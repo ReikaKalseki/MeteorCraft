@@ -21,9 +21,9 @@ import org.lwjgl.opengl.GL12;
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
 import Reika.ReactorCraft.ReactorCraft;
 
-public class RenderMeteor extends Render {
+public class RenderTrail extends Render {
 
-	public void renderEntity(EntityMeteor er, double par2, double par4, double par6, float par8, float par9)
+	public void renderEntity(EntityTrail er, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
@@ -40,10 +40,15 @@ public class RenderMeteor extends Render {
 		int var22 = (int)var26;
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		float size = 6;
-		ReikaTextureHelper.bindTexture(ReactorCraft.class, "/Reika/MeteorCraft/Textures/meteor.png");
+		float size = 10;//-er.ticksExisted/(float)er.LIFE*10;
+		ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/MeteorCraft/Textures/smoke.png");
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
+		//GL11.glDepthFunc(GL11.GL_ALWAYS);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		//GL11.glColor4f(1-er.ticksExisted/(float)er.LIFE, 1-er.ticksExisted/(float)er.LIFE, 1-er.ticksExisted/(float)er.LIFE, 1);
+		GL11.glColor4f(1, 1, 1, 1-er.ticksExisted/(float)er.LIFE);
 		v5.startDrawingQuads();
 		v5.setNormal(0.0F, 1.0F, 0.0F);
 		v5.addVertexWithUV(0, 0, 0, 0, 0);
@@ -52,16 +57,18 @@ public class RenderMeteor extends Render {
 		v5.addVertexWithUV(0, 1, 0, 0, 1);
 		v5.draw();
 		//ReikaJavaLibrary.pConsole(er.getRange());
-
+		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glTranslated(0.5, 0.5, 0);
 		GL11.glScaled(1D/size, 1D/size, 1);
+		//GL11.glDepthFunc(GL11.GL_LEQUAL);
+		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 	}
 
 	@Override
 	public void doRender(Entity entity, double par2, double par4, double par6, float par8, float par10) {
-		this.renderEntity((EntityMeteor)entity, par2, par4, par6, par8, par10);
+		this.renderEntity((EntityTrail)entity, par2, par4, par6, par8, par10);
 	}
 
 	@Override
