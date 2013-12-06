@@ -10,6 +10,7 @@
 package Reika.MeteorCraft;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -24,40 +25,79 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
 public class MeteorGenerator {
 
 	public static final MeteorGenerator instance = new MeteorGenerator();
 
-	private ArrayList<ItemStack> viableOres = new ArrayList();
+	private HashMap<MeteorType, ArrayList<ItemStack>> viableOres = new HashMap();
 
 	private static final Random rand = new Random();
 
 	private MeteorGenerator() {
-		for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
-			ReikaOreHelper ore = ReikaOreHelper.oreList[i];
-			viableOres.add(ore.getOreBlock());
-		}
-		for (int i = 0; i < ModOreList.oreList.length; i++) {
-			ModOreList ore = ModOreList.oreList[i];
-			if (this.canGenerateOre(ore)) {
-				viableOres.addAll(ore.getAllOreBlocks());
+		for (int k = 0; k < MeteorType.list.length; k++) {
+			MeteorType type = MeteorType.list[k];
+			int id = type.blockID;
+			int meta = type.blockMeta;
+			for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
+				ReikaOreHelper ore = ReikaOreHelper.oreList[i];
+				if (this.canGenerateOre(ore)) {
+					if (this.isValidOreForType(type, ore)) {
+						this.addOre(type, ore.getOreBlock());
+					}
+				}
+			}
+			for (int i = 0; i < ModOreList.oreList.length; i++) {
+				ModOreList ore = ModOreList.oreList[i];
+				if (this.canGenerateOre(ore)) {
+					ArrayList<ItemStack> li = ore.getAllOreBlocks();
+					for (int j = 0; j < li.size(); j++) {
+						ItemStack block = li.get(j);
+						this.addOre(type, block);
+					}
+				}
 			}
 		}
 	}
 
-	private ItemStack getRandomOre() {
-		return viableOres.get(rand.nextInt(viableOres.size()));
+	public boolean isValidOreForType(MeteorType type, ReikaOreHelper ore) {
+		return type.blockID == ore.getOreGenBlock().blockID;
+	}
+
+	public boolean isValidOreForType(MeteorType type, ModOreList ore) {
+		return true;
+	}
+
+	private void addOre(MeteorType type, ItemStack is) {
+		ArrayList<ItemStack> li = this.getOres(type);
+		if (li == null) {
+			li = new ArrayList();
+			li.add(is);
+		}
+		viableOres.put(type, li);
+	}
+
+	private ArrayList<ItemStack> getOres(MeteorType type) {
+		return viableOres.get(type);
+	}
+
+	private ItemStack getRandomOre(MeteorType type) {
+		return this.getOres(type).get(rand.nextInt(this.getOres(type).size()));
 	}
 
 	public boolean canGenerateOre(ModOreList ore) {
 		return MeteorCraft.config.shouldGenerateOre(ore) && ore.existsInGame();
 	}
 
+	public boolean canGenerateOre(ReikaOreHelper ore) {
+		return MeteorCraft.config.shouldGenerateOre(ore);
+	}
+
 	public ItemStack getBlock(EntityMeteor e) {
 		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue())) {
-			return this.getRandomOre();
+			return this.getRandomOre(e.getType());
 		}
 		else {
 			return e.getType().getBlock();
@@ -107,19 +147,36 @@ public class MeteorGenerator {
 		return true;
 	}
 
+	public static boolean canGenOreIn(Block b, ReikaOreHelper ore) {
+		return b == ore.getOreGenBlock();
+	}
+
+	public static boolean canGenOreIn(Block b, ModOreList ore) {
+		return true;
+	}
+
 	public static enum MeteorType {
 		STONE(Block.stone),
 		NETHERRACK(Block.netherrack),
 		END(Block.whiteStone);
 
-		private final Block block;
+		public final int blockID;
+		public final int blockMeta;
+
+		public static final MeteorType[] list = values();
 
 		private MeteorType(Block b) {
-			block = b;
+			blockID = b.blockID;
+			blockMeta = 0;
+		}
+
+		private MeteorType(ItemStack is) {
+			blockID = is.itemID;
+			blockMeta = is.getItemDamage();
 		}
 
 		public ItemStack getBlock() {
-			return new ItemStack(block);
+			return new ItemStack(blockID, 1, blockMeta);
 		}
 	}
 

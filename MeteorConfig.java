@@ -19,6 +19,8 @@ import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.DragonAPI.Interfaces.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
+import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -29,9 +31,10 @@ public class MeteorConfig extends ControlledConfig {
 		super(mod, option, blocks, items, id, cfg);
 	}
 
-	private static final ArrayList<String> modOres = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class);
+	private static final ArrayList<String> modOres = getModOres();
 	private static final int oreLength = modOres.size();
-	private boolean[] ores = new boolean[oreLength];
+	private static final int vanillaOreCount = ReikaOreHelper.oreList.length;
+	private boolean[] ores = new boolean[oreLength+vanillaOreCount];
 
 	//Initialization of the config
 	@Override
@@ -40,14 +43,59 @@ public class MeteorConfig extends ControlledConfig {
 		super.initProps(event);
 
 		config.load();
+
+		for (int i = 0; i < vanillaOreCount; i++) {
+			String name = ReikaOreHelper.oreList[i].getName();
+			ores[i] = config.get("Generate Vanilla Ores", name, true).getBoolean(true);
+		}
 		for (int i = 0; i < oreLength; i++) {
 			String name = modOres.get(i);
-			ores[i] = config.get("Generate Ores", name, true).getBoolean(true);
+			ores[i+vanillaOreCount] = config.get("Generate Mod Ores", name, true).getBoolean(true);
 		}
-
 		/*******************************/
 		//save the data
 		config.save();
+	}
+
+	private static ArrayList<String> getModOres() {
+		ArrayList<String> base = ReikaJavaLibrary.getEnumEntriesWithoutInitializing(ModOreList.class);
+		ArrayList<String> li = new ArrayList();
+		for (int i = 0; i < base.size(); i++) {
+			StringBuilder sb = new StringBuilder();
+			String sg = base.get(i);
+			if (sg.startsWith("NETHER")) {
+				sg = sg.substring(6);
+				sb.append("Nether ");
+				sb.append(ReikaStringParser.capFirstChar(sg));
+				sb.append(" Ore");
+			}
+			else if (sg.startsWith("INFUSED")) {
+				sg = sg.substring(7);
+				sb.append(ReikaStringParser.capFirstChar(sg));
+				sb.append(" Infused Stone");
+			}
+			else if (sg.startsWith("BLUE")) {
+				sg = sg.substring(4);
+				sb.append("Blue ");
+				sb.append(ReikaStringParser.capFirstChar(sg));
+				sb.append(" Ore");
+			}
+			else if (sg.startsWith("GREEN")) {
+				sg = sg.substring(5);
+				sb.append("Green ");
+				sb.append(ReikaStringParser.capFirstChar(sg));
+				sb.append(" Ore");
+			}
+			else {
+				sb.append(ReikaStringParser.capFirstChar(sg));
+				sb.append(" Ore");
+			}
+			String s2 = sb.toString();
+			s2 = s2.replaceAll("Pigiron", "Pig Iron");
+			s2 = s2.replaceAll("Certusquartz", "Certus Quartz");
+			li.add(s2);
+		}
+		return li;
 	}
 
 	@Override
@@ -77,9 +125,13 @@ public class MeteorConfig extends ControlledConfig {
 					p.println(label+": "+String.valueOf(controls[i]));
 				}
 
+				for (int i = 0; i < vanillaOreCount; i++) {
+					String name = ReikaOreHelper.oreList[i].getName();
+					ores[i] = config.get("Generate Vanilla Ores", name, true).getBoolean(true);
+				}
 				for (int i = 0; i < oreLength; i++) {
 					String name = modOres.get(i);
-					ores[i] = config.get("Generate Ores", name, true).getBoolean(true);
+					ores[i+vanillaOreCount] = config.get("Generate Mod Ores", name, true).getBoolean(true);
 				}
 
 				p.close();
@@ -93,6 +145,10 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	public boolean shouldGenerateOre(ModOreList ore) {
+		return ores[ore.ordinal()+ReikaOreHelper.oreList.length];
+	}
+
+	public boolean shouldGenerateOre(ReikaOreHelper ore) {
 		return ores[ore.ordinal()];
 	}
 }

@@ -15,6 +15,8 @@ import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -48,7 +50,7 @@ public class MeteorCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 
-		logger = new ModLogger(instance, true, false, false);
+		logger = new ModLogger(instance, MeteorOptions.LOGLOADING.getState(), MeteorOptions.DEBUGMODE.getState(), false);
 
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.MeteorCraft;
+package Reika.MeteorCraft.Entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
@@ -19,7 +19,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.MeteorCraft.MeteorGenerator;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.MeteorImpact;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;

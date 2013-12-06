@@ -10,6 +10,10 @@
 package Reika.MeteorCraft;
 
 import Reika.DragonAPI.Auxiliary.CustomSoundHandler;
+import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.MeteorCraft.Entity.EntityTrail;
+import Reika.MeteorCraft.Entity.RenderMeteor;
+import Reika.MeteorCraft.Entity.RenderTrail;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class MeteorClient extends MeteorCommon {

@@ -17,6 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
