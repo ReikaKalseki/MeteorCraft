@@ -51,7 +51,7 @@ public class MeteorGenerator {
 			}
 			for (int i = 0; i < ModOreList.oreList.length; i++) {
 				ModOreList ore = ModOreList.oreList[i];
-				if (this.canGenerateOre(ore)) {
+				if (this.canGenerateOre(ore) && this.canGenOreIn(type.blockID, ore)) {
 					ArrayList<ItemStack> li = ore.getAllOreBlocks();
 					for (int j = 0; j < li.size(); j++) {
 						ItemStack block = li.get(j);
@@ -74,8 +74,8 @@ public class MeteorGenerator {
 		ArrayList<ItemStack> li = this.getOres(type);
 		if (li == null) {
 			li = new ArrayList();
-			li.add(is);
 		}
+		li.add(is);
 		viableOres.put(type, li);
 	}
 
@@ -151,8 +151,21 @@ public class MeteorGenerator {
 		return b == ore.getOreGenBlock();
 	}
 
-	public static boolean canGenOreIn(Block b, ModOreList ore) {
-		return true;
+	//Very basic rules:
+	public static boolean canGenOreIn(int blockID, ModOreList ore) {
+		if (ore.isNetherOres())
+			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.ARDITE || ore == ModOreList.COBALT)
+			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.FIRESTONE)
+			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.MAGMANITE)
+			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.AMMONIUM)
+			return blockID == Block.netherrack.blockID;
+		if (blockID == Block.whiteStone.blockID)
+			return ore == ModOreList.PITCHBLENDE;
+		return blockID == Block.stone.blockID;
 	}
 
 	public static enum MeteorType {

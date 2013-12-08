@@ -19,7 +19,13 @@ public enum MeteorOptions implements ConfigList {
 	LOGLOADING("Console Loading Info", true),
 	DEBUGMODE("Debug Mode", false),
 	CHANCE("Meteor Rarity", 72000), //one meteor every hour
-	ORE("Meteor Ore Density", 40); //40% ore
+	ORE("Meteor Ore Density", 40), //default 40% ore
+	MINY("Minimum Impactable Y", -1),
+	OVERWORLD("Always Skyburst in Overworld", false),
+	NETHER("Always Skyburst in Nether", false),
+	END("Always Skyburst in End", false),
+	TWILIGHT("Always Skyburst in Twilight Forest", false),
+	OTHER("Always Skyburst in Other Dimensions", false);
 
 	private String label;
 	private boolean defaultState;

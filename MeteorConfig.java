@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import net.minecraft.world.biome.BiomeGenBase;
+import Reika.DragonAPI.Auxiliary.BiomeTypeList;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.ConfigList;
@@ -36,6 +38,8 @@ public class MeteorConfig extends ControlledConfig {
 	private static final int vanillaOreCount = ReikaOreHelper.oreList.length;
 	private boolean[] ores = new boolean[oreLength+vanillaOreCount];
 
+	private boolean[] biomes = new boolean[BiomeTypeList.biomeList.length];
+
 	//Initialization of the config
 	@Override
 	public void initProps(FMLPreInitializationEvent event) {
@@ -51,6 +55,11 @@ public class MeteorConfig extends ControlledConfig {
 		for (int i = 0; i < oreLength; i++) {
 			String name = modOres.get(i);
 			ores[i+vanillaOreCount] = config.get("Generate Mod Ores", name, true).getBoolean(true);
+		}
+
+		for (int i = 0; i < biomes.length; i++) {
+			String name = BiomeTypeList.biomeList[i].displayName;
+			biomes[i] = config.get("Allowable Impact Biomes", name, true).getBoolean(true);
 		}
 		/*******************************/
 		//save the data
@@ -134,6 +143,11 @@ public class MeteorConfig extends ControlledConfig {
 					ores[i+vanillaOreCount] = config.get("Generate Mod Ores", name, true).getBoolean(true);
 				}
 
+				for (int i = 0; i < biomes.length; i++) {
+					String name = BiomeTypeList.biomeList[i].displayName;
+					biomes[i] = config.get("Allowable Impact Biomes", name, true).getBoolean(true);
+				}
+
 				p.close();
 			}
 		}
@@ -150,5 +164,10 @@ public class MeteorConfig extends ControlledConfig {
 
 	public boolean shouldGenerateOre(ReikaOreHelper ore) {
 		return ores[ore.ordinal()];
+	}
+
+	public boolean canImpactInBiome(BiomeGenBase biome) {
+		BiomeTypeList b = BiomeTypeList.getEntry(biome);
+		return b != null ? biomes[b.ordinal()] : true;
 	}
 }
