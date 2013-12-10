@@ -22,6 +22,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -30,6 +31,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.MeteorCraft.Event.ImpactEvent;
 
 public class MeteorImpact {
 
@@ -50,6 +52,7 @@ public class MeteorImpact {
 	}
 
 	public void impact(EntityMeteor e) {
+		MinecraftForge.EVENT_BUS.post(new ImpactEvent(e, posX, posY, posZ, radius));
 		if (!world.isRemote) {
 			double d = 0.5;
 			double vx = e.motionX*d;

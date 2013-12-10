@@ -21,11 +21,12 @@ public enum MeteorOptions implements ConfigList {
 	CHANCE("Meteor Rarity", 72000), //one meteor every hour
 	ORE("Meteor Ore Density", 40), //default 40% ore
 	MINY("Minimum Impactable Y", -1),
-	OVERWORLD("Always Skyburst in Overworld", false),
-	NETHER("Always Skyburst in Nether", false),
-	END("Always Skyburst in End", false),
-	TWILIGHT("Always Skyburst in Twilight Forest", false),
-	OTHER("Always Skyburst in Other Dimensions", false);
+	DIM0BURST("Always Skyburst in Overworld", false),
+	NETHERBURST("Always Skyburst in Nether", false),
+	ENDBURST("Always Skyburst in End", false),
+	DIM7BURST("Always Skyburst in Twilight Forest", false),
+	OTHER("Always Skyburst in Other Dimensions", false),
+	SHOWER("Allow Meteor Showers", true);
 
 	private String label;
 	private boolean defaultState;

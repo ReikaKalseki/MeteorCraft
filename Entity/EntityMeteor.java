@@ -14,18 +14,24 @@ import net.minecraft.block.BlockFluid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.MeteorGenerator;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.MeteorImpact;
+import Reika.MeteorCraft.Event.AirburstEvent;
+import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -39,24 +45,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	private boolean crossed = false;
 	private boolean impact = false;
 	private boolean boom = false;
+	private int explodeY;
 
 	public EntityMeteor(World world) {
 		super(world);
-	}
-
-	public EntityMeteor(World world, int x, int y, int z) {
-		super(world);
-		this.setPosition(x, y, z);
-		type = MeteorType.STONE;
-		double vx = ReikaRandomHelper.getRandomPlusMinus(0.75, 0.25);
-		double vz = ReikaRandomHelper.getRandomPlusMinus(0.75, 0.25);
-		if (rand.nextBoolean())
-			vx = -vx;
-		if (rand.nextBoolean())
-			vz = -vz;
-		this.addVelocity(vx, -4, vz);
-		velocityChanged = true;
-		noClip = true;
 	}
 
 	public EntityMeteor(World world, int x, int y, int z, MeteorType type) {
@@ -72,6 +64,12 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		this.addVelocity(vx, -4, vz);
 		velocityChanged = true;
 		noClip = true;
+		MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
+	}
+
+	public EntityMeteor setExploding() {
+		explodeY = this.getRandomYToExplodeAlways();
+		return this;
 	}
 
 	@Override
@@ -88,25 +86,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			int y = MathHelper.floor_double(posY);
 			int z = MathHelper.floor_double(posZ);
 			World world = worldObj;
-			if (world.provider.dimensionId == ReikaTwilightHelper.getDimensionID() && MeteorOptions.TWILIGHT.getState())
+			if (posY < explodeY) {
 				this.destroy();
-			switch(world.provider.dimensionId) {
-			case 0:
-				if (MeteorOptions.OVERWORLD.getState())
-					this.destroy();
-				break;
-			case 1:
-				if (MeteorOptions.END.getState())
-					this.destroy();
-				break;
-			case -1:
-				if (MeteorOptions.NETHER.getState())
-					this.destroy();
-				break;
-			default:
-				if (MeteorOptions.OTHER.getState())
-					this.destroy();
-				break;
 			}
 			if (!world.checkChunksExist(x, y, z, x, y, z)) {
 				if (world.isRemote)
@@ -178,12 +159,53 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			this.setDead();
 	}
 
+	private int getRandomYToExplodeAlways() {
+		if (worldObj.getWorldInfo().getTerrainType() == WorldType.FLAT)
+			return worldObj.provider.getAverageGroundLevel()+30+rand.nextInt(100);
+		if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID()) {
+			return 96+rand.nextInt(60);
+		}
+		switch(worldObj.provider.dimensionId) {
+		case -1:
+			return 128+30+rand.nextInt(60);
+		case 1:
+			return 128+30+rand.nextInt(60);
+		default:
+			return 255-rand.nextInt(20);
+		}
+	}
+
 	@Override
 	protected void entityInit() {
 		if (worldObj.isRemote) {
 			Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:entry", 1, 1);
 		}
 		this.playSound("meteorcraft:entry", 1, 1);
+
+		explodeY = -1;
+
+		if (!worldObj.isRemote) {
+			if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID() && MeteorOptions.DIM7BURST.getState())
+				explodeY = this.getRandomYToExplodeAlways();
+			switch(worldObj.provider.dimensionId) {
+			case 0:
+				if (MeteorOptions.DIM0BURST.getState())
+					explodeY = this.getRandomYToExplodeAlways();
+				break;
+			case 1:
+				if (MeteorOptions.ENDBURST.getState())
+					explodeY = this.getRandomYToExplodeAlways();
+				break;
+			case -1:
+				if (MeteorOptions.NETHERBURST.getState())
+					explodeY = this.getRandomYToExplodeAlways();
+				break;
+			default:
+				if (MeteorOptions.OTHER.getState())
+					explodeY = this.getRandomYToExplodeAlways();
+				break;
+			}
+		}
 	}
 
 	public MeteorType getType() {
@@ -227,6 +249,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	public void destroy() {
+		MinecraftForge.EVENT_BUS.post(new AirburstEvent(this));
 		int n = 24+rand.nextInt(32);
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
@@ -238,7 +261,15 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			if (!worldObj.isRemote)
 				worldObj.spawnEntityInWorld(e);
 		}
-		worldObj.newExplosion(null, posX, posY, posZ, 3F, true, true);
+		if (!worldObj.isRemote)
+			worldObj.newExplosion(null, posX, posY, posZ, 3F, true, true);
+		n = 12+rand.nextInt(24);
+		for (int i = 0; i < n; i++) {
+			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
+			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
+			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
+			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Item.glowstone));
+		}
 		if (worldObj.isRemote) {
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.01F);
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.1F);
