@@ -161,17 +161,17 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	private int getRandomYToExplodeAlways() {
 		if (worldObj.getWorldInfo().getTerrainType() == WorldType.FLAT)
-			return worldObj.provider.getAverageGroundLevel()+30+rand.nextInt(100);
+			return worldObj.provider.getAverageGroundLevel()+10+rand.nextInt(30);
 		if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID()) {
 			return 96+rand.nextInt(60);
 		}
 		switch(worldObj.provider.dimensionId) {
 		case -1:
-			return 128+30+rand.nextInt(60);
+			return 128+10+rand.nextInt(40);
 		case 1:
-			return 128+30+rand.nextInt(60);
+			return 96+rand.nextInt(30);
 		default:
-			return 255-rand.nextInt(20);
+			return worldObj.provider.getAverageGroundLevel()+64+rand.nextInt(30);
 		}
 	}
 
@@ -250,7 +250,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	public void destroy() {
 		MinecraftForge.EVENT_BUS.post(new AirburstEvent(this));
-		int n = 24+rand.nextInt(32);
+		int n = 48+rand.nextInt(48); //135 is approx the max in a impact meteor
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
