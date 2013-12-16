@@ -46,7 +46,7 @@ public class MeteorImpact {
 	public MeteorImpact(World world, int x, int y, int z, float range) {
 		this.world = world;
 		posX = x;
-		posY = y;
+		posY = Math.max(y, MathHelper.ceiling_float_int(range));
 		posZ = z;
 		radius = range;
 	}
@@ -110,7 +110,7 @@ public class MeteorImpact {
 
 		MeteorGenerator.instance.generate(world, posX, posY, posZ, e);
 
-		int num = 12+rand.nextInt(13);
+		int num = 16+rand.nextInt(16);
 		for (int i = 0; i < num; i++) {
 			int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
 			int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
@@ -125,9 +125,19 @@ public class MeteorImpact {
 			int dy = ReikaRandomHelper.getRandomPlusMinus(posY, (int)radius);
 			ReikaWorldHelper.ignite(world, dx, dy, dz);
 		}
+
+		num = 9+rand.nextInt(9);
+		for (int i = 0; i < num; i++) {
+			int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
+			int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
+			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
+			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Item.gunpowder));
+		}
 	}
 
 	private boolean canEntitize(World world, int x, int y, int z, int id, int meta) {
+		if (y <= 0)
+			return false;
 		if (id == 0)
 			return false;
 		if (id == Block.bedrock.blockID)

@@ -130,7 +130,8 @@ public class MeteorGenerator {
 			int fy = xyz[1];
 			int fz = xyz[2];
 			ItemStack is = this.getBlock(e);
-			world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
+			if (fy > 0)
+				world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
 		}
 	}
 

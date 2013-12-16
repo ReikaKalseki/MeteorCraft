@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.ReactorCraft.ReactorCraft;
+import Reika.MeteorCraft.MeteorCraft;
 
 public class RenderTrail extends Render {
 
@@ -41,7 +41,7 @@ public class RenderTrail extends Render {
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float size = 10;//-er.ticksExisted/(float)er.LIFE*10;
-		ReikaTextureHelper.bindFinalTexture(ReactorCraft.class, "/Reika/MeteorCraft/Textures/smoke.png");
+		ReikaTextureHelper.bindFinalTexture(MeteorCraft.class, "/Reika/MeteorCraft/Textures/smoke.png");
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
 		//GL11.glDepthFunc(GL11.GL_ALWAYS);

@@ -81,7 +81,7 @@ public class MeteorSpawnController implements ITickHandler {
 		return 0.02;
 	}
 
-	private EntityMeteor createMeteor(World world, EntityPlayer ep) {
+	public EntityMeteor createMeteor(World world, EntityPlayer ep) {
 		int x = MathHelper.floor_double(ep.posX);
 		int z = MathHelper.floor_double(ep.posZ);
 		int r = 64;

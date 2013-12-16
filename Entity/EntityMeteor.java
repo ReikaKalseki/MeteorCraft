@@ -72,6 +72,11 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		return this;
 	}
 
+	public EntityMeteor setType(MeteorType type) {
+		this.type = type;
+		return this;
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -161,17 +166,17 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	private int getRandomYToExplodeAlways() {
 		if (worldObj.getWorldInfo().getTerrainType() == WorldType.FLAT)
-			return worldObj.provider.getAverageGroundLevel()+10+rand.nextInt(30);
+			return 30;
 		if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID()) {
-			return 96+rand.nextInt(60);
+			return 128;
 		}
 		switch(worldObj.provider.dimensionId) {
 		case -1:
-			return 128+10+rand.nextInt(40);
+			return 160;
 		case 1:
-			return 96+rand.nextInt(30);
+			return 96;
 		default:
-			return worldObj.provider.getAverageGroundLevel()+64+rand.nextInt(30);
+			return 140;
 		}
 	}
 
@@ -269,6 +274,13 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
 			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Item.glowstone));
+		}
+		n = 6+rand.nextInt(6);
+		for (int i = 0; i < n; i++) {
+			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
+			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
+			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
+			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Item.gunpowder));
 		}
 		if (worldObj.isRemote) {
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.01F);
