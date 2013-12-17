@@ -34,9 +34,17 @@ public class MeteorGenerator {
 
 	private HashMap<MeteorType, ArrayList<ItemStack>> viableOres = new HashMap();
 
+	private HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
+
 	private static final Random rand = new Random();
 
 	private MeteorGenerator() {
+
+		this.addMetadata(ModOreList.PITCHBLENDE, MeteorType.STONE, 1);
+		this.addMetadata(ModOreList.PITCHBLENDE, MeteorType.END, 5);
+		this.addMetadata(ModOreList.FORCE, MeteorType.STONE, 0);
+		this.addMetadata(ModOreList.FORCE, MeteorType.NETHERRACK, 1);
+
 		for (int k = 0; k < MeteorType.list.length; k++) {
 			MeteorType type = MeteorType.list[k];
 			int id = type.blockID;
@@ -55,19 +63,49 @@ public class MeteorGenerator {
 					ArrayList<ItemStack> li = ore.getAllOreBlocks();
 					for (int j = 0; j < li.size(); j++) {
 						ItemStack block = li.get(j);
-						this.addOre(type, block);
+						if (this.isValidOreForType(type, ore, block.getItemDamage()))
+							this.addOre(type, block);
 					}
 				}
 			}
 		}
 	}
 
+	private void addMetadata(ModOreList ore, MeteorType type, int dmg) {
+		HashMap<MeteorType, ArrayList<Integer>> map = metas.get(ore);
+		if (map == null) {
+			map = new HashMap();
+			metas.put(ore, map);
+		}
+		ArrayList<Integer> li = map.get(type);
+		if (li == null) {
+			li = new ArrayList();
+			map.put(type, li);
+		}
+		if (!li.contains(dmg))
+			li.add(dmg);
+	}
+
+	public boolean hasListedMetadatasForOre(ModOreList ore) {
+		return metas.get(ore) != null;
+	}
+
 	public boolean isValidOreForType(MeteorType type, ReikaOreHelper ore) {
 		return type.blockID == ore.getOreGenBlock().blockID;
 	}
 
-	public boolean isValidOreForType(MeteorType type, ModOreList ore) {
-		return true;
+	public boolean isValidOreForType(MeteorType type, ModOreList ore, int meta) {
+		HashMap<MeteorType, ArrayList<Integer>> map = metas.get(ore);
+		if (map != null) {
+			ArrayList<Integer> li = map.get(type);
+			if (li != null) {
+				return li.contains(meta);
+			}
+			else
+				return true;
+		}
+		else
+			return true;
 	}
 
 	private void addOre(MeteorType type, ItemStack is) {
@@ -83,6 +121,10 @@ public class MeteorGenerator {
 		return viableOres.get(type);
 	}
 
+	public boolean hasOresForType(MeteorType type) {
+		return this.getOres(type) != null && !this.getOres(type).isEmpty();
+	}
+
 	private ItemStack getRandomOre(MeteorType type) {
 		return this.getOres(type).get(rand.nextInt(this.getOres(type).size()));
 	}
@@ -96,7 +138,7 @@ public class MeteorGenerator {
 	}
 
 	public ItemStack getBlock(EntityMeteor e) {
-		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue())) {
+		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(e.getType())) {
 			return this.getRandomOre(e.getType());
 		}
 		else {

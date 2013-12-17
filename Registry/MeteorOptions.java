@@ -26,7 +26,8 @@ public enum MeteorOptions implements ConfigList {
 	ENDBURST("Always Skyburst in End", false),
 	DIM7BURST("Always Skyburst in Twilight Forest", false),
 	OTHER("Always Skyburst in Other Dimensions", false),
-	SHOWER("Allow Meteor Showers", true);
+	SHOWER("Allow Meteor Showers", true),
+	EXPLODE("Global Airburst Override", false);
 
 	private String label;
 	private boolean defaultState;

@@ -68,6 +68,8 @@ public class MeteorSpawnController implements ITickHandler {
 						EntityPlayer ep = (EntityPlayer)world.playerEntities.get(rand.nextInt(world.playerEntities.size()));
 						if (ep != null) {
 							EntityMeteor e = this.createMeteor(world, ep);
+							if (MeteorOptions.EXPLODE.getState())
+								e.setExploding();
 							if (!world.isRemote)
 								world.spawnEntityInWorld(e);
 						}

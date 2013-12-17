@@ -255,7 +255,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	public void destroy() {
 		MinecraftForge.EVENT_BUS.post(new AirburstEvent(this));
-		int n = 48+rand.nextInt(48); //135 is approx the max in a impact meteor
+		int n = 32+rand.nextInt(48); //135 is approx the max in a impact meteor
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
