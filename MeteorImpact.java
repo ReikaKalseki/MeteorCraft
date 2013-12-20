@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.entity.player.EntityPlayer;
@@ -107,6 +108,25 @@ public class MeteorImpact {
 			ep.playSound("random.explode", 1, 1);
 		}
 		ReikaParticleHelper.EXPLODE.spawnAroundBlock(world, posX, posY, posZ, 2);
+
+		int r = 12;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					int dx = posX+i;
+					int dy = posY+j;
+					int dz = posZ+k;
+					double dd = ReikaMathLibrary.py3d(i, j, k)-2+rand.nextDouble()*2;
+					if (dd < r) {
+						Material mat = world.getBlockMaterial(dx, dy, dz);
+						if (mat == Material.glass || mat == Material.ice) {
+							world.setBlock(dx, dy, dz, 0);
+							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Block.glass);
+						}
+					}
+				}
+			}
+		}
 
 		MeteorGenerator.instance.generate(world, posX, posY, posZ, e);
 

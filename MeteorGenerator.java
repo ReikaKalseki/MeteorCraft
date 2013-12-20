@@ -24,6 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
@@ -35,6 +36,7 @@ public class MeteorGenerator {
 	private HashMap<MeteorType, ArrayList<ItemStack>> viableOres = new HashMap();
 
 	private HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
+	private HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> ids = new HashMap();
 
 	private static final Random rand = new Random();
 
@@ -44,6 +46,9 @@ public class MeteorGenerator {
 		this.addMetadata(ModOreList.PITCHBLENDE, MeteorType.END, 5);
 		this.addMetadata(ModOreList.FORCE, MeteorType.STONE, 0);
 		this.addMetadata(ModOreList.FORCE, MeteorType.NETHERRACK, 1);
+
+		this.addID(ModOreList.ESSENCE, MeteorType.STONE, MagicCropHandler.getInstance().oreID);
+		this.addID(ModOreList.ESSENCE, MeteorType.NETHERRACK, MagicCropHandler.getInstance().netherOreID);
 
 		for (int k = 0; k < MeteorType.list.length; k++) {
 			MeteorType type = MeteorType.list[k];
@@ -63,8 +68,15 @@ public class MeteorGenerator {
 					ArrayList<ItemStack> li = ore.getAllOreBlocks();
 					for (int j = 0; j < li.size(); j++) {
 						ItemStack block = li.get(j);
-						if (this.isValidOreForType(type, ore, block.getItemDamage()))
-							this.addOre(type, block);
+						//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
+						if (this.isValidOreIDForType(type, ore, block.itemID)) {
+							//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
+							if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
+								//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
+								MeteorCraft.logger.log("Registering "+block+" ("+ore.getName()+" ore) to meteor type "+type.name());
+								this.addOre(type, block);
+							}
+						}
 					}
 				}
 			}
@@ -86,20 +98,53 @@ public class MeteorGenerator {
 			li.add(dmg);
 	}
 
+	private void addID(ModOreList ore, MeteorType type, int id) {
+		HashMap<MeteorType, ArrayList<Integer>> map = ids.get(ore);
+		if (map == null) {
+			map = new HashMap();
+			ids.put(ore, map);
+		}
+		ArrayList<Integer> li = map.get(type);
+		if (li == null) {
+			li = new ArrayList();
+			map.put(type, li);
+		}
+		if (!li.contains(id))
+			li.add(id);
+	}
+
 	public boolean hasListedMetadatasForOre(ModOreList ore) {
 		return metas.get(ore) != null;
+	}
+
+	public boolean hasListedIDsForOre(ModOreList ore) {
+		return ids.get(ore) != null;
 	}
 
 	public boolean isValidOreForType(MeteorType type, ReikaOreHelper ore) {
 		return type.blockID == ore.getOreGenBlock().blockID;
 	}
 
-	public boolean isValidOreForType(MeteorType type, ModOreList ore, int meta) {
+	public boolean isValidOreMetaForType(MeteorType type, ModOreList ore, int meta) {
 		HashMap<MeteorType, ArrayList<Integer>> map = metas.get(ore);
 		if (map != null) {
 			ArrayList<Integer> li = map.get(type);
 			if (li != null) {
 				return li.contains(meta);
+			}
+			else
+				return true;
+		}
+		else
+			return true;
+	}
+
+	public boolean isValidOreIDForType(MeteorType type, ModOreList ore, int id) {
+		HashMap<MeteorType, ArrayList<Integer>> map = ids.get(ore);
+		if (map != null) {
+			ArrayList<Integer> li = map.get(type);
+			if (li != null) {
+				return li.contains(id);
 			}
 			else
 				return true;
@@ -206,6 +251,8 @@ public class MeteorGenerator {
 			return blockID == Block.netherrack.blockID;
 		if (ore == ModOreList.AMMONIUM)
 			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.ESSENCE)
+			return blockID == Block.netherrack.blockID || blockID == Block.stone.blockID;
 		if (blockID == Block.whiteStone.blockID)
 			return ore == ModOreList.PITCHBLENDE;
 		return blockID == Block.stone.blockID;

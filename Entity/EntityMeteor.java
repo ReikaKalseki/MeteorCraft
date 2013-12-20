@@ -11,6 +11,7 @@ package Reika.MeteorCraft.Entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFluid;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingSand;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
@@ -286,6 +288,29 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.01F);
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.1F);
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.2F);
+		}
+
+		int r = 8;
+		for (int i = -r; i <= r; i++) {
+			for (int j = -r; j <= r; j++) {
+				for (int k = -r; k <= r; k++) {
+					int x = MathHelper.floor_double(posX);
+					int y = MathHelper.floor_double(posY);
+					int z = MathHelper.floor_double(posZ);
+					World world = worldObj;
+					int dx = x+i;
+					int dy = y+j;
+					int dz = z+k;
+					double dd = ReikaMathLibrary.py3d(i, j, k)-2+rand.nextDouble()*2;
+					if (dd < r) {
+						Material mat = world.getBlockMaterial(dx, dy, dz);
+						if (mat == Material.glass || mat == Material.ice) {
+							world.setBlock(dx, dy, dz, 0);
+							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Block.glass);
+						}
+					}
+				}
+			}
 		}
 		this.setDead();
 	}
