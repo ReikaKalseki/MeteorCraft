@@ -71,7 +71,7 @@ public class MeteorCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
-
+		config.initModExclusions();
 	}
 
 	@EventHandler

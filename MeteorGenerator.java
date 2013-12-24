@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
+import Reika.DragonAPI.ModInteract.MimicryHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
@@ -50,6 +51,10 @@ public class MeteorGenerator {
 		this.addID(ModOreList.ESSENCE, MeteorType.STONE, MagicCropHandler.getInstance().oreID);
 		this.addID(ModOreList.ESSENCE, MeteorType.NETHERRACK, MagicCropHandler.getInstance().netherOreID);
 
+		this.addID(ModOreList.MIMICHITE, MeteorType.STONE, MimicryHandler.getInstance().stoneOreID);
+		this.addID(ModOreList.MIMICHITE, MeteorType.NETHERRACK, MimicryHandler.getInstance().netherOreID);
+		this.addID(ModOreList.MIMICHITE, MeteorType.END, MimicryHandler.getInstance().endOreID);
+
 		for (int k = 0; k < MeteorType.list.length; k++) {
 			MeteorType type = MeteorType.list[k];
 			int id = type.blockID;
@@ -68,13 +73,15 @@ public class MeteorGenerator {
 					ArrayList<ItemStack> li = ore.getAllOreBlocks();
 					for (int j = 0; j < li.size(); j++) {
 						ItemStack block = li.get(j);
-						//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
-						if (this.isValidOreIDForType(type, ore, block.itemID)) {
-							//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
-							if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
-								//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
-								MeteorCraft.logger.log("Registering "+block+" ("+ore.getName()+" ore) to meteor type "+type.name());
-								this.addOre(type, block);
+						if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
+							//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
+							if (this.isValidOreIDForType(type, ore, block.itemID)) {
+								//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
+								if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
+									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
+									MeteorCraft.logger.log("Registering "+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
+									this.addOre(type, block);
+								}
 							}
 						}
 					}
