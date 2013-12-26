@@ -9,9 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
@@ -29,8 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.TinkerOreHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.MeteorCraft.Registry.MeteorOptions;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class MeteorConfig extends ControlledConfig {
 
@@ -49,12 +44,7 @@ public class MeteorConfig extends ControlledConfig {
 
 	//Initialization of the config
 	@Override
-	public void initProps(FMLPreInitializationEvent event) {
-
-		super.initProps(event);
-
-		config.load();
-
+	protected void loadAdditionalData() {
 		for (int i = 0; i < vanillaOreCount; i++) {
 			String name = ReikaOreHelper.oreList[i].getName();
 			ores[i] = config.get("Generate Vanilla Ores", name, true).getBoolean(true);
@@ -68,9 +58,6 @@ public class MeteorConfig extends ControlledConfig {
 			String name = BiomeTypeList.biomeList[i].displayName;
 			biomes[i] = config.get("Allowable Impact Biomes", name, true).getBoolean(true);
 		}
-		/*******************************/
-		//save the data
-		config.save();
 	}
 
 	public void initModExclusions() {
@@ -180,7 +167,7 @@ public class MeteorConfig extends ControlledConfig {
 		}
 		return li;
 	}
-
+	/*
 	@Override
 	protected void resetConfigFile() {
 		String path = this.getConfigPath()+"_Old_Config_Backup.txt";
@@ -230,7 +217,7 @@ public class MeteorConfig extends ControlledConfig {
 			e.printStackTrace();
 		}
 		configFile.delete();
-	}
+	}*/
 
 	public boolean shouldGenerateOre(ModOreList ore) {
 		return ores[ore.ordinal()+ReikaOreHelper.oreList.length];
