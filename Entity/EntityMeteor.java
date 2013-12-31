@@ -128,7 +128,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 								if (id != 0) {
 									Block b = Block.blocksList[id];
 									if (!(b instanceof BlockFluid || b instanceof BlockFluidBase)) {
-										b.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(dx, dy, dz), 0);
+										b.dropBlockAsItem(world, dx, dy, dz, world.getBlockMetadata(dx, dy, dz), 0);
 										world.setBlock(dx, dy, dz, 0);
 									}
 								}
