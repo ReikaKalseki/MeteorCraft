@@ -25,7 +25,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
-import Reika.DragonAPI.ModInteract.MimicryHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
@@ -51,9 +50,9 @@ public class MeteorGenerator {
 		this.addID(ModOreList.ESSENCE, MeteorType.STONE, MagicCropHandler.getInstance().oreID);
 		this.addID(ModOreList.ESSENCE, MeteorType.NETHERRACK, MagicCropHandler.getInstance().netherOreID);
 
-		this.addID(ModOreList.MIMICHITE, MeteorType.STONE, MimicryHandler.getInstance().stoneOreID);
-		this.addID(ModOreList.MIMICHITE, MeteorType.NETHERRACK, MimicryHandler.getInstance().netherOreID);
-		this.addID(ModOreList.MIMICHITE, MeteorType.END, MimicryHandler.getInstance().endOreID);
+		this.addMetadata(ModOreList.MIMICHITE, MeteorType.STONE, 0);
+		this.addMetadata(ModOreList.MIMICHITE, MeteorType.NETHERRACK, 1);
+		this.addMetadata(ModOreList.MIMICHITE, MeteorType.END, 2);
 
 		for (int k = 0; k < MeteorType.list.length; k++) {
 			MeteorType type = MeteorType.list[k];
