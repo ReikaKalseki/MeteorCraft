@@ -257,6 +257,8 @@ public class MeteorGenerator {
 			return blockID == Block.netherrack.blockID;
 		if (ore == ModOreList.AMMONIUM)
 			return blockID == Block.netherrack.blockID;
+		if (ore == ModOreList.SODALITE)
+			return blockID == Block.whiteStone.blockID;
 		if (ore == ModOreList.ESSENCE)
 			return blockID == Block.netherrack.blockID || blockID == Block.stone.blockID;
 		if (blockID == Block.whiteStone.blockID)

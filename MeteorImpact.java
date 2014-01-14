@@ -74,9 +74,8 @@ public class MeteorImpact {
 						if (dd <= radius) {
 							if (id != 0) {
 								if (this.canEntitize(world, x2, y2, z2, id, meta)) {
-									int dropid = Block.blocksList[id].idDropped(meta, rand, 0);
-									int dropmeta = Block.blocksList[id].damageDropped(meta);
-									EntityFallingSand es = new EntityFallingSand(world, x2, y2+4, z2, id, meta);
+									ItemStack toDrop = this.getDroppedBlock(id, meta);
+									EntityFallingSand es = new EntityFallingSand(world, x2, y2+4, z2, toDrop.itemID, toDrop.getItemDamage());
 									es.addVelocity(vx, vy*rand.nextDouble()*rand.nextDouble(), vz);
 									es.velocityChanged = true;
 									es.fallTime = -1000;
@@ -119,9 +118,17 @@ public class MeteorImpact {
 					double dd = ReikaMathLibrary.py3d(i, j, k)-2+rand.nextDouble()*2;
 					if (dd < r) {
 						Material mat = world.getBlockMaterial(dx, dy, dz);
+						int id = world.getBlockId(dx, dy, dz);
+						int meta = world.getBlockMetadata(dx, dy, dz);
+						Block b = Block.blocksList[id];
 						if (mat == Material.glass || mat == Material.ice) {
+							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
 							world.setBlock(dx, dy, dz, 0);
 							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Block.glass);
+						}
+						if (mat == Material.circuits || mat == Material.web) {
+							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
+							world.setBlock(dx, dy, dz, 0);
 						}
 					}
 				}
@@ -153,6 +160,14 @@ public class MeteorImpact {
 			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
 			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Item.gunpowder));
 		}
+	}
+
+	private ItemStack getDroppedBlock(int id, int meta) {
+		int dropid = Block.blocksList[id].idDropped(meta, rand, 0);
+		int dropmeta = Block.blocksList[id].damageDropped(meta);
+		if (id == Block.grass.blockID)
+			return new ItemStack(Block.dirt);
+		return new ItemStack(dropid, 1, dropmeta);
 	}
 
 	private boolean canEntitize(World world, int x, int y, int z, int id, int meta) {
