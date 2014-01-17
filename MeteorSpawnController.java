@@ -19,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.MeteorShowerEndEvent;
@@ -43,7 +44,7 @@ public class MeteorSpawnController implements ITickHandler {
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		World world = (World)tickData[0];
-		if (world != null && !world.provider.isHellWorld) {
+		if (world != null && this.canSpawnIn(world)) {
 			if (isShowering) {
 				showerDuration++;
 				if (ReikaRandomHelper.doWithChance(this.getSpawnChanceDuringShower())) {
@@ -60,10 +61,11 @@ public class MeteorSpawnController implements ITickHandler {
 					this.endMeteorShower(world);
 			}
 			else {
-				if (MeteorOptions.SHOWER.getState() && ReikaRandomHelper.doWithChance(0.01D/MeteorOptions.CHANCE.getValue())) {
+				int chance = this.getChanceFromDimension(world.provider.dimensionId);
+				if (MeteorOptions.SHOWER.getState() && ReikaRandomHelper.doWithChance(0.01D/chance)) {
 					this.startMeteorShower(world);
 				}
-				else if (ReikaRandomHelper.doWithChance(1D/MeteorOptions.CHANCE.getValue())) {
+				else if (ReikaRandomHelper.doWithChance(1D/chance)) {
 					if (world.playerEntities.size() > 0) {
 						EntityPlayer ep = (EntityPlayer)world.playerEntities.get(rand.nextInt(world.playerEntities.size()));
 						if (ep != null) {
@@ -76,6 +78,27 @@ public class MeteorSpawnController implements ITickHandler {
 					}
 				}
 			}
+		}
+	}
+
+	private boolean canSpawnIn(World world) {
+		if (world.provider.isHellWorld)
+			return false;
+		if (world.provider.hasNoSky)
+			return false;
+		return this.getChanceFromDimension(world.provider.dimensionId) > 0;
+	}
+
+	private int getChanceFromDimension(int dimID) {
+		if (dimID == ReikaTwilightHelper.getDimensionID())
+			return MeteorOptions.FORESTCHANCE.getValue();
+		switch(dimID) {
+		case 0:
+			return MeteorOptions.CHANCE.getValue();
+		case 1:
+			return MeteorOptions.ENDCHANCE.getValue();
+		default:
+			return MeteorOptions.OTHERCHANCE.getValue();
 		}
 	}
 

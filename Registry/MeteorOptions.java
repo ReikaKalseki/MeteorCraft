@@ -18,7 +18,10 @@ public enum MeteorOptions implements ConfigList {
 
 	LOGLOADING("Console Loading Info", true),
 	DEBUGMODE("Debug Mode", false),
-	CHANCE("Meteor Rarity", 72000), //one meteor every hour
+	CHANCE("Overworld Meteor Rarity", 72000), //one meteor every hour
+	ENDCHANCE("End Meteor Rarity", 72000), //one meteor every hour
+	FORESTCHANCE("Twilight Forest Meteor Rarity", 54000), //one meteor every 45 min
+	OTHERCHANCE("Meteor Rarity in Other Dimensions", 36000), //one meteor every 30 min
 	ORE("Meteor Ore Density", 40), //default 40% ore
 	MINY("Minimum Impactable Y", -1),
 	DIM0BURST("Always Skyburst in Overworld", false),

@@ -94,7 +94,7 @@ public class MeteorImpact {
 			}
 		}
 
-		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(6, 6, 6);
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(9, 9, 9);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < li.size(); i++) {
 			EntityLivingBase el = li.get(i);
