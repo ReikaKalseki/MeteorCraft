@@ -24,7 +24,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
-import Reika.DragonAPI.ModInteract.TinkerOreHandler;
+import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 
 public class MeteorConfig extends ControlledConfig {
@@ -233,7 +233,7 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	public boolean isItemStackGenerationPermitted(ItemStack is) {
-		if (is.itemID == TinkerOreHandler.getInstance().gravelOreID)
+		if (is.itemID == TinkerBlockHandler.getInstance().gravelOreID)
 			return false;
 		return ReikaItemHelper.listContainsItemStack(allowedOreItems, is);
 	}

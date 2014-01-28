@@ -31,6 +31,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.ImpactEvent;
 
@@ -82,10 +83,13 @@ public class MeteorImpact {
 									world.setBlock(x2, y2, z2, 0);
 									world.spawnEntityInWorld(es);
 								}
-								else {
+								else if (this.canDestroy(world, x2, y2, z2, id, meta)) {
 									if (y2 > 0) {
 										world.setBlock(x2, y2, z2, 0);
 									}
+								}
+								else {
+
 								}
 							}
 						}
@@ -162,9 +166,17 @@ public class MeteorImpact {
 		}
 	}
 
+	private boolean canDestroy(World world, int x, int y, int z, int id, int meta) {
+		if (id == Block.bedrock.blockID)
+			return false;
+		if (id == FactorizationHandler.getInstance().bedrockID)
+			return false;
+		return true;
+	}
+
 	private ItemStack getDroppedBlock(int id, int meta) {
-		int dropid = Block.blocksList[id].idDropped(meta, rand, 0);
-		int dropmeta = Block.blocksList[id].damageDropped(meta);
+		int dropid = id;//Block.blocksList[id].idDropped(meta, rand, 0);
+		int dropmeta = meta;//Block.blocksList[id].damageDropped(meta);
 		if (id == Block.grass.blockID)
 			return new ItemStack(Block.dirt);
 		return new ItemStack(dropid, 1, dropmeta);

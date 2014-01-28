@@ -263,6 +263,8 @@ public class MeteorGenerator {
 			return blockID == Block.netherrack.blockID || blockID == Block.stone.blockID;
 		if (blockID == Block.whiteStone.blockID)
 			return ore == ModOreList.PITCHBLENDE;
+		if (ore == ModOreList.MIMICHITE)
+			return true;
 		return blockID == Block.stone.blockID;
 	}
 
