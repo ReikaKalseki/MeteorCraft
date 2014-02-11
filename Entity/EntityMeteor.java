@@ -263,10 +263,15 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 2);
 			ItemStack is = MeteorGenerator.instance.getBlock(this);
-			EntityFallingSand e = new EntityFallingSand(worldObj, rx, ry, rz, is.itemID, is.getItemDamage());
-			e.fallTime = -10000;
-			if (!worldObj.isRemote)
-				worldObj.spawnEntityInWorld(e);
+			if (is.itemID < Block.blocksList.length) { //because some mods are derps and register items as ores
+				EntityFallingSand e = new EntityFallingSand(worldObj, rx, ry, rz, is.itemID, is.getItemDamage());
+				e.fallTime = -10000;
+				if (!worldObj.isRemote)
+					worldObj.spawnEntityInWorld(e);
+			}
+			else {
+
+			}
 		}
 		if (!worldObj.isRemote)
 			worldObj.newExplosion(null, posX, posY, posZ, 3F, true, true);
