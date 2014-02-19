@@ -30,7 +30,8 @@ public enum MeteorOptions implements ConfigList {
 	DIM7BURST("Always Skyburst in Twilight Forest", false),
 	OTHER("Always Skyburst in Other Dimensions", false),
 	SHOWER("Allow Meteor Showers", true),
-	EXPLODE("Global Airburst Override", false);
+	EXPLODE("Global Airburst Override", false),
+	BLOCKID("Defence Gun Block ID", 3800);
 
 	private String label;
 	private boolean defaultState;
