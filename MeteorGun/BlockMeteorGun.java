@@ -26,7 +26,7 @@ public class BlockMeteorGun extends Block {
 
 	public BlockMeteorGun(int par1) {
 		super(par1, Material.iron);
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	@Override
