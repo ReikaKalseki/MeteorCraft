@@ -66,7 +66,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		this.addVelocity(vx, -4, vz);
 		velocityChanged = true;
 		noClip = true;
-		MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
+		if (!worldObj.isRemote)
+			MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
 	}
 
 	public EntityMeteor setExploding() {

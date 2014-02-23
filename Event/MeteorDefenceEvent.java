@@ -9,8 +9,8 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Event;
 
+import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
 import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.MeteorGun.TileEntityMeteorGun;
 
 public class MeteorDefenceEvent extends MeteorEvent {
 

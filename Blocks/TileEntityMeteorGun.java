@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.MeteorCraft.MeteorGun;
+package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityTNTPrimed;
@@ -15,30 +15,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import Reika.DragonAPI.ModList;
-import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
+import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.MeteorCraft.Event.MeteorDefenceEvent;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
-public class TileEntityMeteorGun extends TileEntityBase implements ShaftPowerReceiver {
-
-	private int torque;
-	private int omega;
-	private long power;
-
-	private int iotick = 512;
+public class TileEntityMeteorGun extends TileEntityMeteorBase {
 
 	private int soundTimer = 0;
-
-	public TileEntityMeteorGun() {
-		MinecraftForge.EVENT_BUS.register(this);
-	}
 
 	public int getProtectionRange() {
 		return 16*(this.getTier()*2+3);
@@ -48,19 +35,17 @@ public class TileEntityMeteorGun extends TileEntityBase implements ShaftPowerRec
 		return this.getBlockMetadata();
 	}
 
-	public int getMinPower() {
+	@Override
+	public long getMinPower() {
 		return (1+this.getTier())*524288;
 	}
 
-	public boolean canStopMeteors() {
-		return ModList.ROTARYCRAFT.isLoaded() ? power >= this.getMinPower() : true;
-	}
-
+	@Override
 	@ForgeSubscribe
-	public void killMeteor(EntryEvent e) {
+	public void onMeteor(EntryEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
-		if (this.canStopMeteors() && dd <= this.getProtectionRange()) {
+		if (this.canPerformActions() && dd <= this.getProtectionRange()) {
 			this.killMeteor(m);
 		}
 	}
@@ -89,87 +74,6 @@ public class TileEntityMeteorGun extends TileEntityBase implements ShaftPowerRec
 	}
 
 	@Override
-	public int getOmega() {
-		return omega;
-	}
-
-	@Override
-	public int getTorque() {
-		return torque;
-	}
-
-	@Override
-	public long getPower() {
-		return power;
-	}
-
-	@Override
-	public String getName() {
-		return this.getTEName();
-	}
-
-	@Override
-	public int getIORenderAlpha() {
-		return iotick;
-	}
-
-	@Override
-	public void setIORenderAlpha(int io) {
-		iotick = io;
-	}
-
-	@Override
-	public int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public int getMachineZ() {
-		return zCoord;
-	}
-
-	@Override
-	public void setOmega(int omega) {
-		this.omega = omega;
-	}
-
-	@Override
-	public void setTorque(int torque) {
-		this.torque = torque;
-	}
-
-	@Override
-	public void setPower(long power) {
-		this.power = power;
-	}
-
-	@Override
-	public boolean canReadFromBlock(int x, int y, int z) {
-		return y <= yCoord && (Math.abs(x-xCoord)+Math.abs(y-yCoord)+Math.abs(z-zCoord)) == 1;
-	}
-
-	@Override
-	public boolean isReceiving() {
-		return true;
-	}
-
-	@Override
-	public void noInputMachine() {
-		torque = omega = 0;
-		power = 0;
-	}
-
-	@Override
-	public int getTileEntityBlockID() {
-		return MeteorCraft.meteorGun.blockID;
-	}
-
-	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (soundTimer == 1) {
 			if (worldObj.isRemote) {
@@ -192,19 +96,14 @@ public class TileEntityMeteorGun extends TileEntityBase implements ShaftPowerRec
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
-		if (iotick > 0)
-			iotick -= 8;
-	}
-
-	@Override
 	protected String getTEName() {
 		return "Meteor Defence Gun";
 	}
 
 	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 0;
+	@ForgeSubscribe
+	public void onImpact(ImpactEvent e) {
+
 	}
 
 }

@@ -7,7 +7,7 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.MeteorCraft.MeteorGun;
+package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -18,25 +18,34 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 
-public class BlockMeteorGun extends Block {
+public class BlockMeteorMachine extends Block {
 
-	private final Icon[] topIcon = new Icon[3];
-	private final Icon[] sideIcon = new Icon[3];
-	private final Icon[] bottomIcon = new Icon[3];
+	private final Icon[] topIcon = new Icon[4];
+	private final Icon[] sideIcon = new Icon[4];
+	private final Icon[] bottomIcon = new Icon[4];
 
-	public BlockMeteorGun(int par1) {
+	public BlockMeteorMachine(int par1) {
 		super(par1, Material.iron);
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	@Override
 	public boolean hasTileEntity(int meta) {
-		return meta < 3;
+		return meta < 4;
 	}
 
 	@Override
 	public TileEntity createTileEntity(World world, int meta) {
-		return new TileEntityMeteorGun();
+		if (meta < 3)
+			return new TileEntityMeteorGun();
+		if (meta == 3)
+			return new TileEntityMeteorRadar();
+		return null;
+	}
+
+	@Override
+	public int damageDropped(int dmg) {
+		return dmg;
 	}
 
 	@Override
@@ -47,10 +56,10 @@ public class BlockMeteorGun extends Block {
 	@Override
 	public void registerIcons(IconRegister ico) {
 		String s = ModList.ROTARYCRAFT.isLoaded() ? "_rc" : "";
-		for (int i = 0; i < 3; i++) {
-			topIcon[i] = ico.registerIcon("meteorcraft:gun_"+i+"_top"+s);
-			sideIcon[i] = ico.registerIcon("meteorcraft:gun_"+i+"_side"+s);
-			bottomIcon[i] = ico.registerIcon("meteorcraft:gun_"+i+"_bottom"+s);
+		for (int i = 0; i < topIcon.length; i++) {
+			topIcon[i] = ico.registerIcon("meteorcraft:machine_"+i+"_top"+s);
+			sideIcon[i] = ico.registerIcon("meteorcraft:machine_"+i+"_side"+s);
+			bottomIcon[i] = ico.registerIcon("meteorcraft:machine_"+i+"_bottom"+s);
 		}
 	}
 

@@ -19,11 +19,12 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
+import Reika.MeteorCraft.Blocks.BlockMeteorMachine;
+import Reika.MeteorCraft.Blocks.ItemBlockMeteorMachine;
+import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
+import Reika.MeteorCraft.Blocks.TileEntityMeteorRadar;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Entity.EntityTrail;
-import Reika.MeteorCraft.MeteorGun.BlockMeteorGun;
-import Reika.MeteorCraft.MeteorGun.ItemBlockMeteorGun;
-import Reika.MeteorCraft.MeteorGun.TileEntityMeteorGun;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
@@ -53,7 +54,7 @@ public class MeteorCraft extends DragonAPIMod {
 
 	public static ModLogger logger;
 
-	public static Block meteorGun;
+	public static Block meteorMachines;
 
 	@SidedProxy(clientSide="Reika.MeteorCraft.MeteorClient", serverSide="Reika.MeteorCraft.MeteorCommon")
 	public static MeteorCommon proxy;
@@ -69,9 +70,13 @@ public class MeteorCraft extends DragonAPIMod {
 		ReikaRegistryHelper.setupModData(instance, evt);
 		ReikaRegistryHelper.setupVersionChecking(evt);
 
-		meteorGun = new BlockMeteorGun(MeteorOptions.BLOCKID.getValue());
-		GameRegistry.registerBlock(meteorGun, ItemBlockMeteorGun.class, "Meteor Defence Gun");
-		LanguageRegistry.addName(meteorGun, "Meteor Defence Gun");
+		meteorMachines = new BlockMeteorMachine(MeteorOptions.BLOCKID.getValue()).setUnlocalizedName("meteormachine");
+		GameRegistry.registerBlock(meteorMachines, ItemBlockMeteorMachine.class, "Meteor Machines");
+		for (int i = 0; i < 3; i++) {
+			ItemStack is = new ItemStack(meteorMachines.blockID, i, 0);
+			LanguageRegistry.addName(is, "Meteor Defence Gun");
+		}
+		LanguageRegistry.addName(new ItemStack(meteorMachines.blockID, 3, 0), "Meteor Radar");
 	}
 
 	@Override
@@ -85,19 +90,24 @@ public class MeteorCraft extends DragonAPIMod {
 		proxy.addSounds();
 
 		GameRegistry.registerTileEntity(TileEntityMeteorGun.class, "meteorgun");
+		GameRegistry.registerTileEntity(TileEntityMeteorRadar.class, "meteorradar");
 
-		ItemStack is = new ItemStack(meteorGun.blockID, 1, 0);
-		ItemStack is1 = new ItemStack(meteorGun.blockID, 1, 1);
-		ItemStack is2 = new ItemStack(meteorGun.blockID, 1, 2);
+		ItemStack is = new ItemStack(meteorMachines.blockID, 1, 0);
+		ItemStack is1 = new ItemStack(meteorMachines.blockID, 1, 1);
+		ItemStack is2 = new ItemStack(meteorMachines.blockID, 1, 2);
 		if (ModList.ROTARYCRAFT.isLoaded()) {
 			WorktableRecipes.getInstance().addRecipe(is, "SRS", "PCP", "ScS", 'S', ItemStacks.steelingot, 'R', Block.blockRedstone, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
 			WorktableRecipes.getInstance().addRecipe(is1, "SLS", "PcP", "SCS", 'L', is, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
 			WorktableRecipes.getInstance().addRecipe(is2, "SLS", "PcP", "SCS", 'L', is1, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.turbine, 'c', ItemStacks.pcb);
+
+			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines.blockID, 1, 3), "SsS", "PLP", "ScS", 's', ItemStacks.screen, 'L', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'c', ItemStacks.pcb);
 		}
 		else {
 			GameRegistry.addRecipe(is, "IRI", "BTB", "IDI", 'I', Item.ingotIron, 'B', Block.blockIron, 'D', Block.dispenser, 'R', Block.blockRedstone, 'T', Block.tnt);
 			GameRegistry.addRecipe(is1, "IRI", "BTB", "IDI", 'I', Item.ingotGold, 'B', Block.obsidian, 'D', Block.pistonBase, 'R', Block.blockNetherQuartz, 'T', is);
 			GameRegistry.addRecipe(is2, "IRI", "BTB", "IDI", 'I', Item.diamond, 'B', Block.obsidian, 'D', Item.eyeOfEnder, 'R', Block.whiteStone, 'T', is1);
+
+			GameRegistry.addRecipe(new ItemStack(meteorMachines.blockID, 1, 3), "SgS", "SrS", "SrS", 'g', Item.ingotGold, 'S', Item.ingotIron, 'r', Item.redstone);
 		}
 	}
 
