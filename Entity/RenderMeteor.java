@@ -18,10 +18,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.MeteorCraft.MeteorCraft;
-
 public class RenderMeteor extends Render {
+
+	private static final ResourceLocation texture = new ResourceLocation("meteorcraft", "textures/entity/meteor.png");
 
 	public void renderEntity(EntityMeteor er, double par2, double par4, double par6, float par8, float par9)
 	{
@@ -41,7 +40,8 @@ public class RenderMeteor extends Render {
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float size = 6;
-		ReikaTextureHelper.bindTexture(MeteorCraft.class, "/Reika/MeteorCraft/Textures/meteor.png");
+		//ReikaTextureHelper.bindTexture(MeteorCraft.class, "/Reika/MeteorCraft/Textures/meteor.png");
+		this.bindTexture(texture);
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
 		v5.startDrawingQuads();
@@ -66,7 +66,7 @@ public class RenderMeteor extends Render {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return null;
+		return texture;
 	}
 
 }

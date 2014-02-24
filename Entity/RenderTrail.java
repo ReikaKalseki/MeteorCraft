@@ -18,10 +18,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import Reika.DragonAPI.Libraries.IO.ReikaTextureHelper;
-import Reika.MeteorCraft.MeteorCraft;
-
 public class RenderTrail extends Render {
+
+	private static final ResourceLocation texture = new ResourceLocation("meteorcraft", "textures/entity/smoke.png");
 
 	public void renderEntity(EntityTrail er, double par2, double par4, double par6, float par8, float par9)
 	{
@@ -41,7 +40,8 @@ public class RenderTrail extends Render {
 		GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 		float size = 10;//-er.ticksExisted/(float)er.LIFE*10;
-		ReikaTextureHelper.bindFinalTexture(MeteorCraft.class, "/Reika/MeteorCraft/Textures/smoke.png");
+		//ReikaTextureHelper.bindFinalTexture(MeteorCraft.class, "/Reika/MeteorCraft/Textures/smoke.png");
+		this.bindTexture(texture);
 		GL11.glScaled(size, size, 1);
 		GL11.glTranslated(-0.5, -0.5, 0);
 		//GL11.glDepthFunc(GL11.GL_ALWAYS);
@@ -73,7 +73,7 @@ public class RenderTrail extends Render {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return null;
+		return texture;
 	}
 
 }

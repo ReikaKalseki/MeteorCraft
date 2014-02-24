@@ -104,8 +104,8 @@ public class MeteorImpact {
 			EntityLivingBase el = li.get(i);
 			el.attackEntityFrom(DamageSource.generic, Integer.MAX_VALUE);
 		}
-		//ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "random.explode");
 		ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
+		//MeteorSounds.IMPACT.playSoundAtBlock(world, posX, posY, posZ);
 		for (int i = 0; i < world.playerEntities.size(); i++) {
 			EntityPlayer ep = (EntityPlayer)world.playerEntities.get(i);
 			ep.playSound("random.explode", 1, 1);

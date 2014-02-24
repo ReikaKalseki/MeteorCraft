@@ -68,6 +68,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 			//ep.playSound("ambient.weather.thunder", 2, 2);
 			for (float i = 0; i <= 2; i += 0.5F) {
 				ep.playSound("meteorcraft:boom", 2, i);
+				//MeteorSounds.BOOM.playSoundAtEntity(worldObj, ep, 2, i);
 			}
 			soundTimer = 10;
 		}
@@ -80,6 +81,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 				EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
 
 				ep.playSound("meteorcraft:boom", 2, 2);
+				//MeteorSounds.BOOM.playSoundAtEntity(worldObj, ep, 2, 2);
 				for (int k = 0; k < 2; k++) {
 					ep.playSound("ambient.weather.thunder", 2, 0.25F);
 					ep.playSound("ambient.weather.thunder", 2, 1);

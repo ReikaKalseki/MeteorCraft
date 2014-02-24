@@ -30,6 +30,8 @@ public class MeteorClient extends MeteorCommon {
 		CustomSoundHandler.instance.addSound("meteorcraft", "flyby");
 		CustomSoundHandler.instance.addSound("meteorcraft", "entry");
 		CustomSoundHandler.instance.addSound("meteorcraft", "boom");
+
+		//MinecraftForge.EVENT_BUS.register(new SoundLoader(MeteorCraft.instance, MeteorSounds.soundList, MeteorSounds.SOUND_FOLDER));
 	}
 
 }

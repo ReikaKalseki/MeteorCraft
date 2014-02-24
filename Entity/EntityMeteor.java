@@ -143,23 +143,29 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			if (posY <= worldObj.provider.getAverageGroundLevel()+224 && !crossed) {
 				crossed = true;
 				this.playSound("meteorcraft:flyby", 1, 1);
+				//MeteorSounds.FLYBY.playSoundAtEntity(world, this);
 				if (worldObj.isRemote) {
 					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:flyby", 1, 1);
+					//MeteorSounds.FLYBY.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
 				}
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+127 && !boom) {
 				crossed = true;
 				this.playSound("meteorcraft:boom", 1, 1);
+				//MeteorSounds.BOOM.playSoundAtEntity(world, this);
 				if (worldObj.isRemote) {
 					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:boom", 1, 1);
+					//MeteorSounds.BOOM.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
 				}
 				boom = true;
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+12 && !impact) {
 				if (worldObj.isRemote) {
 					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:impact", 1, 1);
+					//MeteorSounds.IMPACT.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
 				}
 				this.playSound("meteorcraft:impact", 1, 1);
+				//MeteorSounds.IMPACT.playSoundAtEntity(world, this);
 				impact = true;
 			}
 		}
@@ -187,7 +193,9 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	protected void entityInit() {
 		if (worldObj.isRemote) {
 			Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:entry", 1, 1);
+			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
 		}
+		//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
 		this.playSound("meteorcraft:entry", 1, 1);
 
 		explodeY = -1;
