@@ -1,7 +1,7 @@
 /*******************************************************************************
  * @author Reika Kalseki
  * 
- * Copyright 2013
+ * Copyright 2014
  * 
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
@@ -73,21 +73,6 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	@Override
 	public final void setIORenderAlpha(int io) {
 		iotick = io;
-	}
-
-	@Override
-	public final int getMachineX() {
-		return xCoord;
-	}
-
-	@Override
-	public final int getMachineY() {
-		return yCoord;
-	}
-
-	@Override
-	public final int getMachineZ() {
-		return zCoord;
 	}
 
 	@Override
