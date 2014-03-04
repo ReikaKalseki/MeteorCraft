@@ -25,7 +25,9 @@ public class BlockMeteorMachine extends Block {
 	private final Icon[] bottomIcon = new Icon[4];
 
 	public BlockMeteorMachine(int par1) {
-		super(par1, Material.iron);
+		super(par1, ModList.ROTARYCRAFT.isLoaded() ? Material.iron : Material.rock);
+		this.setHardness(ModList.ROTARYCRAFT.isLoaded() ? 4 : 2.5F);
+		this.setResistance(ModList.ROTARYCRAFT.isLoaded() ? 15 : 10);
 		this.setCreativeTab(CreativeTabs.tabMisc);
 	}
 
