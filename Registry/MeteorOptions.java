@@ -127,4 +127,9 @@ public enum MeteorOptions implements ConfigList {
 		return false;
 	}
 
+	@Override
+	public boolean shouldLoad() {
+		return true;
+	}
+
 }
