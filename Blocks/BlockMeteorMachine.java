@@ -65,4 +65,13 @@ public class BlockMeteorMachine extends Block {
 		}
 	}
 
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int oldid, int oldmeta) {
+		TileEntityMeteorBase te = (TileEntityMeteorBase)world.getBlockTileEntity(x, y, z);
+		if (te != null) {
+			te.destroy();
+		}
+		super.breakBlock(world, x, y, z, oldid, oldmeta);
+	}
+
 }

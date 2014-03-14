@@ -30,6 +30,10 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	public void destroy() {
+		MinecraftForge.EVENT_BUS.unregister(this);
+	}
+
 	public abstract void onMeteor(EntryEvent e);
 
 	public abstract void onImpact(ImpactEvent e);

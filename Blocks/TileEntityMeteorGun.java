@@ -22,6 +22,7 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.MeteorCraft.Event.MeteorDefenceEvent;
+import cpw.mods.fml.relauncher.Side;
 
 public class TileEntityMeteorGun extends TileEntityMeteorBase {
 
@@ -63,7 +64,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 		ReikaSoundHelper.playSoundAtBlock(worldObj, xCoord, yCoord, zCoord, "random.explode");
 		ReikaParticleHelper.EXPLODE.spawnAroundBlock(worldObj, xCoord, yCoord, zCoord, 1);
 
-		if (worldObj.isRemote) {
+		if (this.getSide() == Side.CLIENT) {
 			EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
 			//ep.playSound("ambient.weather.thunder", 2, 2);
 			for (float i = 0; i <= 2; i += 0.5F) {
@@ -77,7 +78,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (soundTimer == 1) {
-			if (worldObj.isRemote) {
+			if (this.getSide() == Side.CLIENT) {
 				EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
 
 				ep.playSound("meteorcraft:boom", 2, 2);
