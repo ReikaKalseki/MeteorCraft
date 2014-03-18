@@ -9,12 +9,16 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Event;
 
+import java.util.ArrayList;
+
 import net.minecraftforge.event.Event;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 
 public class MeteorEvent extends Event {
 
 	public final EntityMeteor meteor;
+
+	private static final ArrayList<EntityMeteor> meteors = new ArrayList();
 
 	public MeteorEvent(EntityMeteor e) {
 		meteor = e;

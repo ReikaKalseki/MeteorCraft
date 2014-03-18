@@ -66,8 +66,6 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		this.addVelocity(vx, -4, vz);
 		velocityChanged = true;
 		noClip = true;
-		if (!worldObj.isRemote)
-			MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
 	}
 
 	public EntityMeteor setExploding() {
@@ -82,6 +80,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	@Override
 	public void onUpdate() {
+		if (ticksExisted < 2)
+			MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
 		super.onUpdate();
 		if (ticksExisted > 1200)
 			this.setDead();

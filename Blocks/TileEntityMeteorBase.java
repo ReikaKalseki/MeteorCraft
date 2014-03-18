@@ -20,9 +20,9 @@ import Reika.RotaryCraft.API.ShaftPowerReceiver;
 
 public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver {
 
-	protected int torque;
-	protected int omega;
-	protected long power;
+	private int torque;
+	private int omega;
+	private long power;
 
 	protected int iotick = 512;
 
@@ -111,8 +111,6 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	public boolean canPerformActions() {
-		if (worldObj.isRemote)
-			return false;
 		return ModList.ROTARYCRAFT.isLoaded() ? power >= this.getMinPower() : true;
 	}
 

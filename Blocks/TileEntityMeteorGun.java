@@ -11,7 +11,6 @@ package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -23,6 +22,7 @@ import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.MeteorCraft.Event.MeteorDefenceEvent;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityMeteorGun extends TileEntityMeteorBase {
 
@@ -33,7 +33,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 	}
 
 	public int getTier() {
-		return this.getBlockMetadata();
+		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -65,32 +65,37 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 		ReikaParticleHelper.EXPLODE.spawnAroundBlock(worldObj, xCoord, yCoord, zCoord, 1);
 
 		if (this.getSide() == Side.CLIENT) {
-			EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
-			//ep.playSound("ambient.weather.thunder", 2, 2);
+			this.playMCPlayerSound("ambient.weather.thunder", 2, 2);
 			for (float i = 0; i <= 2; i += 0.5F) {
-				ep.playSound("meteorcraft:boom", 2, i);
-				//MeteorSounds.BOOM.playSoundAtEntity(worldObj, ep, 2, i);
+				this.playMCPlayerSound("meteorcraft:boom", 2, i);
 			}
 			soundTimer = 10;
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void playMCPlayerSound(String s, float v, float p) {
+		Minecraft.getMinecraft().thePlayer.playSound(s, v, p);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void playMCPlayerSound(String s) {
+		this.playMCPlayerSound(s, 1, 1);
 	}
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
 		if (soundTimer == 1) {
 			if (this.getSide() == Side.CLIENT) {
-				EntityPlayer ep = Minecraft.getMinecraft().thePlayer;
-
-				ep.playSound("meteorcraft:boom", 2, 2);
-				//MeteorSounds.BOOM.playSoundAtEntity(worldObj, ep, 2, 2);
+				this.playMCPlayerSound("meteorcraft:boom", 2, 2);
 				for (int k = 0; k < 2; k++) {
-					ep.playSound("ambient.weather.thunder", 2, 0.25F);
-					ep.playSound("ambient.weather.thunder", 2, 1);
-					ep.playSound("ambient.weather.thunder", 2, 2);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 0.25F);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 1F);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 2F);
 
-					ep.playSound("ambient.weather.thunder", 2, 0.25F);
-					ep.playSound("ambient.weather.thunder", 2, 1);
-					ep.playSound("ambient.weather.thunder", 2, 2);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 0.25F);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 1F);
+					this.playMCPlayerSound("ambient.weather.thunder", 2, 2F);
 				}
 			}
 		}

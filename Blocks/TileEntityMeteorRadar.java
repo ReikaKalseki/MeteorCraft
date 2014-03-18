@@ -55,7 +55,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	public int getRange() {
-		return (int)(power/1024);
+		return (int)(this.getPower()/1024);
 	}
 
 }
