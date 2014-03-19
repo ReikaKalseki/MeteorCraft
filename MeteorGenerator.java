@@ -26,7 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
 public class MeteorGenerator {
@@ -188,16 +187,16 @@ public class MeteorGenerator {
 		return MeteorCraft.config.shouldGenerateOre(ore);
 	}
 
-	public ItemStack getBlock(EntityMeteor e) {
-		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(e.getType())) {
-			return this.getRandomOre(e.getType());
+	public ItemStack getBlock(MeteorType type) {
+		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(type)) {
+			return this.getRandomOre(type);
 		}
 		else {
-			return e.getType().getBlock();
+			return type.getBlock();
 		}
 	}
 
-	public void generate(World world, int x, int y, int z, EntityMeteor e) {
+	public void generate(World world, int x, int y, int z, MeteorType type) {
 		BlockArray blocks = new BlockArray();
 		int radius = 2+rand.nextInt(3);
 		for (int i = -radius; i <= radius; i++) {
@@ -222,7 +221,7 @@ public class MeteorGenerator {
 			int fx = xyz[0];
 			int fy = xyz[1];
 			int fz = xyz[2];
-			ItemStack is = this.getBlock(e);
+			ItemStack is = this.getBlock(type);
 			if (fy > 0)
 				world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
 		}
