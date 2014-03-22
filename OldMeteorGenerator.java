@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * @author Reika Kalseki
+ * 
+ * Copyright 2014
+ * 
+ * All rights reserved.
+ * Distribution of the software in any form is only allowed with
+ * explicit, prior permission from the owner.
+ ******************************************************************************/
 package Reika.MeteorCraft;
 
 import java.util.Random;
@@ -16,8 +25,9 @@ public class OldMeteorGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (this.canGen(world)) {
-			if (random.nextInt(200) == 0)
+			if (random.nextInt(100) == 0) {
 				this.generate(random, world, chunkX*16, chunkZ*16);
+			}
 		}
 	}
 
@@ -36,6 +46,7 @@ public class OldMeteorGenerator implements IWorldGenerator {
 		int x = chunkX+rand.nextInt(16);
 		int z = chunkZ+rand.nextInt(16);
 		int y = this.getGenY(world, x, z, rand);
+		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 		MeteorGenerator.instance.generate(world, x, y, z, this.getRandomType(rand));
 	}
 
@@ -53,6 +64,8 @@ public class OldMeteorGenerator implements IWorldGenerator {
 			return 5+rand.nextInt(30);
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		int max = (int)(biome.maxHeight*world.provider.getAverageGroundLevel());
+		if (max <= 0)
+			max = 1;
 		int y = 5+rand.nextInt(max);
 		while (world.canBlockSeeTheSky(x, y+1, z)) {
 			y = 5+rand.nextInt(max);

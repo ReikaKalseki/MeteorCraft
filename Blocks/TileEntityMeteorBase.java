@@ -43,6 +43,10 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		return MeteorCraft.meteorMachines.blockID;
 	}
 
+	public boolean canSeeSky() {
+		return worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord);
+	}
+
 	@Override
 	public void animateWithTick(World world, int x, int y, int z) {
 		if (iotick > 0)
@@ -111,6 +115,8 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	public boolean canPerformActions() {
+		if (!this.canSeeSky())
+			return false;
 		return ModList.ROTARYCRAFT.isLoaded() ? power >= this.getMinPower() : true;
 	}
 

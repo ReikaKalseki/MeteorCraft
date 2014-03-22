@@ -92,6 +92,9 @@ public class MeteorCraft extends DragonAPIMod {
 		GameRegistry.registerTileEntity(TileEntityMeteorGun.class, "meteorgun");
 		GameRegistry.registerTileEntity(TileEntityMeteorRadar.class, "meteorradar");
 
+		if (MeteorOptions.OLDGEN.getState())
+			GameRegistry.registerWorldGenerator(new OldMeteorGenerator());
+
 		ItemStack is = new ItemStack(meteorMachines.blockID, 1, 0);
 		ItemStack is1 = new ItemStack(meteorMachines.blockID, 1, 1);
 		ItemStack is2 = new ItemStack(meteorMachines.blockID, 1, 2);
