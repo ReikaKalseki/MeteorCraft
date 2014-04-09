@@ -48,7 +48,7 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	@Override
-	public void animateWithTick(World world, int x, int y, int z) {
+	protected void animateWithTick(World world, int x, int y, int z) {
 		if (iotick > 0)
 			iotick -= 8;
 	}
