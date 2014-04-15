@@ -11,6 +11,7 @@ package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.MeteorCraft.Entity.EntityMeteor;
@@ -55,7 +56,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	public int getRange() {
-		return (int)(this.getPower()/1024);
+		return ModList.ROTARYCRAFT.isLoaded() ? (int)(this.getPower()/1024) : 128;
 	}
 
 }
