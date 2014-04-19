@@ -44,7 +44,7 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	public boolean canSeeSky() {
-		return worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord);
+		return worldObj.canBlockSeeTheSky(xCoord, yCoord+1, zCoord);
 	}
 
 	@Override
