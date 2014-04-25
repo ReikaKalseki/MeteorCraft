@@ -41,7 +41,8 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
 		if (this.canPerformActions() && dd <= this.getRange()) {
-			ReikaChatHelper.sendChatToAllOnServer("A meteor has been detected above "+m.posX+", "+m.posZ);
+			if (!worldObj.isRemote)
+				ReikaChatHelper.sendChatToAllOnServer("A meteor has been detected above "+m.posX+", "+m.posZ);
 		}
 	}
 
@@ -51,7 +52,8 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
 		if (this.canPerformActions() && dd <= this.getRange()) {
-			ReikaChatHelper.sendChatToAllOnServer("A meteor impact has been detected at "+e.x+", "+e.y+", "+e.z);
+			if (!worldObj.isRemote)
+				ReikaChatHelper.sendChatToAllOnServer("A meteor impact has been detected at "+e.x+", "+e.y+", "+e.z);
 		}
 	}
 
