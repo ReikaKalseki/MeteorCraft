@@ -127,4 +127,14 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		return pass == 0;
 	}
 
+	@Override
+	public final int getRedstoneOverride() {
+		return this.canPerformActions() ? 0 : 15;
+	}
+
+	@Override
+	public final int getMinTorque(int available) {
+		return 1;
+	}
+
 }
