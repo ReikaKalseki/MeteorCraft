@@ -98,11 +98,11 @@ public class MeteorImpact {
 			}
 		}
 
-		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(9, 9, 9);
+		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(16, 16, 16);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (int i = 0; i < li.size(); i++) {
 			EntityLivingBase el = li.get(i);
-			el.attackEntityFrom(DamageSource.generic, Integer.MAX_VALUE);
+			el.attackEntityFrom(DamageSource.generic, this.getDamageFor(el));
 		}
 		ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
 		//MeteorSounds.IMPACT.playSoundAtBlock(world, posX, posY, posZ);
@@ -164,6 +164,14 @@ public class MeteorImpact {
 			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
 			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Item.gunpowder));
 		}
+	}
+
+	private float getDamageFor(EntityLivingBase el) {
+		int dd = (int)ReikaMathLibrary.py3d(el.posX-posX, el.posY-posY, el.posZ-posZ);
+		if (dd <= 9)
+			return Integer.MAX_VALUE;
+		else
+			return 20-2*(dd-9);
 	}
 
 	private boolean canDestroy(World world, int x, int y, int z, int id, int meta) {
