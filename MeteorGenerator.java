@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -32,12 +33,14 @@ public class MeteorGenerator {
 
 	public static final MeteorGenerator instance = new MeteorGenerator();
 
-	private HashMap<MeteorType, ArrayList<ItemStack>> viableOres = new HashMap();
+	private final HashMap<MeteorType, InvertedWeightedRandom<ItemStack>> viableOres = new HashMap();
 
-	private HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
-	private HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> ids = new HashMap();
+	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
+	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> ids = new HashMap();
 
 	private static final Random rand = new Random();
+
+	private final Material[] mats;
 
 	private MeteorGenerator() {
 
@@ -61,7 +64,7 @@ public class MeteorGenerator {
 				ReikaOreHelper ore = ReikaOreHelper.oreList[i];
 				if (this.canGenerateOre(ore)) {
 					if (this.isValidOreForType(type, ore)) {
-						this.addOre(type, ore.getOreBlock());
+						this.addOre(type, ore.getOreBlock(), MeteorCraft.config.getOreWeight(ore));
 					}
 				}
 			}
@@ -78,13 +81,36 @@ public class MeteorGenerator {
 								if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
 									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
 									MeteorCraft.logger.log("Registering "+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
-									this.addOre(type, block);
+									this.addOre(type, block, MeteorCraft.config.getOreWeight(ore));
 								}
 							}
 						}
 					}
 				}
 			}
+		}
+
+		ArrayList<Material> mats = new ArrayList();
+		mats.add(Material.circuits);
+		mats.add(Material.glass);
+		mats.add(Material.snow);
+		mats.add(Material.ice);
+		mats.add(Material.cactus);
+		mats.add(Material.craftedSnow);
+		mats.add(Material.fire);
+		mats.add(Material.leaves);
+		mats.add(Material.plants);
+		mats.add(Material.portal);
+		mats.add(Material.pumpkin);
+		mats.add(Material.redstoneLight);
+		mats.add(Material.sponge);
+		mats.add(Material.lava);
+		mats.add(Material.water);
+		mats.add(Material.vine);
+		mats.add(Material.web);
+		this.mats = new Material[mats.size()];
+		for (int i = 0; i < mats.size(); i++) {
+			this.mats[i] = mats.get(i);
 		}
 	}
 
@@ -158,16 +184,16 @@ public class MeteorGenerator {
 			return true;
 	}
 
-	private void addOre(MeteorType type, ItemStack is) {
-		ArrayList<ItemStack> li = this.getOres(type);
-		if (li == null) {
-			li = new ArrayList();
+	private void addOre(MeteorType type, ItemStack is, int weight) {
+		InvertedWeightedRandom<ItemStack> dat = this.getOres(type);
+		if (dat == null) {
+			dat = new InvertedWeightedRandom();
 		}
-		li.add(is);
-		viableOres.put(type, li);
+		dat.addEntry(weight, is);
+		viableOres.put(type, dat);
 	}
 
-	private ArrayList<ItemStack> getOres(MeteorType type) {
+	private InvertedWeightedRandom<ItemStack> getOres(MeteorType type) {
 		return viableOres.get(type);
 	}
 
@@ -176,7 +202,7 @@ public class MeteorGenerator {
 	}
 
 	private ItemStack getRandomOre(MeteorType type) {
-		return this.getOres(type).get(rand.nextInt(this.getOres(type).size()));
+		return this.getOres(type).getRandomEntry();
 	}
 
 	public boolean canGenerateOre(ModOreList ore) {
@@ -197,6 +223,19 @@ public class MeteorGenerator {
 	}
 
 	public void generate(World world, int x, int y, int z, MeteorType type) {
+		BlockArray blocks = this.getMeteorBlockArray(world, x, y, z);
+		for (int i = 0; i < blocks.getSize(); i++) {
+			int[] xyz = blocks.getNthBlock(i);
+			int fx = xyz[0];
+			int fy = xyz[1];
+			int fz = xyz[2];
+			ItemStack is = this.getBlock(type);
+			if (fy > 0)
+				world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
+		}
+	}
+
+	public BlockArray getMeteorBlockArray(World world, int x, int y, int z) {
 		BlockArray blocks = new BlockArray();
 		int radius = 2+rand.nextInt(3);
 		for (int i = -radius; i <= radius; i++) {
@@ -215,16 +254,8 @@ public class MeteorGenerator {
 				}
 			}
 		}
-		blocks.sink(world, Material.circuits, Material.glass, Material.snow, Material.ice, Material.cactus, Material.craftedSnow, Material.fire, Material.leaves, Material.plants, Material.portal, Material.pumpkin, Material.redstoneLight, Material.sponge, Material.lava, Material.water, Material.vine, Material.web);
-		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int fx = xyz[0];
-			int fy = xyz[1];
-			int fz = xyz[2];
-			ItemStack is = this.getBlock(type);
-			if (fy > 0)
-				world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
-		}
+		blocks.sink(world, mats);
+		return blocks;
 	}
 
 	public static boolean canStopMeteor(World world, int x, int y, int z) {

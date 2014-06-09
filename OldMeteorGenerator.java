@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Registry.MeteorOptions;
@@ -47,7 +48,19 @@ public class OldMeteorGenerator implements IWorldGenerator {
 		int z = chunkZ+rand.nextInt(16);
 		int y = this.getGenY(world, x, z, rand);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
-		MeteorGenerator.instance.generate(world, x, y, z, this.getRandomType(rand));
+		BlockArray gen = MeteorGenerator.instance.getMeteorBlockArray(world, x, y, z);
+		double tries = 0;
+		int h = gen.getSizeY()+1;
+		boolean solid = gen.isAtLeastXPercentSolid(world, 50);
+		while (tries < h && !solid) {
+			gen.offset(0, -1, 0);
+			tries++;
+			solid = gen.isAtLeastXPercentSolid(world, 50);
+		}
+		if (solid) {
+			MeteorGenerator.instance.generate(world, x, y, z, this.getRandomType(rand));
+			//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
+		}
 	}
 
 	private MeteorType getRandomType(Random rand) {

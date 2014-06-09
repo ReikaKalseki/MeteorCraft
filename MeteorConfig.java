@@ -36,7 +36,7 @@ public class MeteorConfig extends ControlledConfig {
 	private static final ArrayList<String> modOres = getModOres();
 	private static final int oreLength = modOres.size();
 	private static final int vanillaOreCount = ReikaOreHelper.oreList.length;
-	private final boolean[] ores = new boolean[oreLength+vanillaOreCount];
+	private final int[] ores = new int[oreLength+vanillaOreCount];
 
 	private final boolean[] biomes = new boolean[BiomeTypeList.biomeList.length];
 
@@ -47,11 +47,11 @@ public class MeteorConfig extends ControlledConfig {
 	protected void loadAdditionalData() {
 		for (int i = 0; i < vanillaOreCount; i++) {
 			String name = ReikaOreHelper.oreList[i].getName();
-			ores[i] = config.get("Generate Vanilla Ores", name, true).getBoolean(true);
+			ores[i] = config.get("Ore Weight", name+" Ore", 1).getInt();
 		}
 		for (int i = 0; i < oreLength; i++) {
 			String name = modOres.get(i);
-			ores[i+vanillaOreCount] = config.get("Generate Mod Ores", name, true).getBoolean(true);
+			ores[i+vanillaOreCount] = config.get("Ore Weight", name, 1).getInt();
 		}
 
 		for (int i = 0; i < biomes.length; i++) {
@@ -219,12 +219,20 @@ public class MeteorConfig extends ControlledConfig {
 		configFile.delete();
 	}*/
 
-	public boolean shouldGenerateOre(ModOreList ore) {
+	public int getOreWeight(ModOreList ore) {
 		return ores[ore.ordinal()+ReikaOreHelper.oreList.length];
 	}
 
-	public boolean shouldGenerateOre(ReikaOreHelper ore) {
+	public int getOreWeight(ReikaOreHelper ore) {
 		return ores[ore.ordinal()];
+	}
+
+	public boolean shouldGenerateOre(ModOreList ore) {
+		return ores[ore.ordinal()+ReikaOreHelper.oreList.length] > 0;
+	}
+
+	public boolean shouldGenerateOre(ReikaOreHelper ore) {
+		return ores[ore.ordinal()] > 0;
 	}
 
 	public boolean canImpactInBiome(BiomeGenBase biome) {
