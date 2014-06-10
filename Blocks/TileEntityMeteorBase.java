@@ -137,4 +137,9 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		return 1;
 	}
 
+	@Override
+	public final boolean hasModel() {
+		return false;
+	}
+
 }
