@@ -16,9 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
+import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
 import Reika.DragonAPI.Base.DragonAPIMod;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
-import Reika.DragonAPI.Libraries.ReikaRegistryHelper;
 import Reika.MeteorCraft.Blocks.BlockMeteorMachine;
 import Reika.MeteorCraft.Blocks.ItemBlockMeteorMachine;
 import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
@@ -67,9 +67,6 @@ public class MeteorCraft extends DragonAPIMod {
 
 		logger = new ModLogger(instance, MeteorOptions.LOGLOADING.getState(), MeteorOptions.DEBUGMODE.getState(), false);
 
-		ReikaRegistryHelper.setupModData(instance, evt);
-		ReikaRegistryHelper.setupVersionChecking(evt);
-
 		meteorMachines = new BlockMeteorMachine(MeteorOptions.BLOCKID.getValue()).setUnlocalizedName("meteormachine");
 		GameRegistry.registerBlock(meteorMachines, ItemBlockMeteorMachine.class, "Meteor Machines");
 		for (int i = 0; i < 3; i++) {
@@ -77,6 +74,7 @@ public class MeteorCraft extends DragonAPIMod {
 			LanguageRegistry.addName(is, "Meteor Defence Gun");
 		}
 		LanguageRegistry.addName(new ItemStack(meteorMachines.blockID, 3, 0), "Meteor Radar");
+		this.basicSetup(evt);
 	}
 
 	@Override
@@ -118,6 +116,7 @@ public class MeteorCraft extends DragonAPIMod {
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
 		config.initModExclusions();
+		CustomOreLoader.instance.loadFile();
 	}
 
 	@EventHandler
@@ -137,27 +136,17 @@ public class MeteorCraft extends DragonAPIMod {
 
 	@Override
 	public URL getDocumentationSite() {
-		return DragonAPICore.getReikaForumPage(instance);
+		return DragonAPICore.getReikaForumPage();
 	}
 
 	@Override
-	public boolean hasWiki() {
-		return false;
-	}
-
-	@Override
-	public URL getWiki() {
+	public String getWiki() {
 		return null;
 	}
 
 	@Override
-	public boolean hasVersion() {
-		return false;
-	}
-
-	@Override
-	public String getVersionName() {
-		return null;
+	public String getUpdateCheckURL() {
+		return CommandableUpdateChecker.reikaURL;
 	}
 
 	@Override

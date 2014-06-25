@@ -27,6 +27,7 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
+import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
 public class MeteorGenerator {
@@ -111,6 +112,18 @@ public class MeteorGenerator {
 		this.mats = new Material[mats.size()];
 		for (int i = 0; i < mats.size(); i++) {
 			this.mats[i] = mats.get(i);
+		}
+
+		List<CustomOreEntry> li = CustomOreLoader.instance.getEntries();
+		for (int i = 0; i < li.size(); i++) {
+			CustomOreEntry e = li.get(i);
+			int weight = e.spawnWeight;
+			MeteorType type = MeteorType.list[e.meteorType];
+			List<ItemStack> items = e.getItems();
+			for (int k = 0; k < items.size(); k++) {
+				ItemStack is = items.get(k);
+				this.addOre(type, is, weight);
+			}
 		}
 	}
 
