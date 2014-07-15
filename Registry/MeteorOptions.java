@@ -16,8 +16,6 @@ import Reika.MeteorCraft.MeteorCraft;
 
 public enum MeteorOptions implements ConfigList {
 
-	LOGLOADING("Console Loading Info", true),
-	DEBUGMODE("Debug Mode", false),
 	CHANCE("Overworld Meteor Rarity", 72000), //one meteor every hour
 	ENDCHANCE("End Meteor Rarity", 72000), //one meteor every hour
 	FORESTCHANCE("Twilight Forest Meteor Rarity", 54000), //one meteor every 45 min

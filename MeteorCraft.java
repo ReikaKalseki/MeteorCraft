@@ -65,7 +65,7 @@ public class MeteorCraft extends DragonAPIMod {
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
 
-		logger = new ModLogger(instance, MeteorOptions.LOGLOADING.getState(), MeteorOptions.DEBUGMODE.getState(), false);
+		logger = new ModLogger(instance, false);
 
 		meteorMachines = new BlockMeteorMachine(MeteorOptions.BLOCKID.getValue()).setUnlocalizedName("meteormachine");
 		GameRegistry.registerBlock(meteorMachines, ItemBlockMeteorMachine.class, "Meteor Machines");

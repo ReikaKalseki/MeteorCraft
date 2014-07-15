@@ -47,11 +47,11 @@ public class MeteorConfig extends ControlledConfig {
 	protected void loadAdditionalData() {
 		for (int i = 0; i < vanillaOreCount; i++) {
 			String name = ReikaOreHelper.oreList[i].getName();
-			ores[i] = config.get("Ore Weight", name+" Ore", 1).getInt();
+			ores[i] = config.get("Ore Weight", name+" Ore", 10).getInt();
 		}
 		for (int i = 0; i < oreLength; i++) {
 			String name = modOres.get(i);
-			ores[i+vanillaOreCount] = config.get("Ore Weight", name, 1).getInt();
+			ores[i+vanillaOreCount] = config.get("Ore Weight", name, 10).getInt();
 		}
 
 		for (int i = 0; i < biomes.length; i++) {

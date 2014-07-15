@@ -46,6 +46,8 @@ public class OldMeteorGenerator implements IWorldGenerator {
 	private void generate(Random rand, World world, int chunkX, int chunkZ) {
 		int x = chunkX+rand.nextInt(16);
 		int z = chunkZ+rand.nextInt(16);
+		if (world.canBlockSeeTheSky(x, 1, z) || world.getBlockId(x, 0, z) == 0) //sky/void world
+			return;
 		int y = this.getGenY(world, x, z, rand);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 		BlockArray gen = MeteorGenerator.instance.getMeteorBlockArray(world, x, y, z);
