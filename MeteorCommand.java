@@ -11,29 +11,24 @@ package Reika.MeteorCraft;
 
 import java.util.ArrayList;
 
-import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
+import Reika.DragonAPI.Command.DragonCommandBase;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 
-public class MeteorCommand extends CommandBase {
+public class MeteorCommand extends DragonCommandBase {
 
 	private final String tag = "meteor";
 
 	@Override
-	public String getCommandName() {
-		return tag;
-	}
-
-	@Override
-	public String getCommandUsage(ICommandSender icommandsender) {
-		return "/"+tag;
+	public String getCommandString() {
+		return "meteor";
 	}
 
 	@Override

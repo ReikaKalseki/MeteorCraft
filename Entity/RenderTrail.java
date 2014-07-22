@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+
 public class RenderTrail extends Render {
 
 	private static final ResourceLocation texture = new ResourceLocation("meteorcraft", "textures/entity/smoke.png");
@@ -46,7 +48,7 @@ public class RenderTrail extends Render {
 		GL11.glTranslated(-0.5, -0.5, 0);
 		//GL11.glDepthFunc(GL11.GL_ALWAYS);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		BlendMode.DEFAULT.apply();
 		//GL11.glColor4f(1-er.ticksExisted/(float)er.LIFE, 1-er.ticksExisted/(float)er.LIFE, 1-er.ticksExisted/(float)er.LIFE, 1);
 		GL11.glColor4f(1, 1, 1, 1-er.ticksExisted/(float)er.LIFE);
 		v5.startDrawingQuads();
