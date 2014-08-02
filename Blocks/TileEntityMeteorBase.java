@@ -10,6 +10,7 @@
 package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
@@ -99,8 +100,8 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	@Override
-	public final boolean canReadFromBlock(int x, int y, int z) {
-		return y <= yCoord && (Math.abs(x-xCoord)+Math.abs(y-yCoord)+Math.abs(z-zCoord)) == 1;
+	public final boolean canReadFrom(ForgeDirection dir) {
+		return dir != ForgeDirection.UP;
 	}
 
 	@Override
@@ -135,11 +136,6 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	@Override
 	public final int getMinTorque(int available) {
 		return 1;
-	}
-
-	@Override
-	public final boolean hasModel() {
-		return false;
 	}
 
 }
