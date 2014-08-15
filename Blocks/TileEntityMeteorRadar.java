@@ -9,14 +9,15 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Blocks;
 
-import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
+
+import net.minecraft.world.World;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 
@@ -36,7 +37,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onMeteor(EntryEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
@@ -47,7 +48,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onImpact(ImpactEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);

@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Event;
 
+import Reika.MeteorCraft.Entity.EntityMeteor;
+
 import java.util.ArrayList;
 
-import net.minecraftforge.event.Event;
-import Reika.MeteorCraft.Entity.EntityMeteor;
+import cpw.mods.fml.common.eventhandler.Event;
 
 public class MeteorEvent extends Event {
 

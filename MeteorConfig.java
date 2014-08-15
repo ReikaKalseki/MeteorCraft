@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.ArrayList;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.BiomeTypeList;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -27,10 +22,16 @@ import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.oredict.OreDictionary;
+
 public class MeteorConfig extends ControlledConfig {
 
-	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] blocks, IDRegistry[] items, IDRegistry[] id, int cfg) {
-		super(mod, option, blocks, items, id, cfg);
+	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
+		super(mod, option, id, cfg);
 	}
 
 	private static final ArrayList<String> modOres = getModOres();
@@ -241,7 +242,7 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	public boolean isItemStackGenerationPermitted(ItemStack is) {
-		if (is.itemID == TinkerBlockHandler.getInstance().gravelOreID)
+		if (ReikaItemHelper.matchStackWithBlock(is, TinkerBlockHandler.getInstance().gravelOreID))
 			return false;
 		return ReikaItemHelper.listContainsItemStack(allowedOreItems, is);
 	}

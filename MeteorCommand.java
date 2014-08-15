@@ -9,18 +9,19 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.ArrayList;
-
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MovingObjectPosition;
 import Reika.DragonAPI.Command.DragonCommandBase;
 import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Entity.EntityMeteor;
+
+import java.util.ArrayList;
+
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MovingObjectPosition;
 
 public class MeteorCommand extends DragonCommandBase {
 
@@ -48,13 +49,13 @@ public class MeteorCommand extends DragonCommandBase {
 			Argument a = Argument.getArgument(args[i]);
 
 			if (a == null) {
-				ChatMessageComponent chat = new ChatMessageComponent();
+				StringBuilder sb2 = new StringBuilder();
 				String sg = EnumChatFormatting.RED.toString()+"Invalid argument \""+args[i]+"\".";
-				chat.addText(sg);
-				chat.addText("\n");
+				sb2.append(sg);
+				sb2.append("\n");
 				sg = EnumChatFormatting.GOLD.toString()+"Valid arguments:";
-				chat.addText(sg);
-				chat.addText("\n");
+				sb2.append(sg);
+				sb2.append("\n");
 				StringBuilder sb = new StringBuilder();
 				ArrayList<String> li = this.getValidArguments();
 				for (int k = 0; k < li.size(); k++) {
@@ -63,8 +64,10 @@ public class MeteorCommand extends DragonCommandBase {
 						sb.append("\n");
 				}
 				sg = sb.toString();
-				chat.addText(sg);
-				ep.sendChatToPlayer(chat);
+				sb2.append(sg);
+
+				ChatComponentTranslation chat = new ChatComponentTranslation(sb2.toString());
+				ep.addChatMessage(chat);
 				return;
 			}
 			else {

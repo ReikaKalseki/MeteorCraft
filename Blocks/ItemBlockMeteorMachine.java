@@ -11,19 +11,21 @@ package Reika.MeteorCraft.Blocks;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockMeteorMachine extends ItemBlock {
 
-	public ItemBlockMeteorMachine(int par1) {
-		super(par1);
+	public ItemBlockMeteorMachine(Block b) {
+		super(b);
 		hasSubtypes = true;
 	}
 
 	@Override
-	public void getSubItems(int id, CreativeTabs tab, List li) {
+	public void getSubItems(Item id, CreativeTabs tab, List li) {
 		for (int i = 0; i < 4; i++) {
 			li.add(new ItemStack(id, 1, i));
 		}
@@ -35,7 +37,7 @@ public class ItemBlockMeteorMachine extends ItemBlock {
 	}
 
 	@Override
-	public String getItemDisplayName(ItemStack is) {
+	public String getItemStackDisplayName(ItemStack is) {
 		if (is.getItemDamage() < 3)
 			return "Meteor Defence Gun (Tier "+is.getItemDamage()+")";
 		if (is.getItemDamage() == 3)

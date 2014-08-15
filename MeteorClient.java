@@ -9,11 +9,13 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import Reika.DragonAPI.Auxiliary.CustomSoundHandler;
+import Reika.DragonAPI.Instantiable.IO.SoundLoader;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Entity.RenderMeteor;
 import Reika.MeteorCraft.Entity.RenderTrail;
+import Reika.MeteorCraft.Registry.MeteorSounds;
+
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class MeteorClient extends MeteorCommon {
@@ -26,12 +28,12 @@ public class MeteorClient extends MeteorCommon {
 
 	@Override
 	public void addSounds() {
-		CustomSoundHandler.instance.addSound("meteorcraft", "impact");
-		CustomSoundHandler.instance.addSound("meteorcraft", "flyby");
-		CustomSoundHandler.instance.addSound("meteorcraft", "entry");
-		CustomSoundHandler.instance.addSound("meteorcraft", "boom");
+		//CustomSoundHandler.instance.addSound("meteorcraft", "impact", SoundCategory.MASTER);
+		//CustomSoundHandler.instance.addSound("meteorcraft", "flyby", SoundCategory.MASTER);
+		//CustomSoundHandler.instance.addSound("meteorcraft", "entry", SoundCategory.MASTER);
+		//CustomSoundHandler.instance.addSound("meteorcraft", "boom", SoundCategory.MASTER);
 
-		//MinecraftForge.EVENT_BUS.register(new SoundLoader(MeteorCraft.instance, MeteorSounds.soundList, MeteorSounds.SOUND_FOLDER));
+		new SoundLoader(MeteorCraft.class, MeteorSounds.soundList).register();
 	}
 
 }

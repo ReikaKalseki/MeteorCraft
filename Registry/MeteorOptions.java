@@ -9,10 +9,11 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Registry;
 
-import net.minecraftforge.common.Configuration;
 import Reika.DragonAPI.Exception.RegistrationException;
 import Reika.DragonAPI.Interfaces.ConfigList;
 import Reika.MeteorCraft.MeteorCraft;
+
+import net.minecraftforge.common.config.Configuration;
 
 public enum MeteorOptions implements ConfigList {
 

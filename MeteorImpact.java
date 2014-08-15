@@ -9,21 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityFallingSand;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -34,6 +19,24 @@ import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.FactorizationHandler;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.ImpactEvent;
+import Reika.MeteorCraft.Registry.MeteorSounds;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 public class MeteorImpact {
 
@@ -70,22 +73,22 @@ public class MeteorImpact {
 						int x2 = MathHelper.floor_double(dx);
 						int y2 = MathHelper.floor_double(dy);
 						int z2 = MathHelper.floor_double(dz);
-						int id = world.getBlockId(x2, y2, z2);
+						Block id = world.getBlock(x2, y2, z2);
 						int meta = world.getBlockMetadata(x2, y2, z2);
 						if (dd <= radius) {
-							if (id != 0) {
+							if (id != Blocks.air) {
 								if (this.canEntitize(world, x2, y2, z2, id, meta)) {
 									ItemStack toDrop = this.getDroppedBlock(id, meta);
-									EntityFallingSand es = new EntityFallingSand(world, x2, y2+4, z2, toDrop.itemID, toDrop.getItemDamage());
+									EntityFallingBlock es = new EntityFallingBlock(world, x2, y2+4, z2, Block.getBlockFromItem(toDrop.getItem()), toDrop.getItemDamage());
 									es.addVelocity(vx, vy*rand.nextDouble()*rand.nextDouble(), vz);
 									es.velocityChanged = true;
-									es.fallTime = -1000;
-									world.setBlock(x2, y2, z2, 0);
+									es.field_145812_b = -1000;
+									world.setBlockToAir(x2, y2, z2);
 									world.spawnEntityInWorld(es);
 								}
 								else if (this.canDestroy(world, x2, y2, z2, id, meta)) {
 									if (y2 > 0) {
-										world.setBlock(x2, y2, z2, 0);
+										world.setBlockToAir(x2, y2, z2);
 									}
 								}
 								else {
@@ -104,8 +107,8 @@ public class MeteorImpact {
 			EntityLivingBase el = li.get(i);
 			el.attackEntityFrom(DamageSource.generic, this.getDamageFor(el));
 		}
-		ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
-		//MeteorSounds.IMPACT.playSoundAtBlock(world, posX, posY, posZ);
+		//ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
+		ReikaSoundHelper.playSound(MeteorSounds.IMPACT, posX+0.5, posY+0.5, posZ+0.5, 1, 1);
 		for (int i = 0; i < world.playerEntities.size(); i++) {
 			EntityPlayer ep = (EntityPlayer)world.playerEntities.get(i);
 			ep.playSound("random.explode", 1, 1);
@@ -121,18 +124,17 @@ public class MeteorImpact {
 					int dz = posZ+k;
 					double dd = ReikaMathLibrary.py3d(i, j, k)-2+rand.nextDouble()*2;
 					if (dd < r) {
-						Material mat = world.getBlockMaterial(dx, dy, dz);
-						int id = world.getBlockId(dx, dy, dz);
+						Material mat = ReikaWorldHelper.getMaterial(world, dx, dy, dz);
+						Block b = world.getBlock(dx, dy, dz);
 						int meta = world.getBlockMetadata(dx, dy, dz);
-						Block b = Block.blocksList[id];
 						if (mat == Material.glass || mat == Material.ice) {
 							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
-							world.setBlock(dx, dy, dz, 0);
-							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Block.glass);
+							world.setBlockToAir(dx, dy, dz);
+							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Blocks.glass);
 						}
 						if (mat == Material.circuits || mat == Material.web) {
 							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
-							world.setBlock(dx, dy, dz, 0);
+							world.setBlockToAir(dx, dy, dz);
 						}
 					}
 				}
@@ -146,7 +148,7 @@ public class MeteorImpact {
 			int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
 			int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
 			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
-			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Item.glowstone));
+			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Items.glowstone_dust));
 		}
 
 		num = 12+rand.nextInt(37);
@@ -162,7 +164,7 @@ public class MeteorImpact {
 			int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
 			int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
 			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
-			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Item.gunpowder));
+			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Items.gunpowder));
 		}
 	}
 
@@ -174,35 +176,34 @@ public class MeteorImpact {
 			return 20-2*(dd-9);
 	}
 
-	private boolean canDestroy(World world, int x, int y, int z, int id, int meta) {
-		if (id == Block.bedrock.blockID)
+	private boolean canDestroy(World world, int x, int y, int z, Block id, int meta) {
+		if (id == Blocks.bedrock)
 			return false;
 		if (id == FactorizationHandler.getInstance().bedrockID)
 			return false;
 		return true;
 	}
 
-	private ItemStack getDroppedBlock(int id, int meta) {
-		int dropid = id;//Block.blocksList[id].idDropped(meta, rand, 0);
-		int dropmeta = meta;//Block.blocksList[id].damageDropped(meta);
-		if (id == Block.grass.blockID)
-			return new ItemStack(Block.dirt);
+	private ItemStack getDroppedBlock(Block id, int meta) {
+		Block dropid = id;//Blocks.blocksList[id].getItemDropped(meta, rand, 0);
+		int dropmeta = meta;//Blocks.blocksList[id].damageDropped(meta);
+		if (id == Blocks.grass)
+			return new ItemStack(Blocks.dirt);
 		return new ItemStack(dropid, 1, dropmeta);
 	}
 
-	private boolean canEntitize(World world, int x, int y, int z, int id, int meta) {
+	private boolean canEntitize(World world, int x, int y, int z, Block id, int meta) {
 		if (y <= 0)
 			return false;
-		if (id == 0)
+		if (id == Blocks.air)
 			return false;
-		if (id == Block.bedrock.blockID)
+		if (id == Blocks.bedrock)
 			return false;
-		Block b = Block.blocksList[id];
-		if (b.hasTileEntity(meta))
+		if (id.hasTileEntity(meta))
 			return false;
 		if (ReikaWorldHelper.softBlocks(world, x, y, z))
 			return false;
-		if (b.getRenderType() != 0) //To prevent weird looking flying sand entities
+		if (id.getRenderType() != 0) //To prevent weird looking flying sand entities
 			return false;
 		return true;
 	}

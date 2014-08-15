@@ -9,24 +9,11 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityFallingSand;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.BlockFluidBase;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.MeteorGenerator;
@@ -35,10 +22,24 @@ import Reika.MeteorCraft.MeteorImpact;
 import Reika.MeteorCraft.Event.AirburstEvent;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
+import Reika.MeteorCraft.Registry.MeteorSounds;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.BlockFluidBase;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
@@ -102,7 +103,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 					Minecraft.getMinecraft().thePlayer.playSound("random.explode", 1, 0.2F);
 				this.setDead();
 			}
-			int id = world.getBlockId(x, y, z);
+			Block b = world.getBlock(x, y, z);
 			if (MeteorGenerator.canStopMeteor(world, x, y, z)) {
 				this.onImpact(world, x, y, z);
 			}
@@ -125,12 +126,11 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 								int dx = x+i+ox;
 								int dy = y+j+oy;
 								int dz = z+k+oz;
-								int id2 = world.getBlockId(dx, dy, dz);
-								if (id != 0) {
-									Block b = Block.blocksList[id];
-									if (!(b instanceof BlockFluid || b instanceof BlockFluidBase)) {
-										b.dropBlockAsItem(world, dx, dy, dz, world.getBlockMetadata(dx, dy, dz), 0);
-										world.setBlock(dx, dy, dz, 0);
+								Block id2 = world.getBlock(dx, dy, dz);
+								if (id2 != Blocks.air) {
+									if (!(id2 instanceof BlockLiquid || id2 instanceof BlockFluidBase)) {
+										id2.dropBlockAsItem(world, dx, dy, dz, world.getBlockMetadata(dx, dy, dz), 0);
+										world.setBlockToAir(dx, dy, dz);
 									}
 								}
 							}
@@ -142,35 +142,42 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 				world.spawnEntityInWorld(new EntityTrail(world, posX-motionX, posY-motionY, posZ-motionZ));
 			if (posY <= worldObj.provider.getAverageGroundLevel()+224 && !crossed) {
 				crossed = true;
-				this.playSound("meteorcraft:flyby", 1, 1);
-				//MeteorSounds.FLYBY.playSoundAtEntity(world, this);
+				//this.playSound("meteorcraft:flyby", 1, 1);
+				this.playSound(MeteorSounds.FLYBY, this);
 				if (worldObj.isRemote) {
-					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:flyby", 1, 1);
-					//MeteorSounds.FLYBY.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
+					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:flyby", 1, 1);
+					this.playSound(MeteorSounds.FLYBY, Minecraft.getMinecraft().thePlayer);
 				}
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+127 && !boom) {
 				crossed = true;
-				this.playSound("meteorcraft:boom", 1, 1);
-				//MeteorSounds.BOOM.playSoundAtEntity(world, this);
+				//this.playSound("meteorcraft:boom", 1, 1);
+				this.playSound(MeteorSounds.BOOM, this);
 				if (worldObj.isRemote) {
-					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:boom", 1, 1);
-					//MeteorSounds.BOOM.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
+					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:boom", 1, 1);
+					this.playSound(MeteorSounds.BOOM, Minecraft.getMinecraft().thePlayer);
 				}
 				boom = true;
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+12 && !impact) {
 				if (worldObj.isRemote) {
-					Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:impact", 1, 1);
-					//MeteorSounds.IMPACT.playSoundAtEntity(world, Minecraft.getMinecraft().thePlayer);
+					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:impact", 1, 1);
+					this.playSound(MeteorSounds.IMPACT, Minecraft.getMinecraft().thePlayer);
 				}
-				this.playSound("meteorcraft:impact", 1, 1);
-				//MeteorSounds.IMPACT.playSoundAtEntity(world, this);
+				//this.playSound("meteorcraft:impact", 1, 1);
+				this.playSound(MeteorSounds.IMPACT, this);
 				impact = true;
 			}
 		}
 		if (motionY > -4 && !worldObj.isRemote)
 			this.setDead();
+	}
+
+	private void playSound(MeteorSounds sound, Entity e) {
+		double x = e.posX;
+		double y = e.posY;
+		double z = e.posZ;
+		ReikaSoundHelper.playSound(sound, x, y, z, 1, 1);
 	}
 
 	private int getRandomYToExplodeAlways() {
@@ -192,11 +199,11 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	@Override
 	protected void entityInit() {
 		if (worldObj.isRemote) {
-			Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:entry", 1, 1);
+			this.playSound(MeteorSounds.ENTRY, Minecraft.getMinecraft().thePlayer);
 			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
 		}
 		//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
-		this.playSound("meteorcraft:entry", 1, 1);
+		this.playSound(MeteorSounds.ENTRY, this);
 
 		explodeY = -1;
 
@@ -233,12 +240,12 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	@Override
-	public void writeSpawnData(ByteArrayDataOutput data) {
+	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(this.getType().ordinal());
 	}
 
 	@Override
-	public void readSpawnData(ByteArrayDataInput data) {
+	public void readSpawnData(ByteBuf data) {
 		this.setType(data.readInt());
 	}
 
@@ -272,9 +279,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 2);
 			ItemStack is = MeteorGenerator.instance.getBlock(this.getType());
-			if (is.itemID < Block.blocksList.length) { //because some mods are derps and register items as ores
-				EntityFallingSand e = new EntityFallingSand(worldObj, rx, ry, rz, is.itemID, is.getItemDamage());
-				e.fallTime = -10000;
+			Block b = Block.getBlockFromItem(is.getItem());
+			if (b != null) { //because some mods are derps and register items as ores
+				EntityFallingBlock e = new EntityFallingBlock(worldObj, rx, ry, rz, b, is.getItemDamage());
+				e.field_145812_b = -10000;
 				if (!worldObj.isRemote)
 					worldObj.spawnEntityInWorld(e);
 			}
@@ -289,14 +297,14 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
-			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Item.glowstone));
+			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Items.glowstone_dust));
 		}
 		n = 6+rand.nextInt(6);
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
-			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Item.gunpowder));
+			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Items.gunpowder));
 		}
 		if (worldObj.isRemote) {
 			Minecraft.getMinecraft().thePlayer.playSound("random.explode", 3, 0.01F);
@@ -317,10 +325,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 					int dz = z+k;
 					double dd = ReikaMathLibrary.py3d(i, j, k)-2+rand.nextDouble()*2;
 					if (dd < r) {
-						Material mat = world.getBlockMaterial(dx, dy, dz);
+						Material mat = ReikaWorldHelper.getMaterial(world, dx, dy, dz);
 						if (mat == Material.glass || mat == Material.ice) {
-							world.setBlock(dx, dy, dz, 0);
-							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Block.glass);
+							world.setBlockToAir(dx, dy, dz);
+							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Blocks.glass);
 						}
 					}
 				}

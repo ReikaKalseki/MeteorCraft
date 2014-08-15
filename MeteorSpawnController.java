@@ -9,15 +9,8 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.EnumSet;
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatMessageComponent;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
+import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
@@ -25,10 +18,18 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.MeteorShowerEndEvent;
 import Reika.MeteorCraft.Event.MeteorShowerStartEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
 
-public class MeteorSpawnController implements ITickHandler {
+import java.util.Random;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+
+public class MeteorSpawnController implements TickHandler {
 
 	public static final MeteorSpawnController instance = new MeteorSpawnController();
 
@@ -42,7 +43,7 @@ public class MeteorSpawnController implements ITickHandler {
 	}
 
 	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {
+	public void tick(Object... tickData) {
 		World world = (World)tickData[0];
 		if (world != null && this.canSpawnIn(world)) {
 			if (isShowering) {
@@ -131,8 +132,7 @@ public class MeteorSpawnController implements ITickHandler {
 	}
 
 	private void startMeteorShower(World world) {
-		ChatMessageComponent chat = new ChatMessageComponent();
-		chat.addText("A meteor shower is starting...");
+		ChatComponentTranslation chat = new ChatComponentTranslation("A meteor shower is starting...");
 		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(chat);
 		isShowering = true;
 		showerDuration = 0;
@@ -145,13 +145,13 @@ public class MeteorSpawnController implements ITickHandler {
 	}
 
 	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-
+	public TickType getType() {
+		return TickType.WORLD;
 	}
 
 	@Override
-	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.WORLD);
+	public Phase getPhase() {
+		return Phase.START;
 	}
 
 	@Override

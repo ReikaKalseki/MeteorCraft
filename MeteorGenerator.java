@@ -9,15 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -30,6 +21,17 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 public class MeteorGenerator {
 
 	public static final MeteorGenerator instance = new MeteorGenerator();
@@ -37,7 +39,7 @@ public class MeteorGenerator {
 	private final HashMap<MeteorType, InvertedWeightedRandom<ItemStack>> viableOres = new HashMap();
 
 	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
-	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> ids = new HashMap();
+	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Block>>> ids = new HashMap();
 
 	private static final Random rand = new Random();
 
@@ -59,7 +61,7 @@ public class MeteorGenerator {
 
 		for (int k = 0; k < MeteorType.list.length; k++) {
 			MeteorType type = MeteorType.list[k];
-			int id = type.blockID;
+			Block id = type.blockID;
 			int meta = type.blockMeta;
 			for (int i = 0; i < ReikaOreHelper.oreList.length; i++) {
 				ReikaOreHelper ore = ReikaOreHelper.oreList[i];
@@ -77,7 +79,7 @@ public class MeteorGenerator {
 						ItemStack block = li.get(j);
 						if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
 							//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
-							if (this.isValidOreIDForType(type, ore, block.itemID)) {
+							if (this.isValidOreIDForType(type, ore, Block.getBlockFromItem(block.getItem()))) {
 								//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
 								if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
 									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
@@ -102,7 +104,7 @@ public class MeteorGenerator {
 		mats.add(Material.leaves);
 		mats.add(Material.plants);
 		mats.add(Material.portal);
-		mats.add(Material.pumpkin);
+		mats.add(Material.gourd);
 		mats.add(Material.redstoneLight);
 		mats.add(Material.sponge);
 		mats.add(Material.lava);
@@ -142,13 +144,13 @@ public class MeteorGenerator {
 			li.add(dmg);
 	}
 
-	private void addID(ModOreList ore, MeteorType type, int id) {
-		HashMap<MeteorType, ArrayList<Integer>> map = ids.get(ore);
+	private void addID(ModOreList ore, MeteorType type, Block id) {
+		HashMap<MeteorType, ArrayList<Block>> map = ids.get(ore);
 		if (map == null) {
 			map = new HashMap();
 			ids.put(ore, map);
 		}
-		ArrayList<Integer> li = map.get(type);
+		ArrayList<Block> li = map.get(type);
 		if (li == null) {
 			li = new ArrayList();
 			map.put(type, li);
@@ -166,7 +168,7 @@ public class MeteorGenerator {
 	}
 
 	public boolean isValidOreForType(MeteorType type, ReikaOreHelper ore) {
-		return type.blockID == ore.getOreGenBlock().blockID;
+		return type.blockID == ore.getOreGenBlock();
 	}
 
 	public boolean isValidOreMetaForType(MeteorType type, ModOreList ore, int meta) {
@@ -183,10 +185,10 @@ public class MeteorGenerator {
 			return true;
 	}
 
-	public boolean isValidOreIDForType(MeteorType type, ModOreList ore, int id) {
-		HashMap<MeteorType, ArrayList<Integer>> map = ids.get(ore);
+	public boolean isValidOreIDForType(MeteorType type, ModOreList ore, Block id) {
+		HashMap<MeteorType, ArrayList<Block>> map = ids.get(ore);
 		if (map != null) {
-			ArrayList<Integer> li = map.get(type);
+			ArrayList<Block> li = map.get(type);
 			if (li != null) {
 				return li.contains(id);
 			}
@@ -244,7 +246,7 @@ public class MeteorGenerator {
 			int fz = xyz[2];
 			ItemStack is = this.getBlock(type);
 			if (fy > 0)
-				world.setBlock(fx, fy, fz, is.itemID, is.getItemDamage(), 3);
+				ReikaWorldHelper.setBlock(world, fx, fy, fz, is);
 		}
 	}
 
@@ -261,7 +263,7 @@ public class MeteorGenerator {
 					//dy = world.getTopSolidOrLiquidBlock(dx, dz);
 					if (dd <= radius || (j < 0 && ReikaMathLibrary.py3d(i, 0, k) <= radius)) {
 						//ItemStack is = this.getBlock(e);
-						//world.setBlock(dx, dy, dz, is.itemID, is.getItemDamage(), 3);
+						//world.setBlock(dx, dy, dz, is.getItem(), is.getItemDamage(), 3);
 						blocks.addBlockCoordinate(dx, dy, dz);
 					}
 				}
@@ -272,13 +274,13 @@ public class MeteorGenerator {
 	}
 
 	public static boolean canStopMeteor(World world, int x, int y, int z) {
-		int id = world.getBlockId(x, y, z);
-		if (id == 0)
+		Block b = world.getBlock(x, y, z);
+		if (b == Blocks.air)
 			return false;
 		if (ReikaWorldHelper.softBlocks(world, x, y, z))
 			return false;
-		Material mat = world.getBlockMaterial(x, y, z);
-		List<Material> mats = ReikaJavaLibrary.makeListFrom(Material.circuits, Material.glass, Material.snow, Material.ice, Material.cactus, Material.craftedSnow, Material.fire, Material.leaves, Material.plants, Material.portal, Material.pumpkin, Material.redstoneLight, Material.sponge, Material.lava, Material.water, Material.vine, Material.web);
+		Material mat = ReikaWorldHelper.getMaterial(world, x, y, z);
+		List<Material> mats = ReikaJavaLibrary.makeListFrom(Material.circuits, Material.glass, Material.snow, Material.ice, Material.cactus, Material.craftedSnow, Material.fire, Material.leaves, Material.plants, Material.portal, Material.gourd, Material.redstoneLight, Material.sponge, Material.lava, Material.water, Material.vine, Material.web);
 		if (mats.contains(mat))
 			return false;
 		return true;
@@ -289,46 +291,41 @@ public class MeteorGenerator {
 	}
 
 	//Very basic rules:
-	public static boolean canGenOreIn(int blockID, ModOreList ore) {
+	public static boolean canGenOreIn(Block blockID, ModOreList ore) {
 		if (ore.isNetherOres())
-			return blockID == Block.netherrack.blockID;
+			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.ARDITE || ore == ModOreList.COBALT)
-			return blockID == Block.netherrack.blockID;
+			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.FIRESTONE)
-			return blockID == Block.netherrack.blockID;
+			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.MAGMANITE)
-			return blockID == Block.netherrack.blockID;
+			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.AMMONIUM)
-			return blockID == Block.netherrack.blockID;
+			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.SODALITE)
-			return blockID == Block.whiteStone.blockID;
+			return blockID == Blocks.end_stone;
 		if (ore == ModOreList.ESSENCE)
-			return blockID == Block.netherrack.blockID || blockID == Block.stone.blockID;
-		if (blockID == Block.whiteStone.blockID)
+			return blockID == Blocks.netherrack || blockID == Blocks.stone;
+		if (blockID == Blocks.end_stone)
 			return ore == ModOreList.PITCHBLENDE;
 		if (ore == ModOreList.MIMICHITE)
 			return true;
-		return blockID == Block.stone.blockID;
+		return blockID == Blocks.stone;
 	}
 
 	public static enum MeteorType {
-		STONE(Block.stone),
-		NETHERRACK(Block.netherrack),
-		END(Block.whiteStone);
+		STONE(Blocks.stone),
+		NETHERRACK(Blocks.netherrack),
+		END(Blocks.end_stone);
 
-		public final int blockID;
+		public final Block blockID;
 		public final int blockMeta;
 
 		public static final MeteorType[] list = values();
 
 		private MeteorType(Block b) {
-			blockID = b.blockID;
+			blockID = b;
 			blockMeta = 0;
-		}
-
-		private MeteorType(ItemStack is) {
-			blockID = is.itemID;
-			blockMeta = is.getItemDamage();
 		}
 
 		public ItemStack getBlock() {

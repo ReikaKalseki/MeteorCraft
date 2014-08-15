@@ -9,6 +9,9 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
@@ -17,8 +20,6 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import Reika.DragonAPI.IO.ReikaFileReader;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class CustomOreLoader {
 

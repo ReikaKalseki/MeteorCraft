@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Entity;
 
+import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,8 +19,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 
 public class RenderTrail extends Render {
 

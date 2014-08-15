@@ -9,9 +9,10 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Event;
 
-import net.minecraft.world.World;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Entity.EntityMeteor;
+
+import net.minecraft.world.World;
 
 public class AirburstEvent extends MeteorEvent {
 

@@ -9,15 +9,17 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Blocks;
 
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+
+import net.minecraft.block.Block;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver {
 
@@ -40,8 +42,8 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	public abstract void onImpact(ImpactEvent e);
 
 	@Override
-	public final int getTileEntityBlockID() {
-		return MeteorCraft.meteorMachines.blockID;
+	public final Block getTileEntityBlockID() {
+		return MeteorCraft.meteorMachines;
 	}
 
 	public boolean canSeeSky() {

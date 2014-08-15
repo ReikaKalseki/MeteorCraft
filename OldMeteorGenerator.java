@@ -9,16 +9,18 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import java.util.Random;
-
-import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.IChunkProvider;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Registry.MeteorOptions;
+
+import java.util.Random;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class OldMeteorGenerator implements IWorldGenerator {
@@ -46,7 +48,7 @@ public class OldMeteorGenerator implements IWorldGenerator {
 	private void generate(Random rand, World world, int chunkX, int chunkZ) {
 		int x = chunkX+rand.nextInt(16);
 		int z = chunkZ+rand.nextInt(16);
-		if (world.canBlockSeeTheSky(x, 1, z) || world.getBlockId(x, 0, z) == 0) //sky/void world
+		if (world.canBlockSeeTheSky(x, 1, z) || world.getBlock(x, 0, z) == Blocks.air) //sky/void world
 			return;
 		int y = this.getGenY(world, x, z, rand);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
@@ -78,7 +80,7 @@ public class OldMeteorGenerator implements IWorldGenerator {
 		if (world.provider.dimensionId == ReikaTwilightHelper.getDimensionID())
 			return 5+rand.nextInt(30);
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-		int max = (int)(biome.maxHeight*world.provider.getAverageGroundLevel());
+		int max = world.provider.getAverageGroundLevel();
 		if (max <= 0)
 			max = 1;
 		int y = 5+rand.nextInt(max);
