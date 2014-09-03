@@ -9,6 +9,16 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
@@ -20,17 +30,6 @@ import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
 import Reika.MeteorCraft.Registry.MeteorOptions;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class MeteorGenerator {
 
@@ -245,7 +244,7 @@ public class MeteorGenerator {
 			int fy = xyz[1];
 			int fz = xyz[2];
 			ItemStack is = this.getBlock(type);
-			if (fy > 0)
+			if (fy > 0 && world.getBlock(fx, fy, fz) != Blocks.bedrock)
 				ReikaWorldHelper.setBlock(world, fx, fy, fz, is);
 		}
 	}

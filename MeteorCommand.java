@@ -9,12 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import Reika.DragonAPI.Command.DragonCommandBase;
-import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.MeteorCraft.MeteorGenerator.MeteorType;
-import Reika.MeteorCraft.Entity.EntityMeteor;
-
 import java.util.ArrayList;
 
 import net.minecraft.command.ICommandSender;
@@ -22,6 +16,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
+import Reika.DragonAPI.Command.DragonCommandBase;
+import Reika.DragonAPI.Libraries.ReikaPlayerAPI;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.Entity.EntityMeteor;
 
 public class MeteorCommand extends DragonCommandBase {
 

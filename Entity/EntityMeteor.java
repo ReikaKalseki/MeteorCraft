@@ -9,21 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Entity;
 
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
-import Reika.MeteorCraft.MeteorCraft;
-import Reika.MeteorCraft.MeteorGenerator;
-import Reika.MeteorCraft.MeteorGenerator.MeteorType;
-import Reika.MeteorCraft.MeteorImpact;
-import Reika.MeteorCraft.Event.AirburstEvent;
-import Reika.MeteorCraft.Event.EntryEvent;
-import Reika.MeteorCraft.Registry.MeteorOptions;
-import Reika.MeteorCraft.Registry.MeteorSounds;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -40,6 +25,20 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
+import Reika.MeteorCraft.MeteorCraft;
+import Reika.MeteorCraft.MeteorGenerator;
+import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.MeteorImpact;
+import Reika.MeteorCraft.Event.AirburstEvent;
+import Reika.MeteorCraft.Event.EntryEvent;
+import Reika.MeteorCraft.Registry.MeteorOptions;
+import Reika.MeteorCraft.Registry.MeteorSounds;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {

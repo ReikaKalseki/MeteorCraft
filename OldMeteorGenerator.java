@@ -9,11 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import Reika.DragonAPI.Instantiable.Data.BlockArray;
-import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
-import Reika.MeteorCraft.MeteorGenerator.MeteorType;
-import Reika.MeteorCraft.Registry.MeteorOptions;
-
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
@@ -21,6 +16,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
+import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
+import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class OldMeteorGenerator implements IWorldGenerator {

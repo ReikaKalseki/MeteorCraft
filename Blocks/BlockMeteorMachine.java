@@ -9,8 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Blocks;
 
-import Reika.DragonAPI.ModList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -18,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 
 public class BlockMeteorMachine extends Block {
 

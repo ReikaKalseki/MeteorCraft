@@ -9,6 +9,10 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Blocks;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -16,11 +20,6 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.MeteorCraft.Event.MeteorDefenceEvent;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

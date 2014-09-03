@@ -9,16 +9,15 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Registry;
 
-import Reika.DragonAPI.Instantiable.WorldLocation;
-import Reika.DragonAPI.Interfaces.SoundEnum;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
-import Reika.MeteorCraft.MeteorCraft;
-
 import java.net.URL;
 
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.WorldLocation;
+import Reika.DragonAPI.Interfaces.SoundEnum;
+import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
+import Reika.MeteorCraft.MeteorCraft;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -51,7 +50,7 @@ public enum MeteorSounds implements SoundEnum {
 			n = n.substring(1);
 		}
 		name = n;
-		path = SOUND_FOLDER+name+SOUND_EXT;
+		path = PREFIX+SOUND_FOLDER+name+SOUND_EXT;
 		category = cat;
 	}
 

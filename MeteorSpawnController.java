@@ -9,6 +9,14 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.util.Random;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -18,15 +26,6 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.MeteorShowerEndEvent;
 import Reika.MeteorCraft.Event.MeteorShowerStartEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
-
-import java.util.Random;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 
 public class MeteorSpawnController implements TickHandler {
@@ -150,8 +149,8 @@ public class MeteorSpawnController implements TickHandler {
 	}
 
 	@Override
-	public Phase getPhase() {
-		return Phase.START;
+	public boolean canFire(Phase p) {
+		return p == Phase.START;
 	}
 
 	@Override

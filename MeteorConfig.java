@@ -9,6 +9,11 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.BiomeTypeList;
 import Reika.DragonAPI.Base.DragonAPIMod;
@@ -21,12 +26,6 @@ import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
-
-import java.util.ArrayList;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class MeteorConfig extends ControlledConfig {
 

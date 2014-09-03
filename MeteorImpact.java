@@ -9,18 +9,6 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
-import Reika.DragonAPI.Libraries.ReikaAABBHelper;
-import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
-import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
-import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
-import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
-import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.FactorizationHandler;
-import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.Event.ImpactEvent;
-import Reika.MeteorCraft.Registry.MeteorSounds;
-
 import java.util.List;
 import java.util.Random;
 
@@ -37,6 +25,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
+import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
+import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
+import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.FactorizationHandler;
+import Reika.MeteorCraft.Entity.EntityMeteor;
+import Reika.MeteorCraft.Event.ImpactEvent;
+import Reika.MeteorCraft.Registry.MeteorSounds;
 
 public class MeteorImpact {
 
@@ -193,6 +192,8 @@ public class MeteorImpact {
 	}
 
 	private boolean canEntitize(World world, int x, int y, int z, Block id, int meta) {
+		if (!this.canDestroy(world, x, y, z, id, meta))
+			return false;
 		if (y <= 0)
 			return false;
 		if (id == Blocks.air)

@@ -9,6 +9,12 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.net.URL;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.DragonAPICore;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
@@ -24,13 +30,6 @@ import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
 import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
-
-import java.net.URL;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

@@ -15,7 +15,6 @@ import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Entity.RenderMeteor;
 import Reika.MeteorCraft.Entity.RenderTrail;
 import Reika.MeteorCraft.Registry.MeteorSounds;
-
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class MeteorClient extends MeteorCommon {
@@ -33,7 +32,7 @@ public class MeteorClient extends MeteorCommon {
 		//CustomSoundHandler.instance.addSound("meteorcraft", "entry", SoundCategory.MASTER);
 		//CustomSoundHandler.instance.addSound("meteorcraft", "boom", SoundCategory.MASTER);
 
-		new SoundLoader(MeteorCraft.class, MeteorSounds.soundList).register();
+		new SoundLoader(MeteorSounds.soundList).register();
 	}
 
 }
