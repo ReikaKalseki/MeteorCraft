@@ -19,6 +19,7 @@ import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver {
 
@@ -36,9 +37,19 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 
-	public abstract void onMeteor(EntryEvent e);
+	@SubscribeEvent
+	public final void entryEvent(EntryEvent e) {
+		this.onMeteor(e);
+	}
 
-	public abstract void onImpact(ImpactEvent e);
+	@SubscribeEvent
+	public final void impactEvent(ImpactEvent e) {
+		this.onImpact(e);
+	}
+
+	protected abstract void onMeteor(EntryEvent e);
+
+	protected abstract void onImpact(ImpactEvent e);
 
 	@Override
 	public final Block getTileEntityBlockID() {

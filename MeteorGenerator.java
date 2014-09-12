@@ -10,6 +10,7 @@
 package Reika.MeteorCraft;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -73,9 +74,8 @@ public class MeteorGenerator {
 			for (int i = 0; i < ModOreList.oreList.length; i++) {
 				ModOreList ore = ModOreList.oreList[i];
 				if (this.canGenerateOre(ore) && this.canGenOreIn(type.blockID, ore)) {
-					ArrayList<ItemStack> li = ore.getAllOreBlocks();
-					for (int j = 0; j < li.size(); j++) {
-						ItemStack block = li.get(j);
+					Collection<ItemStack> li = ore.getAllOreBlocks();
+					for (ItemStack block : li) {
 						if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
 							//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
 							if (this.isValidOreIDForType(type, ore, Block.getBlockFromItem(block.getItem()))) {

@@ -16,7 +16,6 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 
@@ -36,7 +35,6 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	@SubscribeEvent
 	public void onMeteor(EntryEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
@@ -47,7 +45,6 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	@SubscribeEvent
 	public void onImpact(ImpactEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
