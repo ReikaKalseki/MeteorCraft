@@ -349,6 +349,8 @@ public class MeteorGenerator {
 					rand.addEntry(m, m.chance);
 			}
 		}
+
+		--add drop-by-type control--
 	}
 
 }
