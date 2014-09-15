@@ -10,6 +10,9 @@
 package Reika.MeteorCraft.Entity;
 
 import io.netty.buffer.ByteBuf;
+
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -17,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -25,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
+import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -303,6 +306,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		}
 		if (!worldObj.isRemote)
 			worldObj.newExplosion(null, posX, posY, posZ, 3F, true, true);
+		/*
 		n = 12+rand.nextInt(24);
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
@@ -316,7 +320,20 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
 			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Items.gunpowder));
+		}*/
+
+		Collection<ItemDrop> drops = this.getType().getDroppedItems();
+		for (ItemDrop drop : drops) {
+			ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItem(), 1);
+			int num = drop.getDropCount();
+			for (int i = 0; i < num; i++) {
+				double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
+				double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
+				double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
+				ReikaItemHelper.dropItem(worldObj, rx, ry, rz, is);
+			}
 		}
+
 		if (worldObj.isRemote) {
 			this.playClientFullVolSound("random.explode", 3, 0.01F);
 			this.playClientFullVolSound("random.explode", 3, 0.1F);

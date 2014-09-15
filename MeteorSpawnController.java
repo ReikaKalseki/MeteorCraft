@@ -18,11 +18,11 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
+import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.MeteorShowerEndEvent;
@@ -65,7 +65,7 @@ public class MeteorSpawnController implements TickHandler {
 			else {
 				double chance = this.getChanceFromDimension(world.provider.dimensionId);
 
-				if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+				if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 					IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 					chance /= ig.getMeteorFrequency();
 				}

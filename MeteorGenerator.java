@@ -11,6 +11,7 @@ package Reika.MeteorCraft;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -18,8 +19,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
@@ -323,6 +327,7 @@ public class MeteorGenerator {
 		public final Block blockID;
 		public final int blockMeta;
 		private final int chance;
+		private Collection<ItemDrop> drops = new ArrayList();
 
 		private static WeightedRandom<MeteorType> rand = new WeightedRandom();
 
@@ -342,15 +347,46 @@ public class MeteorGenerator {
 			return rand.getRandomEntry();
 		}
 
+		private void addDrop(ItemStack is, int min, int max) {
+			drops.add(new ItemDrop(is, min, max));
+		}
+
+		private void addDrop(Item is, int min, int max) {
+			drops.add(new ItemDrop(is, min, max));
+		}
+
 		static {
 			for (int i = 0; i < list.length; i++) {
 				MeteorType m = list[i];
 				if (m.blockID != null)
 					rand.addEntry(m, m.chance);
 			}
+
+			MeteorType.STONE.addDrop(Items.glowstone_dust, 16, 32);
+			MeteorType.STONE.addDrop(Items.gunpowder, 9, 18);
+
+			//MeteorType.NETHERRACK.addDrop(Items.glowstone_dust, 16, 32);
+			//MeteorType.NETHERRACK.addDrop(Items.gunpowder, 9, 18);
+			MeteorType.NETHERRACK.addDrop(Items.blaze_powder, 16, 32);
+			MeteorType.NETHERRACK.addDrop(Items.nether_wart, 16, 32);
+
+			//MeteorType.END.addDrop(Items.glowstone_dust, 16, 32);
+			//MeteorType.END.addDrop(Items.gunpowder, 9, 18);
+			MeteorType.END.addDrop(Items.ender_pearl, 4, 12);
+			MeteorType.END.addDrop(Items.nether_star, 0, 1);
+
+			//MeteorType.SKYSTONE.addDrop(Items.glowstone_dust, 16, 32);
+			//MeteorType.SKYSTONE.addDrop(Items.gunpowder, 9, 18);
+			MeteorType.SKYSTONE.addDrop(AppEngHandler.getInstance().getCertusQuartzDust(), 12, 24);
+			Collection<ItemStack> c = AppEngHandler.getInstance().getPossibleMeteorChestLoot();
+			for (ItemStack is : c) {
+				MeteorType.SKYSTONE.addDrop(is, 0, 1);
+			}
 		}
 
-		--add drop-by-type control--
+		public Collection<ItemDrop> getDroppedItems() {
+			return Collections.unmodifiableCollection(drops);
+		}
 	}
 
 }
