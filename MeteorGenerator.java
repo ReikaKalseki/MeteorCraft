@@ -21,12 +21,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
+import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
@@ -313,22 +315,39 @@ public class MeteorGenerator {
 	}
 
 	public static enum MeteorType {
-		STONE(Blocks.stone),
-		NETHERRACK(Blocks.netherrack),
-		END(Blocks.end_stone);
+		STONE(Blocks.stone, 100),
+		NETHERRACK(Blocks.netherrack, 20),
+		END(Blocks.end_stone, 10),
+		SKYSTONE(AppEngHandler.getInstance().skystone, 15);
 
 		public final Block blockID;
 		public final int blockMeta;
+		private final int chance;
+
+		private static WeightedRandom<MeteorType> rand = new WeightedRandom();
 
 		public static final MeteorType[] list = values();
 
-		private MeteorType(Block b) {
+		private MeteorType(Block b, int c) {
 			blockID = b;
 			blockMeta = 0;
+			chance = c;
 		}
 
 		public ItemStack getBlock() {
 			return new ItemStack(blockID, 1, blockMeta);
+		}
+
+		public static MeteorType getWeightedType() {
+			return rand.getRandomEntry();
+		}
+
+		static {
+			for (int i = 0; i < list.length; i++) {
+				MeteorType m = list[i];
+				if (m.blockID != null)
+					rand.addEntry(m, m.chance);
+			}
 		}
 	}
 

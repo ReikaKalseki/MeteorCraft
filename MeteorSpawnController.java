@@ -11,12 +11,14 @@ package Reika.MeteorCraft;
 
 import java.util.Random;
 
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import Reika.DragonAPI.Auxiliary.InterfaceCache;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -61,7 +63,13 @@ public class MeteorSpawnController implements TickHandler {
 					this.endMeteorShower(world);
 			}
 			else {
-				int chance = this.getChanceFromDimension(world.provider.dimensionId);
+				double chance = this.getChanceFromDimension(world.provider.dimensionId);
+
+				if (InterfaceCache.instance.instanceOf("IGalacticraftWorldProvider", world.provider)) {
+					IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
+					chance /= ig.getMeteorFrequency();
+				}
+
 				if (MeteorOptions.SHOWER.getState() && ReikaRandomHelper.doWithChance(0.01D/chance)) {
 					this.startMeteorShower(world);
 				}
@@ -112,13 +120,13 @@ public class MeteorSpawnController implements TickHandler {
 		int r = 64;
 		int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);
-		EntityMeteor e;
-		if (ReikaRandomHelper.doWithChance(10))
-			e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.END);
-		else if (ReikaRandomHelper.doWithChance(20))
-			e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.NETHERRACK);
-		else
-			e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.STONE);
+		EntityMeteor e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.getWeightedType());
+		//if (ReikaRandomHelper.doWithChance(10))
+		//e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.END);
+		//else if (ReikaRandomHelper.doWithChance(20))
+		//e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.NETHERRACK);
+		//else
+		//	e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.STONE);
 		return e;
 	}
 
