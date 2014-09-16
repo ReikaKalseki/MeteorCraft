@@ -53,6 +53,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	private boolean impact = false;
 	private boolean boom = false;
 	private int explodeY;
+	private boolean genOres;
 
 	public EntityMeteor(World world) {
 		super(world);
@@ -71,6 +72,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		this.addVelocity(vx, -4, vz);
 		velocityChanged = true;
 		noClip = true;
+		genOres = ReikaRandomHelper.doWithChance(MeteorOptions.LOADCHANCE.getValue());
 	}
 
 	public EntityMeteor setExploding() {
@@ -79,7 +81,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	public EntityMeteor setType(MeteorType type) {
-		this.type = type;
+		if (type.isValid())
+			this.type = type;
 		return this;
 	}
 
@@ -256,11 +259,13 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	@Override
 	public void writeSpawnData(ByteBuf data) {
 		data.writeInt(this.getType().ordinal());
+		data.writeBoolean(genOres);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		this.setType(data.readInt());
+		genOres = data.readBoolean();
 	}
 
 	protected void onImpact(World world, int x, int y, int z) {
@@ -292,7 +297,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 2);
-			ItemStack is = MeteorGenerator.instance.getBlock(this.getType());
+			ItemStack is = MeteorGenerator.instance.getBlock(this.getType(), genOres);
 			Block b = Block.getBlockFromItem(is.getItem());
 			if (b != null) { //because some mods are derps and register items as ores
 				EntityFallingBlock e = new EntityFallingBlock(worldObj, rx, ry, rz, b, is.getItemDamage());
@@ -363,6 +368,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			}
 		}
 		this.setDead();
+	}
+
+	public boolean genOres() {
+		return genOres;
 	}
 
 }

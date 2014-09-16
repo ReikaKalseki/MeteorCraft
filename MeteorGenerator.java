@@ -36,6 +36,7 @@ import Reika.DragonAPI.ModInteract.AppEngHandler;
 import Reika.DragonAPI.ModInteract.MagicCropHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
+import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 
 public class MeteorGenerator {
@@ -233,8 +234,8 @@ public class MeteorGenerator {
 		return MeteorCraft.config.shouldGenerateOre(ore);
 	}
 
-	public ItemStack getBlock(MeteorType type) {
-		if (ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(type)) {
+	public ItemStack getBlock(MeteorType type, boolean ore) {
+		if (ore && ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(type)) {
 			return this.getRandomOre(type);
 		}
 		else {
@@ -242,14 +243,30 @@ public class MeteorGenerator {
 		}
 	}
 
-	public void generate(World world, int x, int y, int z, MeteorType type) {
+	public void generate(World world, int x, int y, int z, EntityMeteor e) {
+		this.generate(world, x, y, z, e.getType(), e.genOres());
+	}
+
+	public void generate(World world, int x, int y, int z) {
+		this.generate(world, x, y, z, this.getTypeFor(world), true);
+	}
+
+	private MeteorType getTypeFor(World world) {
+		if (world.provider.dimensionId == -1 || world.provider.isHellWorld)
+			return MeteorType.NETHERRACK;
+		if (world.provider.dimensionId == 1 || world.provider.hasNoSky)
+			return MeteorType.END;
+		return MeteorType.STONE;
+	}
+
+	private void generate(World world, int x, int y, int z, MeteorType type, boolean ore) {
 		BlockArray blocks = this.getMeteorBlockArray(world, x, y, z);
 		for (int i = 0; i < blocks.getSize(); i++) {
 			int[] xyz = blocks.getNthBlock(i);
 			int fx = xyz[0];
 			int fy = xyz[1];
 			int fz = xyz[2];
-			ItemStack is = this.getBlock(type);
+			ItemStack is = this.getBlock(type, ore);
 			if (fy > 0 && world.getBlock(fx, fy, fz) != Blocks.bedrock)
 				ReikaWorldHelper.setBlock(world, fx, fy, fz, is);
 		}
@@ -358,7 +375,7 @@ public class MeteorGenerator {
 		static {
 			for (int i = 0; i < list.length; i++) {
 				MeteorType m = list[i];
-				if (m.blockID != null)
+				if (m.isValid())
 					rand.addEntry(m, m.chance);
 			}
 
@@ -377,7 +394,7 @@ public class MeteorGenerator {
 
 			//MeteorType.SKYSTONE.addDrop(Items.glowstone_dust, 16, 32);
 			//MeteorType.SKYSTONE.addDrop(Items.gunpowder, 9, 18);
-			MeteorType.SKYSTONE.addDrop(AppEngHandler.getInstance().getCertusQuartzDust(), 12, 24);
+			MeteorType.SKYSTONE.addDrop(AppEngHandler.getInstance().getCertusQuartzDust(), 16, 32);
 			Collection<ItemStack> c = AppEngHandler.getInstance().getPossibleMeteorChestLoot();
 			for (ItemStack is : c) {
 				MeteorType.SKYSTONE.addDrop(is, 0, 1);
@@ -386,6 +403,10 @@ public class MeteorGenerator {
 
 		public Collection<ItemDrop> getDroppedItems() {
 			return Collections.unmodifiableCollection(drops);
+		}
+
+		public boolean isValid() {
+			return blockID != null;
 		}
 	}
 

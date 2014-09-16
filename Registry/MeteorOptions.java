@@ -30,7 +30,8 @@ public enum MeteorOptions implements ConfigList {
 	SHOWER("Allow Meteor Showers", true),
 	EXPLODE("Global Airburst Override", false),
 	BLOCKID("Defence Gun Block ID", 3800),
-	OLDGEN("Generate Ancient Meteors", true);
+	OLDGEN("Generate Ancient Meteors", true),
+	LOADCHANCE("Percent of Meteors With Ore", 100);
 
 	private String label;
 	private boolean defaultState;

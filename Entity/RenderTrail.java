@@ -27,6 +27,7 @@ public class RenderTrail extends Render {
 	public void renderEntity(EntityTrail er, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glPushMatrix();
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		Tessellator v5 = Tessellator.instance;
 		float var16 = 1.0F;
@@ -64,6 +65,7 @@ public class RenderTrail extends Render {
 		GL11.glScaled(1D/size, 1D/size, 1);
 		//GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 	}

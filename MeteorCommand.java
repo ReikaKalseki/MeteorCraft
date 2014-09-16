@@ -86,7 +86,8 @@ public class MeteorCommand extends DragonCommandBase {
 		AIRBURST("Make the meteor explode in midair:", "airburst", "explode"),
 		STONE("Set the meteor to stone:", "stone", "overworld"),
 		NETHERRACK("Set the meteor to netherrack:", "netherrack", "nether"),
-		END("Set the meteor to end stone:", "endstone", "end");
+		END("Set the meteor to end stone:", "endstone", "end"),
+		SKY("Set the meteor to skystone:", "skystone", "sky", "ae2");
 
 		public final String description;
 		public final String[] variants;
@@ -123,6 +124,9 @@ public class MeteorCommand extends DragonCommandBase {
 				break;
 			case END:
 				e.setType(MeteorType.END);
+				break;
+			case SKY:
+				e.setType(MeteorType.SKYSTONE);
 				break;
 			}
 		}

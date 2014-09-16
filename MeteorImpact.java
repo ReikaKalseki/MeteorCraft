@@ -141,7 +141,7 @@ public class MeteorImpact {
 			}
 		}
 
-		MeteorGenerator.instance.generate(world, posX, posY, posZ, e.getType());
+		MeteorGenerator.instance.generate(world, posX, posY, posZ, e);
 		/*
 		int num = 16+rand.nextInt(16);
 		for (int i = 0; i < num; i++) {

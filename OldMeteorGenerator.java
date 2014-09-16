@@ -61,7 +61,7 @@ public class OldMeteorGenerator implements IWorldGenerator {
 			solid = gen.isAtLeastXPercentSolid(world, 50);
 		}
 		if (solid) {
-			MeteorGenerator.instance.generate(world, x, y, z, this.getRandomType(rand));
+			MeteorGenerator.instance.generate(world, x, y, z);
 			//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 		}
 	}
