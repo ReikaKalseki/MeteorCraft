@@ -109,8 +109,14 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 				if (world.isRemote)
 					this.playClientFullVolSound("random.explode", 1, 0.2F);
 				this.setDead();
-			}
-			Block b = world.getBlock(x, y, z);
+			}/*
+			Block[] b = new Block[8];
+			for (int i = 0; i < b.length; i++) {
+				int dx = MathHelper.floor_double(x+motionX);
+				int dy = MathHelper.floor_double(y+motionY);
+				int dz = MathHelper.floor_double(z+motionZ);
+				b[i] = world.getBlock(dx, dy, dz);
+			}*/
 			if (MeteorGenerator.canStopMeteor(world, x, y, z)) {
 				this.onImpact(world, x, y, z);
 			}
@@ -122,11 +128,11 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			}
 			else if (!world.isRemote) {
 				int r = 4;
-				for (int c = 0; c < 4; c++) {
+				for (int c = 0; c < 16; c++) {
 					double dd = ReikaMathLibrary.py3d(motionX, motionY, motionZ);
-					int ox = MathHelper.floor_double(x-motionX*c/dd);
-					int oy = MathHelper.floor_double(y-motionY*c/dd);
-					int oz = MathHelper.floor_double(z-motionZ*c/dd);
+					int ox = MathHelper.floor_double(x+motionX*c/dd);
+					int oy = MathHelper.floor_double(y+motionY*c/dd);
+					int oz = MathHelper.floor_double(z+motionZ*c/dd);
 					for (int i = -r; i <= r; i++) {
 						for (int j = -r; j <= r; j++) {
 							for (int k = -r; k <= r; k++) {
@@ -194,7 +200,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		double x = e.posX;
 		double y = e.posY;
 		double z = e.posZ;
-		ReikaSoundHelper.playSound(sound, x, y, z, 1, 1);
+		if (worldObj.isRemote)
+			ReikaSoundHelper.playSound(sound, x, y, z, 1, 1);
 	}
 
 	private int getRandomYToExplodeAlways() {

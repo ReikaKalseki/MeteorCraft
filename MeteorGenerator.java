@@ -22,6 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Instantiable.Data.BlockArray;
@@ -335,6 +336,27 @@ public class MeteorGenerator {
 		return blockID == Blocks.stone;
 	}
 
+	public static boolean canStopMeteorRayTrace(World world, int x, int y, int z, EntityMeteor e, int dist) {
+		int r = 4;
+		for (int i = 0; i < dist; i++) {
+			for (int a = -r; a <= r; a++) {
+				for (int b = -r; b <= r; b++) {
+					for (int c = -r; c <= r; c++) {
+						int dx = a+MathHelper.floor_double(x+e.motionX*i);
+						int dy = b+MathHelper.floor_double(y+e.motionY*i);
+						int dz = c+MathHelper.floor_double(z+e.motionZ*i);
+						if (dy < world.provider.getActualHeight()) {
+							ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz));
+							if (canStopMeteor(world, dx, dy, dz))
+								return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	public static enum MeteorType {
 		STONE(Blocks.stone, 100),
 		NETHERRACK(Blocks.netherrack, 20),
@@ -365,11 +387,12 @@ public class MeteorGenerator {
 		}
 
 		private void addDrop(ItemStack is, int min, int max) {
-			drops.add(new ItemDrop(is, min, max));
+			if (this.isValid())
+				drops.add(new ItemDrop(is, min, max));
 		}
 
 		private void addDrop(Item is, int min, int max) {
-			drops.add(new ItemDrop(is, min, max));
+			this.addDrop(new ItemStack(is), min, max);
 		}
 
 		static {
