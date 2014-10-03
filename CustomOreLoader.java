@@ -13,12 +13,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.IO.ReikaFileReader;
-import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 
 public class CustomOreLoader {
 
@@ -48,7 +48,7 @@ public class CustomOreLoader {
 		}
 
 		public List<ItemStack> getItems() {
-			return ReikaJavaLibrary.copyList(oreItems);
+			return Collections.unmodifiableList(oreItems);
 		}
 
 		@Override
@@ -156,7 +156,7 @@ public class CustomOreLoader {
 	}
 
 	public List<CustomOreEntry> getEntries() {
-		return ReikaJavaLibrary.copyList(data);
+		return Collections.unmodifiableList(data);
 	}
 
 }
