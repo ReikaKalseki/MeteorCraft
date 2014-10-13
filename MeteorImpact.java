@@ -103,8 +103,7 @@ public class MeteorImpact {
 
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(16, 16, 16);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
-		for (int i = 0; i < li.size(); i++) {
-			EntityLivingBase el = li.get(i);
+		for (EntityLivingBase el : li) {
 			el.attackEntityFrom(DamageSource.generic, this.getDamageFor(el));
 		}
 		//ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
