@@ -64,7 +64,6 @@ public class MeteorSpawnController implements TickHandler {
 			}
 			else {
 				double chance = this.getChanceFromDimension(world.provider.dimensionId);
-
 				if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 					IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 					chance /= ig.getMeteorFrequency();
@@ -92,6 +91,8 @@ public class MeteorSpawnController implements TickHandler {
 	private boolean canSpawnIn(World world) {
 		if (world.provider.isHellWorld)
 			return false;
+		if (world.provider.dimensionId == 1)
+			return true;
 		if (world.provider.hasNoSky)
 			return false;
 		return this.getChanceFromDimension(world.provider.dimensionId) > 0;
