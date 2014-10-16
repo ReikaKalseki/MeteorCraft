@@ -20,6 +20,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.TickRegistry;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.MeteorCraft.Blocks.BlockMeteorMachine;
 import Reika.MeteorCraft.Blocks.ItemBlockMeteorMachine;
@@ -54,6 +55,8 @@ public class MeteorCraft extends DragonAPIMod {
 	public static ModLogger logger;
 
 	public static Block meteorMachines;
+
+	public static final CustomStringDamageSource meteorDamage = (CustomStringDamageSource)new CustomStringDamageSource("was hit by a meteor").setDamageBypassesArmor();
 
 	@SidedProxy(clientSide="Reika.MeteorCraft.MeteorClient", serverSide="Reika.MeteorCraft.MeteorCommon")
 	public static MeteorCommon proxy;

@@ -11,6 +11,7 @@ package Reika.MeteorCraft;
 
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.oredict.OreDictionary;
@@ -242,6 +243,11 @@ public class MeteorConfig extends ControlledConfig {
 
 	public boolean isItemStackGenerationPermitted(ItemStack is) {
 		if (ReikaItemHelper.matchStackWithBlock(is, TinkerBlockHandler.getInstance().gravelOreID))
+			return false;
+		Block b = Block.getBlockFromItem(is.getItem());
+		if (b == null)
+			return false;
+		if (b.getClass().getName().startsWith("shukaro.artifice")) //artifice ore variants
 			return false;
 		return ReikaItemHelper.listContainsItemStack(allowedOreItems, is);
 	}

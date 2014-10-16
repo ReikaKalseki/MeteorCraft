@@ -21,7 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -104,7 +103,7 @@ public class MeteorImpact {
 		AxisAlignedBB box = ReikaAABBHelper.getBlockAABB(posX, posY, posZ).expand(16, 16, 16);
 		List<EntityLivingBase> li = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 		for (EntityLivingBase el : li) {
-			el.attackEntityFrom(DamageSource.generic, this.getDamageFor(el));
+			el.attackEntityFrom(MeteorCraft.meteorDamage, this.getDamageFor(el));
 		}
 		//ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
 		if (world.isRemote)
