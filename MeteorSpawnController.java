@@ -44,7 +44,7 @@ public class MeteorSpawnController implements TickHandler {
 	}
 
 	@Override
-	public void tick(Object... tickData) {
+	public void tick(TickType type, Object... tickData) {
 		World world = (World)tickData[0];
 		if (world != null && this.canSpawnIn(world)) {
 			if (isShowering) {
