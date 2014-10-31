@@ -78,8 +78,8 @@ public class MeteorCommand extends DragonCommandBase {
 	}
 
 	@Override
-	public int getRequiredPermissionLevel() {
-		return 4;
+	protected boolean isAdminOnly() {
+		return true;
 	}
 
 	private enum Argument {
