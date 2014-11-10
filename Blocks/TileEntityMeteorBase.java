@@ -9,12 +9,16 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Blocks;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
+import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
@@ -29,22 +33,40 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 
 	protected int iotick = 512;
 
-	public TileEntityMeteorBase() {
-		MinecraftForge.EVENT_BUS.register(this);
+	private static final Collection<WorldLocation> cache = new ArrayList();
+	private static final EventWatcher instance = new EventWatcher();
+
+	public static final class EventWatcher {
+
+		private EventWatcher() {
+			MinecraftForge.EVENT_BUS.register(this);
+		}
+
+		@SubscribeEvent
+		public final void entryEvent(EntryEvent e) {
+			for (WorldLocation loc : cache) {
+				((TileEntityMeteorBase)loc.getTileEntity()).onMeteor(e);
+			}
+		}
+
+		@SubscribeEvent
+		public final void impactEvent(ImpactEvent e) {
+			for (WorldLocation loc : cache) {
+				((TileEntityMeteorBase)loc.getTileEntity()).onImpact(e);
+			}
+		}
+
 	}
 
-	public void destroy() {
-		MinecraftForge.EVENT_BUS.unregister(this);
+	@Override
+	protected final void onFirstTick(World world, int x, int y, int z) {
+		WorldLocation loc = new WorldLocation(this);
+		if (!cache.contains(loc))
+			cache.add(loc);
 	}
 
-	@SubscribeEvent
-	public final void entryEvent(EntryEvent e) {
-		this.onMeteor(e);
-	}
-
-	@SubscribeEvent
-	public final void impactEvent(ImpactEvent e) {
-		this.onImpact(e);
+	public final void destroy() {
+		cache.remove(new WorldLocation(this));
 	}
 
 	protected abstract void onMeteor(EntryEvent e);
