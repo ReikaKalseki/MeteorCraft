@@ -346,7 +346,6 @@ public class MeteorGenerator {
 						int dy = b+MathHelper.floor_double(y+e.motionY*i);
 						int dz = c+MathHelper.floor_double(z+e.motionZ*i);
 						if (dy < world.provider.getActualHeight()) {
-							ReikaJavaLibrary.pConsole(world.getBlock(dx, dy, dz));
 							if (canStopMeteor(world, dx, dy, dz))
 								return true;
 						}
