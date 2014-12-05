@@ -201,7 +201,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		double y = e.posY;
 		double z = e.posZ;
 		if (worldObj.isRemote)
-			ReikaSoundHelper.playSound(sound, x, y, z, 1, 1);
+			ReikaSoundHelper.playClientSound(sound, x, y, z, 1, 1);
 	}
 
 	private int getRandomYToExplodeAlways() {

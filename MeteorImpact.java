@@ -107,7 +107,7 @@ public class MeteorImpact {
 		}
 		//ReikaSoundHelper.playSoundAtBlock(world, posX, posY, posZ, "meteorcraft:impact");
 		if (world.isRemote)
-			ReikaSoundHelper.playSound(MeteorSounds.IMPACT, posX+0.5, posY+0.5, posZ+0.5, 1, 1);
+			ReikaSoundHelper.playClientSound(MeteorSounds.IMPACT, posX+0.5, posY+0.5, posZ+0.5, 1, 1);
 		for (int i = 0; i < world.playerEntities.size(); i++) {
 			EntityPlayer ep = (EntityPlayer)world.playerEntities.get(i);
 			ep.playSound("random.explode", 1, 1);
