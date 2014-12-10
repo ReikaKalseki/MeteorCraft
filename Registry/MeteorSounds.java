@@ -99,4 +99,9 @@ public enum MeteorSounds implements SoundEnum {
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
+
+	@Override
+	public boolean canOverlap() {
+		return true;
+	}
 }
