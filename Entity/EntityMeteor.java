@@ -105,7 +105,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 			if (posY < explodeY) {
 				this.destroy();
 			}
-			if (!world.checkChunksExist(x, y, z, x, y, z)) {
+			if (y < 256 && !world.checkChunksExist(x, y, z, x, y, z)) {
 				if (world.isRemote)
 					this.playClientFullVolSound("random.explode", 1, 0.2F);
 				this.setDead();

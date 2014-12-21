@@ -121,7 +121,7 @@ public class MeteorSpawnController implements TickHandler {
 		int r = 64;
 		int dx = ReikaRandomHelper.getRandomPlusMinus(x, r);
 		int dz = ReikaRandomHelper.getRandomPlusMinus(z, r);
-		EntityMeteor e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.getWeightedType());
+		EntityMeteor e = new EntityMeteor(world, dx, 1024, dz, MeteorType.getWeightedType());
 		//if (ReikaRandomHelper.doWithChance(10))
 		//e = new EntityMeteor(world, dx, world.provider.getHeight(), dz, MeteorType.END);
 		//else if (ReikaRandomHelper.doWithChance(20))
