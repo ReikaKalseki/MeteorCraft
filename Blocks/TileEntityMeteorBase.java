@@ -22,7 +22,7 @@ import Reika.DragonAPI.Instantiable.Data.WorldLocation;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
-import Reika.RotaryCraft.API.ShaftPowerReceiver;
+import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver {
