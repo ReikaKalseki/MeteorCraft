@@ -30,7 +30,7 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
-import Reika.RotaryCraft.Auxiliary.WorktableRecipes;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
