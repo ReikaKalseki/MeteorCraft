@@ -47,7 +47,7 @@ public class OldMeteorGenerator implements IWorldGenerator {
 	private void generate(Random rand, World world, int chunkX, int chunkZ) {
 		int x = chunkX+rand.nextInt(16);
 		int z = chunkZ+rand.nextInt(16);
-		if (world.canBlockSeeTheSky(x, 1, z) || world.getBlock(x, 0, z) == Blocks.air) //sky/void world
+		if (world.getBlock(x, 0, z) == Blocks.air || world.canBlockSeeTheSky(x, 1, z)) //sky/void world
 			return;
 		int y = this.getGenY(world, x, z, rand);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);

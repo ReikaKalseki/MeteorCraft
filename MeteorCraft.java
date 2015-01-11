@@ -20,6 +20,7 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Base.DragonAPIMod.LoadProfiler.LoadPhase;
 import Reika.DragonAPI.Instantiable.CustomStringDamageSource;
 import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.MeteorCraft.Blocks.BlockMeteorMachine;
@@ -64,6 +65,7 @@ public class MeteorCraft extends DragonAPIMod {
 	@Override
 	@EventHandler
 	public void preload(FMLPreInitializationEvent evt) {
+		this.startTiming(LoadPhase.PRELOAD);
 		this.verifyVersions();
 		config.loadSubfolderedConfigFile(evt);
 		config.initProps(evt);
@@ -73,11 +75,13 @@ public class MeteorCraft extends DragonAPIMod {
 		meteorMachines = new BlockMeteorMachine().setBlockName("meteormachine");
 		GameRegistry.registerBlock(meteorMachines, ItemBlockMeteorMachine.class, "Meteor Machines");
 		this.basicSetup(evt);
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		this.startTiming(LoadPhase.LOAD);
 		int id = EntityRegistry.instance().findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityMeteor.class, "Meteor", id);
 		EntityRegistry.instance().registerModEntity(EntityMeteor.class, "Meteor", EntityRegistry.findGlobalUniqueEntityId(), instance, 384, 20, true);
@@ -113,13 +117,16 @@ public class MeteorCraft extends DragonAPIMod {
 
 			GameRegistry.addRecipe(new ItemStack(meteorMachines, 1, 3), "SgS", "SrS", "SrS", 'g', Items.gold_ingot, 'S', Items.iron_ingot, 'r', Items.redstone);
 		}
+		this.finishTiming();
 	}
 
 	@Override
 	@EventHandler
 	public void postload(FMLPostInitializationEvent evt) {
+		this.startTiming(LoadPhase.POSTLOAD);
 		config.initModExclusions();
 		CustomOreLoader.instance.loadFile();
+		this.finishTiming();
 	}
 
 	@EventHandler
