@@ -42,6 +42,8 @@ public class CustomOreLoader {
 				String s = ores[i];
 				oreNames.add(s);
 				oreItems.addAll(OreDictionary.getOres(s));
+				if (oreItems.isEmpty())
+					throw new IllegalStateException("Cannot have entries with no corresponding ores!");
 			}
 			size = oreItems.size();
 			meteorType = type;
@@ -77,13 +79,19 @@ public class CustomOreLoader {
 			while (line != null) {
 				line = p.readLine();
 				if (line != null && !line.startsWith("//")) {
-					CustomOreEntry entry = this.parseString(line);
-					if (entry != null) {
-						data.add(entry);
-						MeteorCraft.logger.log("Added ore entry "+entry);
+					try {
+						CustomOreEntry entry = this.parseString(line);
+						if (entry != null) {
+							data.add(entry);
+							MeteorCraft.logger.log("Added ore entry "+entry);
+						}
+						else {
+							MeteorCraft.logger.logError("Malformed custom ore entry: "+line);
+						}
 					}
-					else {
+					catch (Exception e) {
 						MeteorCraft.logger.logError("Malformed custom ore entry: "+line);
+						e.printStackTrace();
 					}
 				}
 			}
@@ -114,7 +122,7 @@ public class CustomOreLoader {
 			this.writeCommentLine(p, "\tSample Ore 1, 2, 0, oreSample");
 			this.writeCommentLine(p, "\tSample Ore 2, 2, 2, oreNotSample, oreSecondName, oreHasLotsOfVariants");
 			this.writeCommentLine(p, "");
-			this.writeCommentLine(p, "Missing names or spawn weights, or less than one Ore Dictionary name are incorrect.");
+			this.writeCommentLine(p, "Entries missing names or spawn weights, or having less than one Ore Dictionary name, are incorrect.");
 			this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
 			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines.");
 			this.writeCommentLine(p, "");
@@ -138,21 +146,22 @@ public class CustomOreLoader {
 		p.append("// "+line+"\n");
 	}
 
-	private CustomOreEntry parseString(String s) {
-		try {
-			String[] parts = s.split(",");
-			String name = parts[0];
-			int weight = Integer.parseInt(parts[1]);
-			int type = Integer.parseInt(parts[2]);
-			if (weight < 0 || type < 0 || type > 2 || name.isEmpty() || parts.length < 4)
-				return null;
-			String[] ores = new String[parts.length-3];
-			System.arraycopy(parts, 3, ores, 0, ores.length);
-			return new CustomOreEntry(name, weight, type, ores);
-		}
-		catch (Exception e) {
-			return null;
-		}
+	private CustomOreEntry parseString(String s) throws Exception {
+		String[] parts = s.split(",");
+		if (parts.length < 4)
+			throw new IllegalArgumentException("Invalid parameter count.");
+		String name = parts[0];
+		if (name.isEmpty())
+			throw new IllegalArgumentException("Empty name is invalid.");
+		int weight = Integer.parseInt(parts[1]);
+		if (weight < 0)
+			throw new IllegalArgumentException("Negative weights are not permitted.");
+		int type = Integer.parseInt(parts[2]);
+		if (type < 0 || type > 2)
+			throw new IllegalArgumentException("Invalid meteor type.");
+		String[] ores = new String[parts.length-3];
+		System.arraycopy(parts, 3, ores, 0, ores.length);
+		return new CustomOreEntry(name, weight, type, ores);
 	}
 
 	public List<CustomOreEntry> getEntries() {
