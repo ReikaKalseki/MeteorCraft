@@ -19,6 +19,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public class CustomOreLoader {
 
@@ -90,7 +91,7 @@ public class CustomOreLoader {
 						}
 					}
 					catch (Exception e) {
-						MeteorCraft.logger.logError("Malformed custom ore entry: "+line);
+						MeteorCraft.logger.logError("Malformed custom ore entry ["+e.getLocalizedMessage()+"]: '"+line+"'");
 						e.printStackTrace();
 					}
 				}
@@ -124,7 +125,7 @@ public class CustomOreLoader {
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "Entries missing names or spawn weights, or having less than one Ore Dictionary name, are incorrect.");
 			this.writeCommentLine(p, "Incorrectly formatted lines will be ignored and will log an error in the console.");
-			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines.");
+			this.writeCommentLine(p, "Lines beginning with '//' are comments and will be ignored, as will empty lines. Spaces are stripped.");
 			this.writeCommentLine(p, "");
 			this.writeCommentLine(p, "NOTE WELL: It is your responsibility to choose the spawning blocks appropriately.");
 			this.writeCommentLine(p, "\tWhile you can theoretically spawn anything from the Ore Dictionary in meteors,");
@@ -142,12 +143,14 @@ public class CustomOreLoader {
 		}
 	}
 
-	private void writeCommentLine(PrintWriter p, String line) {
+	private static void writeCommentLine(PrintWriter p, String line) {
 		p.append("// "+line+"\n");
 	}
 
 	private CustomOreEntry parseString(String s) throws Exception {
 		String[] parts = s.split(",");
+		for (int i = 1; i < parts.length; i++)
+			parts[i] = ReikaStringParser.stripSpaces(parts[i]);
 		if (parts.length < 4)
 			throw new IllegalArgumentException("Invalid parameter count.");
 		String name = parts[0];
