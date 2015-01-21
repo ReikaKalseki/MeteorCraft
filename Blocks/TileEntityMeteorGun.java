@@ -20,6 +20,7 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.EntryEvent;
 import Reika.MeteorCraft.Event.ImpactEvent;
 import Reika.MeteorCraft.Event.MeteorDefenceEvent;
+import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -52,7 +53,10 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 	private void killMeteor(EntityMeteor m) {
 		MinecraftForge.EVENT_BUS.post(new MeteorDefenceEvent(this, m));
 		m.setPosition(xCoord+0.5, m.posY, zCoord+0.5);
-		m.destroy();
+		if (MeteorOptions.NOGUNBURST.getState())
+			m.setDead();
+		else
+			m.destroy();
 		if (worldObj.isRemote) {
 			EntityTNTPrimed tnt = new EntityTNTPrimed(worldObj, xCoord+0.5, yCoord+0.5, zCoord+0.5, null);
 			tnt.motionY = 5;

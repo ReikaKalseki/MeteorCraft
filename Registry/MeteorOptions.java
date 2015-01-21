@@ -29,9 +29,9 @@ public enum MeteorOptions implements ConfigList {
 	OTHER("Always Skyburst in Other Dimensions", false),
 	SHOWER("Allow Meteor Showers", true),
 	EXPLODE("Global Airburst Override", false),
-	BLOCKID("Defence Gun Block ID", 3800),
 	OLDGEN("Generate Ancient Meteors", true),
-	LOADCHANCE("Percent of Meteors With Ore", 100);
+	LOADCHANCE("Percent of Meteors With Ore", 100),
+	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false);
 
 	private String label;
 	private boolean defaultState;
