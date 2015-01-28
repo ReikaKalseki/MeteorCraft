@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
@@ -41,14 +42,20 @@ public abstract class MeteorCraftEvent extends Event {
 	public static class AirburstEvent extends MeteorCraftEvent {
 
 		private final Collection<EntityFallingBlock> blocks;
+		private final Collection<EntityItem> items;
 
-		public AirburstEvent(EntityMeteor e, Collection<EntityFallingBlock> c) {
+		public AirburstEvent(EntityMeteor e, Collection<EntityFallingBlock> cb, Collection<EntityItem> ci) {
 			super(e);
-			blocks = c;
+			blocks = cb;
+			items = ci;
 		}
 
 		public Collection<EntityFallingBlock> getBlocks() {
 			return Collections.unmodifiableCollection(blocks);
+		}
+
+		public Collection<EntityItem> getItems() {
+			return Collections.unmodifiableCollection(items);
 		}
 	}
 

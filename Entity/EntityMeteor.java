@@ -20,6 +20,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -300,7 +301,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	public void destroy() {
 		Collection<EntityFallingBlock> li = new ArrayList();
-		AirburstEvent evt = new AirburstEvent(this, li);
+		Collection<EntityItem> li2 = new ArrayList();
+		AirburstEvent evt = new AirburstEvent(this, li, li2);
 		int n = 32+rand.nextInt(48); //135 is approx the max in a impact meteor
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
@@ -321,21 +323,6 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		}
 		if (!worldObj.isRemote)
 			worldObj.newExplosion(null, posX, posY, posZ, 3F, true, true);
-		/*
-		n = 12+rand.nextInt(24);
-		for (int i = 0; i < n; i++) {
-			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
-			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
-			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
-			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Items.glowstone_dust));
-		}
-		n = 6+rand.nextInt(6);
-		for (int i = 0; i < n; i++) {
-			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
-			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
-			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
-			ReikaItemHelper.dropItem(worldObj, rx, ry, rz, new ItemStack(Items.gunpowder));
-		}*/
 
 		Collection<ItemDrop> drops = this.getType().getDroppedItems();
 		for (ItemDrop drop : drops) {
@@ -345,7 +332,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 				double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
 				double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 8);
 				double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 8);
-				ReikaItemHelper.dropItem(worldObj, rx, ry, rz, is);
+				li2.add(ReikaItemHelper.dropItem(worldObj, rx, ry, rz, is));
 			}
 		}
 
