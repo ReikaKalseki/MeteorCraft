@@ -17,9 +17,9 @@ import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.Event.EntryEvent;
-import Reika.MeteorCraft.Event.ImpactEvent;
-import Reika.MeteorCraft.Event.MeteorDefenceEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.MeteorDefenceEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,16 +42,17 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 	}
 
 	@Override
-	public void onMeteor(EntryEvent e) {
-		EntityMeteor m = e.meteor;
-		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
-		if (this.canPerformActions() && dd <= this.getProtectionRange()) {
-			this.killMeteor(m);
+	public void onEvent(MeteorCraftEvent e) {
+		if (e instanceof EntryEvent) {
+			EntityMeteor m = e.meteor;
+			double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
+			if (this.canPerformActions() && dd <= this.getProtectionRange()) {
+				this.killMeteor(m);
+			}
 		}
 	}
 
 	private void killMeteor(EntityMeteor m) {
-		MinecraftForge.EVENT_BUS.post(new MeteorDefenceEvent(this, m));
 		m.setPosition(xCoord+0.5, m.posY, zCoord+0.5);
 		if (MeteorOptions.NOGUNBURST.getState())
 			m.setDead();
@@ -73,6 +74,7 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 			}
 			soundTimer = 10;
 		}
+		MinecraftForge.EVENT_BUS.post(new MeteorDefenceEvent(this, m));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -108,11 +110,6 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 	@Override
 	protected String getTEName() {
 		return "Meteor Defence Gun";
-	}
-
-	@Override
-	public void onImpact(ImpactEvent e) {
-
 	}
 
 }

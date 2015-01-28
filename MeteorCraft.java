@@ -26,6 +26,7 @@ import Reika.DragonAPI.Instantiable.IO.ModLogger;
 import Reika.MeteorCraft.Blocks.BlockMeteorMachine;
 import Reika.MeteorCraft.Blocks.ItemBlockMeteorMachine;
 import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
+import Reika.MeteorCraft.Blocks.TileEntityMeteorMagnet;
 import Reika.MeteorCraft.Blocks.TileEntityMeteorRadar;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Entity.EntityTrail;
@@ -96,6 +97,7 @@ public class MeteorCraft extends DragonAPIMod {
 
 		GameRegistry.registerTileEntity(TileEntityMeteorGun.class, "meteorgun");
 		GameRegistry.registerTileEntity(TileEntityMeteorRadar.class, "meteorradar");
+		GameRegistry.registerTileEntity(TileEntityMeteorMagnet.class, "meteormagnet");
 
 		if (MeteorOptions.OLDGEN.getState())
 			GameRegistry.registerWorldGenerator(new OldMeteorGenerator(), 100);
@@ -109,6 +111,8 @@ public class MeteorCraft extends DragonAPIMod {
 			WorktableRecipes.getInstance().addRecipe(is2, "SLS", "PcP", "SCS", 'L', is1, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.turbine, 'c', ItemStacks.pcb);
 
 			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 3), "SsS", "PLP", "ScS", 's', ItemStacks.screen, 'L', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'c', ItemStacks.pcb);
+
+			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 4), "SlS", "PgP", "SrS", 's', ItemStacks.lim, 'r', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'g', ItemStacks.generator);
 		}
 		else {
 			GameRegistry.addRecipe(is, "IRI", "BTB", "IDI", 'I', Items.iron_ingot, 'B', Blocks.iron_block, 'D', Blocks.dispenser, 'R', Blocks.redstone_block, 'T', Blocks.tnt);
@@ -116,6 +120,8 @@ public class MeteorCraft extends DragonAPIMod {
 			GameRegistry.addRecipe(is2, "IRI", "BTB", "IDI", 'I', Items.diamond, 'B', Blocks.obsidian, 'D', Items.ender_eye, 'R', Blocks.end_stone, 'T', is1);
 
 			GameRegistry.addRecipe(new ItemStack(meteorMachines, 1, 3), "SgS", "SrS", "SrS", 'g', Items.gold_ingot, 'S', Items.iron_ingot, 'r', Items.redstone);
+
+			GameRegistry.addRecipe(new ItemStack(meteorMachines, 1, 4), "SgS", "SqS", "SrS", 'g', Items.gold_ingot, 'q', Items.quartz, 'S', Items.iron_ingot, 'r', Items.redstone);
 		}
 		this.finishTiming();
 	}

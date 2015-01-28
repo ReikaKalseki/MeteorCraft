@@ -11,6 +11,7 @@ package Reika.MeteorCraft.Entity;
 
 import io.netty.buffer.ByteBuf;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
@@ -38,8 +39,8 @@ import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.MeteorGenerator;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.MeteorImpact;
-import Reika.MeteorCraft.Event.AirburstEvent;
-import Reika.MeteorCraft.Event.EntryEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.AirburstEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.MeteorCraft.Registry.MeteorSounds;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -206,17 +207,17 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	private int getRandomYToExplodeAlways() {
 		if (worldObj.getWorldInfo().getTerrainType() == WorldType.FLAT)
-			return 30;
+			return 32+rand.nextInt(32);
 		if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID()) {
-			return 128;
+			return ReikaRandomHelper.getRandomPlusMinus(128, 24);
 		}
 		switch(worldObj.provider.dimensionId) {
 		case -1:
-			return 160;
+			return 160+rand.nextInt(32);
 		case 1:
-			return 96;
+			return 96+rand.nextInt(20);
 		default:
-			return 140;
+			return 140+rand.nextInt(32);
 		}
 	}
 
@@ -298,7 +299,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	}
 
 	public void destroy() {
-		MinecraftForge.EVENT_BUS.post(new AirburstEvent(this));
+		Collection<EntityFallingBlock> li = new ArrayList();
+		AirburstEvent evt = new AirburstEvent(this, li);
 		int n = 32+rand.nextInt(48); //135 is approx the max in a impact meteor
 		for (int i = 0; i < n; i++) {
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
@@ -311,6 +313,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 				e.field_145812_b = -10000;
 				if (!worldObj.isRemote)
 					worldObj.spawnEntityInWorld(e);
+				li.add(e);
 			}
 			else {
 
@@ -374,6 +377,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 				}
 			}
 		}
+		MinecraftForge.EVENT_BUS.post(evt);
 		this.setDead();
 	}
 

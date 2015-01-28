@@ -20,9 +20,9 @@ import Reika.DragonAPI.ModList;
 
 public class BlockMeteorMachine extends Block {
 
-	private final IIcon[] topIcon = new IIcon[4];
-	private final IIcon[] sideIcon = new IIcon[4];
-	private final IIcon[] bottomIcon = new IIcon[4];
+	private final IIcon[] topIcon = new IIcon[5];
+	private final IIcon[] sideIcon = new IIcon[5];
+	private final IIcon[] bottomIcon = new IIcon[5];
 
 	public BlockMeteorMachine() {
 		super(ModList.ROTARYCRAFT.isLoaded() ? Material.iron : Material.rock);
@@ -33,7 +33,7 @@ public class BlockMeteorMachine extends Block {
 
 	@Override
 	public boolean hasTileEntity(int meta) {
-		return meta < 4;
+		return meta < 5;
 	}
 
 	@Override
@@ -42,6 +42,8 @@ public class BlockMeteorMachine extends Block {
 			return new TileEntityMeteorGun();
 		if (meta == 3)
 			return new TileEntityMeteorRadar();
+		if (meta == 4)
+			return new TileEntityMeteorMagnet();
 		return null;
 	}
 
@@ -69,7 +71,7 @@ public class BlockMeteorMachine extends Block {
 	public void breakBlock(World world, int x, int y, int z, Block oldid, int oldmeta) {
 		TileEntityMeteorBase te = (TileEntityMeteorBase)world.getTileEntity(x, y, z);
 		if (te != null) {
-			te.destroy();
+			te.breakBlock();
 		}
 		super.breakBlock(world, x, y, z, oldid, oldmeta);
 	}

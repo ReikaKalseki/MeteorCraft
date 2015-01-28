@@ -19,13 +19,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
+import Reika.DragonAPI.Interfaces.LocationCached;
 import Reika.MeteorCraft.MeteorCraft;
-import Reika.MeteorCraft.Event.EntryEvent;
-import Reika.MeteorCraft.Event.ImpactEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.AirburstEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.ImpactEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.MeteorDefenceEvent;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver {
+public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver, LocationCached {
 
 	private int torque;
 	private int omega;
@@ -42,17 +46,32 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 			MinecraftForge.EVENT_BUS.register(this);
 		}
 
+		// What happened to catching all child events??
 		@SubscribeEvent
 		public final void entryEvent(EntryEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onMeteor(e);
+				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
-		public final void impactEvent(ImpactEvent e) {
+		public final void entryEvent(AirburstEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onImpact(e);
+				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+			}
+		}
+
+		@SubscribeEvent
+		public final void entryEvent(ImpactEvent e) {
+			for (WorldLocation loc : cache) {
+				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+			}
+		}
+
+		@SubscribeEvent
+		public final void entryEvent(MeteorDefenceEvent e) {
+			for (WorldLocation loc : cache) {
+				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
 			}
 		}
 
@@ -65,13 +84,11 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 			cache.add(loc);
 	}
 
-	public final void destroy() {
+	public final void breakBlock() {
 		cache.remove(new WorldLocation(this));
 	}
 
-	protected abstract void onMeteor(EntryEvent e);
-
-	protected abstract void onImpact(ImpactEvent e);
+	protected abstract void onEvent(MeteorCraftEvent e);
 
 	@Override
 	public final Block getTileEntityBlockID() {

@@ -26,7 +26,7 @@ public class ItemBlockMeteorMachine extends ItemBlock {
 
 	@Override
 	public void getSubItems(Item id, CreativeTabs tab, List li) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 5; i++) {
 			li.add(new ItemStack(id, 1, i));
 		}
 	}
@@ -42,6 +42,8 @@ public class ItemBlockMeteorMachine extends ItemBlock {
 			return "Meteor Defence Gun (Tier "+is.getItemDamage()+")";
 		if (is.getItemDamage() == 3)
 			return "Meteor Radar";
+		if (is.getItemDamage() == 4)
+			return "Meteor Fragment Magnet";
 		return "Unnamed Meteor Machine";
 	}
 

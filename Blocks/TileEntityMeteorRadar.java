@@ -14,8 +14,9 @@ import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.Event.EntryEvent;
-import Reika.MeteorCraft.Event.ImpactEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.Event.MeteorCraftEvent.ImpactEvent;
 
 public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 
@@ -35,7 +36,14 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	public void onMeteor(EntryEvent e) {
+	public void onEvent(MeteorCraftEvent evt) {
+		if (evt instanceof EntryEvent)
+			this.onMeteor((EntryEvent)evt);
+		else if (evt instanceof ImpactEvent)
+			this.onImpact((ImpactEvent)evt);
+	}
+
+	private void onMeteor(EntryEvent e) {
 		EntityMeteor m = e.meteor;
 		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
 		if (this.canPerformActions() && dd <= this.getRange()) {
@@ -44,13 +52,12 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 		}
 	}
 
-	@Override
-	public void onImpact(ImpactEvent e) {
+	private void onImpact(ImpactEvent e) {
 		EntityMeteor m = e.meteor;
-		double dd = ReikaMathLibrary.py3d(e.x-xCoord, 0, e.z-zCoord);
+		double dd = ReikaMathLibrary.py3d(e.impactX-xCoord, 0, e.impactZ-zCoord);
 		if (this.canPerformActions() && dd <= this.getRange()) {
 			if (!worldObj.isRemote)
-				ReikaChatHelper.sendChatToAllOnServer("A meteor impact has been detected at "+e.x+", "+e.y+", "+e.z);
+				ReikaChatHelper.sendChatToAllOnServer("A meteor impact has been detected at "+e.impactX+", "+e.impactY+", "+e.impactZ);
 		}
 	}
 
