@@ -62,6 +62,7 @@ public class MeteorGenerator {
 
 		this.addID(ModOreList.ESSENCE, MeteorType.STONE, MagicCropHandler.getInstance().oreID);
 		this.addID(ModOreList.ESSENCE, MeteorType.NETHERRACK, MagicCropHandler.getInstance().netherOreID);
+		this.addID(ModOreList.ESSENCE, MeteorType.END, MagicCropHandler.getInstance().endOreID);
 
 		this.addMetadata(ModOreList.MIMICHITE, MeteorType.STONE, 0);
 		this.addMetadata(ModOreList.MIMICHITE, MeteorType.NETHERRACK, 1);
