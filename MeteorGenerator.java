@@ -387,6 +387,10 @@ public class MeteorGenerator {
 		}
 
 		private void addDrop(ItemStack is, int min, int max) {
+			if (is == null || is.getItem() == null) {
+				MeteorCraft.logger.logError("Cannot add drop to meteor type "+this+"! Null item!");
+				return;
+			}
 			if (this.isValid())
 				drops.add(new ItemDrop(is, min, max));
 		}
