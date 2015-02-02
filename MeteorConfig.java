@@ -124,7 +124,7 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	private void addModOreAllowance(ItemStack is) {
-		if (!ReikaItemHelper.listContainsItemStack(allowedOreItems, is))
+		if (!ReikaItemHelper.collectionContainsItemStack(allowedOreItems, is))
 			allowedOreItems.add(is);
 	}
 
@@ -249,6 +249,6 @@ public class MeteorConfig extends ControlledConfig {
 			return false;
 		if (b.getClass().getName().startsWith("shukaro.artifice")) //artifice ore variants
 			return false;
-		return ReikaItemHelper.listContainsItemStack(allowedOreItems, is);
+		return ReikaItemHelper.collectionContainsItemStack(allowedOreItems, is);
 	}
 }
