@@ -32,7 +32,7 @@ import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
-import Reika.DragonAPI.ModInteract.FactorizationHandler;
+import Reika.DragonAPI.ModInteract.ItemHandlers.FactorizationHandler;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Event.MeteorCraftEvent.ImpactEvent;
 import Reika.MeteorCraft.Registry.MeteorSounds;
