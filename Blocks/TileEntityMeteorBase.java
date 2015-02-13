@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -50,28 +51,48 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		@SubscribeEvent
 		public final void entryEvent(EntryEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+				TileEntity te = loc.getTileEntity();
+				if (te == null) {
+					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+					continue;
+				}
+				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(AirburstEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+				TileEntity te = loc.getTileEntity();
+				if (te == null) {
+					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+					continue;
+				}
+				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(ImpactEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+				TileEntity te = loc.getTileEntity();
+				if (te == null) {
+					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+					continue;
+				}
+				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(MeteorDefenceEvent e) {
 			for (WorldLocation loc : cache) {
-				((TileEntityMeteorBase)loc.getTileEntity()).onEvent(e);
+				TileEntity te = loc.getTileEntity();
+				if (te == null) {
+					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+					continue;
+				}
+				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 

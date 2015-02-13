@@ -79,7 +79,7 @@ public class CustomOreLoader {
 			String line = "";
 			while (line != null) {
 				line = p.readLine();
-				if (line != null && !line.startsWith("//")) {
+				if (line != null && !line.isEmpty() && !line.startsWith("//")) {
 					try {
 						CustomOreEntry entry = this.parseString(line);
 						if (entry != null) {
