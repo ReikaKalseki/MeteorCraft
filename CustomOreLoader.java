@@ -27,6 +27,10 @@ public class CustomOreLoader {
 
 	private final ArrayList<CustomOreEntry> data = new ArrayList();
 
+	private CustomOreLoader() {
+
+	}
+
 	public static class CustomOreEntry {
 
 		public final String displayName;

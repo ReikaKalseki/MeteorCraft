@@ -326,7 +326,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 		Collection<ItemDrop> drops = this.getType().getDroppedItems();
 		for (ItemDrop drop : drops) {
-			ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItem(), 1);
+			ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItemStack(), 1);
 			int num = drop.getDropCount();
 			for (int i = 0; i < num; i++) {
 				double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 8);
