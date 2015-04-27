@@ -9,6 +9,8 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
@@ -39,8 +41,21 @@ public class MeteorSpawnController implements TickHandler {
 	private boolean isShowering;
 	private int showerDuration;
 
+	private static final HashSet<Integer> blacklist = new HashSet();
+	private static final HashMap<Integer, Integer> chanceOverrides = new HashMap();
+
 	private MeteorSpawnController() {
 
+	}
+
+	public static void blacklistDimension(int dim) {
+		if (dim != 0)
+			blacklist.add(dim);
+	}
+
+	public static void setDimensionChance(int dim, int chance) {
+		if (dim != 0)
+			chanceOverrides.put(dim, chance);
 	}
 
 	@Override
@@ -95,12 +110,17 @@ public class MeteorSpawnController implements TickHandler {
 			return true;
 		if (world.provider.hasNoSky)
 			return false;
+		if (blacklist.contains(world.provider.dimensionId))
+			return false;
 		return this.getChanceFromDimension(world.provider.dimensionId) > 0;
 	}
 
 	private int getChanceFromDimension(int dimID) {
 		if (dimID == ReikaTwilightHelper.getDimensionID())
 			return MeteorOptions.FORESTCHANCE.getValue();
+		Integer get = chanceOverrides.get(dimID);
+		if (get != null)
+			return get.intValue();
 		switch(dimID) {
 		case 0:
 			return MeteorOptions.CHANCE.getValue();
