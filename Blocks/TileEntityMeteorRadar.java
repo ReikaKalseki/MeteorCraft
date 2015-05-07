@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.ImpactEvent;
 import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.Event.MeteorCraftEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.ImpactEvent;
 
 public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 

@@ -16,8 +16,8 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
-import Reika.MeteorCraft.Event.MeteorCraftEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.AirburstEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;
 
 public class TileEntityMeteorMagnet extends TileEntityMeteorBase {
 

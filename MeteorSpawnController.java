@@ -26,9 +26,9 @@ import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
+import Reika.MeteorCraft.API.Event.MeteorShowerEndEvent;
+import Reika.MeteorCraft.API.Event.MeteorShowerStartEvent;
 import Reika.MeteorCraft.Entity.EntityMeteor;
-import Reika.MeteorCraft.Event.MeteorShowerEndEvent;
-import Reika.MeteorCraft.Event.MeteorShowerStartEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 

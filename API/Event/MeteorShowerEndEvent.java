@@ -7,21 +7,20 @@
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
-package Reika.MeteorCraft.Event;
+package Reika.MeteorCraft.API.Event;
 
 import net.minecraft.world.World;
 import cpw.mods.fml.common.eventhandler.Event;
 
-public class MeteorShowerStartEvent extends Event {
+public class MeteorShowerEndEvent extends Event {
 
 	public final World world;
 
-	/** World time at start */
-	public final long startTime;
+	public final long duration;
 
-	public MeteorShowerStartEvent(World world) {
+	public MeteorShowerEndEvent(World world, long dura) {
 		this.world = world;
-		startTime = world.getWorldTime();
+		duration = dura;
 	}
 
 }

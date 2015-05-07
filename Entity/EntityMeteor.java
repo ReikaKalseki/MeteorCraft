@@ -25,6 +25,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,15 +41,16 @@ import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.MeteorGenerator;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.MeteorImpact;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.AirburstEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.API.MeteorEntity;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.MeteorCraft.Registry.MeteorSounds;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
+public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity {
 
 	private MeteorType type;
 	private boolean crossed = false;
@@ -56,6 +58,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 	private boolean boom = false;
 	private int explodeY;
 	private boolean genOres;
+
+	private double spawnX;
+	private double spawnY;
+	private double spawnZ;
 
 	public EntityMeteor(World world) {
 		super(world);
@@ -75,6 +81,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 		velocityChanged = true;
 		noClip = true;
 		genOres = ReikaRandomHelper.doWithChance(MeteorOptions.LOADCHANCE.getValue());
+
+		spawnX = x;
+		spawnY = y;
+		spawnZ = z;
 	}
 
 	public EntityMeteor setExploding() {
@@ -370,6 +380,27 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData {
 
 	public boolean genOres() {
 		return genOres;
+	}
+
+	@Override
+	public Vec3 getVelocityVector() {
+		return Vec3.createVectorHelper(motionX, motionY, motionZ);
+	}
+
+	@Override
+	public Vec3 getProjectedIntercept(double yLevel) {
+		double dy = (posY-yLevel)/motionY;
+		return Vec3.createVectorHelper(posX+motionX*dy, yLevel, posZ+motionZ*dy);
+	}
+
+	@Override
+	public Block getMeteorRockType() {
+		return this.getType().blockID;
+	}
+
+	@Override
+	public Vec3 getSpawnPosition() {
+		return Vec3.createVectorHelper(spawnX, spawnY, spawnZ);
 	}
 
 }

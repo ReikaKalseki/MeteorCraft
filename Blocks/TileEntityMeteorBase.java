@@ -22,11 +22,11 @@ import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
 import Reika.DragonAPI.Interfaces.LocationCached;
 import Reika.MeteorCraft.MeteorCraft;
-import Reika.MeteorCraft.Event.MeteorCraftEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.AirburstEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.EntryEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.ImpactEvent;
-import Reika.MeteorCraft.Event.MeteorCraftEvent.MeteorDefenceEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.ImpactEvent;
+import Reika.MeteorCraft.API.Event.MeteorCraftEvent.MeteorDefenceEvent;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
