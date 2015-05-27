@@ -28,6 +28,7 @@ import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -264,10 +265,10 @@ public class MeteorGenerator {
 	private void generate(World world, int x, int y, int z, MeteorType type, boolean ore) {
 		BlockArray blocks = this.getMeteorBlockArray(world, x, y, z);
 		for (int i = 0; i < blocks.getSize(); i++) {
-			int[] xyz = blocks.getNthBlock(i);
-			int fx = xyz[0];
-			int fy = xyz[1];
-			int fz = xyz[2];
+			Coordinate c = blocks.getNthBlock(i);
+			int fx = c.xCoord;
+			int fy = c.yCoord;
+			int fz = c.zCoord;
 			ItemStack is = this.getBlock(type, ore);
 			if (fy > 0 && world.getBlock(fx, fy, fz) != Blocks.bedrock)
 				ReikaWorldHelper.setBlock(world, fx, fy, fz, is);
