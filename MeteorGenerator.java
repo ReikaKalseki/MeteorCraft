@@ -335,6 +335,8 @@ public class MeteorGenerator {
 			return ore == ModOreList.PITCHBLENDE;
 		if (ore == ModOreList.MIMICHITE)
 			return true;
+		if (ore == ModOreList.THORIUM)
+			return blockID == Blocks.netherrack;
 		return blockID == Blocks.stone;
 	}
 
