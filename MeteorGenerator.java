@@ -333,10 +333,12 @@ public class MeteorGenerator {
 			return blockID == Blocks.netherrack || blockID == Blocks.stone;
 		if (blockID == Blocks.end_stone)
 			return ore == ModOreList.PITCHBLENDE;
-		if (ore == ModOreList.MIMICHITE)
+		if (ore == ModOreList.MIMICHITE || ore == ModOreList.DRACONIUM)
 			return true;
 		if (ore == ModOreList.THORIUM)
 			return blockID == Blocks.netherrack;
+		if (ore == ModOreList.ENDIUM)
+			return blockID == Blocks.end_stone;
 		return blockID == Blocks.stone;
 	}
 

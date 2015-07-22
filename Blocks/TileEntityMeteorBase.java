@@ -20,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
-import Reika.DragonAPI.Interfaces.LocationCached;
+import Reika.DragonAPI.Interfaces.TileEntity.LocationCached;
 import Reika.MeteorCraft.MeteorCraft;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;

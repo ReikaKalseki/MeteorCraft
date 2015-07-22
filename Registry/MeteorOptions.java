@@ -9,12 +9,11 @@
  ******************************************************************************/
 package Reika.MeteorCraft.Registry;
 
-import net.minecraftforge.common.config.Configuration;
-import Reika.DragonAPI.Exception.RegistrationException;
-import Reika.DragonAPI.Interfaces.ConfigList;
+import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
+import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
 import Reika.MeteorCraft.MeteorCraft;
 
-public enum MeteorOptions implements ConfigList {
+public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 
 	CHANCE("Overworld Meteor Rarity", 72000), //one meteor every hour
 	ENDCHANCE("End Meteor Rarity", 72000), //one meteor every hour
@@ -36,7 +35,6 @@ public enum MeteorOptions implements ConfigList {
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
-	private float defaultFloat;
 	private Class type;
 
 	public static final MeteorOptions[] optionList = MeteorOptions.values();
@@ -61,38 +59,12 @@ public enum MeteorOptions implements ConfigList {
 		return type == int.class;
 	}
 
-	public boolean isDecimal() {
-		return type == float.class;
-	}
-
-	public float setDecimal(Configuration config) {
-		if (!this.isDecimal())
-			throw new RegistrationException(MeteorCraft.instance, "Config Property \""+this.getLabel()+"\" is not decimal!");
-		return (float)config.get("Control Setup", this.getLabel(), defaultFloat).getDouble(defaultFloat);
-	}
-
-	public float getFloat() {
-		return (Float)MeteorCraft.config.getControl(this.ordinal());
-	}
-
 	public Class getPropertyType() {
 		return type;
 	}
 
-	public int setValue(Configuration config) {
-		if (!this.isNumeric())
-			throw new RegistrationException(MeteorCraft.instance, "Config Property \""+this.getLabel()+"\" is not numerical!");
-		return config.get("Control Setup", this.getLabel(), defaultValue).getInt();
-	}
-
 	public String getLabel() {
 		return label;
-	}
-
-	public boolean setState(Configuration config) {
-		if (!this.isBoolean())
-			throw new RegistrationException(MeteorCraft.instance, "Config Property \""+this.getLabel()+"\" is not boolean!");
-		return config.get("Control Setup", this.getLabel(), defaultState).getBoolean(defaultState);
 	}
 
 	public boolean getState() {
@@ -115,11 +87,6 @@ public enum MeteorOptions implements ConfigList {
 	@Override
 	public int getDefaultValue() {
 		return defaultValue;
-	}
-
-	@Override
-	public float getDefaultFloat() {
-		return defaultFloat;
 	}
 
 	@Override
