@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import Reika.DragonAPI.DragonAPICore;
+import Reika.DragonAPI.DragonOptions;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.Trackers.CommandableUpdateChecker;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry;
@@ -32,6 +33,7 @@ import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.RotaryCraft.Auxiliary.ItemStacks;
+import Reika.RotaryCraft.Auxiliary.RecipeManagers.RecipeHandler.RecipeLevel;
 import Reika.RotaryCraft.Auxiliary.RecipeManagers.WorktableRecipes;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -43,7 +45,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod( modid = "MeteorCraft", name="MeteorCraft", certificateFingerprint = "@GET_FINGERPRINT@", dependencies="required-after:DragonAPI")
 
@@ -72,6 +73,8 @@ public class MeteorCraft extends DragonAPIMod {
 		config.initProps(evt);
 
 		logger = new ModLogger(instance, false);
+		if (DragonOptions.FILELOG.getState())
+			logger.setOutput("**_Loading_Log.log");
 
 		meteorMachines = new BlockMeteorMachine().setBlockName("meteormachine");
 		GameRegistry.registerBlock(meteorMachines, ItemBlockMeteorMachine.class, "Meteor Machines");
@@ -91,7 +94,7 @@ public class MeteorCraft extends DragonAPIMod {
 		EntityRegistry.registerGlobalEntityID(EntityTrail.class, "MeteorTrail", id);
 		EntityRegistry.instance().registerModEntity(EntityTrail.class, "MeteorTrail", EntityRegistry.findGlobalUniqueEntityId(), instance, 384, 20, true);
 
-		TickRegistry.instance.registerTickHandler(MeteorSpawnController.instance, Side.SERVER);
+		TickRegistry.instance.registerTickHandler(MeteorSpawnController.instance);
 		proxy.addRenders();
 		proxy.addSounds();
 
@@ -106,13 +109,13 @@ public class MeteorCraft extends DragonAPIMod {
 		ItemStack is1 = new ItemStack(meteorMachines, 1, 1);
 		ItemStack is2 = new ItemStack(meteorMachines, 1, 2);
 		if (ModList.ROTARYCRAFT.isLoaded()) {
-			WorktableRecipes.getInstance().addRecipe(is, "SRS", "PCP", "ScS", 'S', ItemStacks.steelingot, 'R', Blocks.redstone_block, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
-			WorktableRecipes.getInstance().addRecipe(is1, "SLS", "PcP", "SCS", 'L', is, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
-			WorktableRecipes.getInstance().addRecipe(is2, "SLS", "PcP", "SCS", 'L', is1, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.turbine, 'c', ItemStacks.pcb);
+			WorktableRecipes.getInstance().addRecipe(is, RecipeLevel.PROTECTED, "SRS", "PCP", "ScS", 'S', ItemStacks.steelingot, 'R', Blocks.redstone_block, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
+			WorktableRecipes.getInstance().addRecipe(is1, RecipeLevel.PROTECTED, "SLS", "PcP", "SCS", 'L', is, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.compressor, 'c', ItemStacks.pcb);
+			WorktableRecipes.getInstance().addRecipe(is2, RecipeLevel.PROTECTED, "SLS", "PcP", "SCS", 'L', is1, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'C', ItemStacks.turbine, 'c', ItemStacks.pcb);
 
-			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 3), "SsS", "PLP", "ScS", 's', ItemStacks.screen, 'L', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'c', ItemStacks.pcb);
+			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 3), RecipeLevel.PROTECTED, "SsS", "PLP", "ScS", 's', ItemStacks.screen, 'L', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'c', ItemStacks.pcb);
 
-			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 4), "SlS", "PgP", "SrS", 's', ItemStacks.lim, 'r', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'g', ItemStacks.generator);
+			WorktableRecipes.getInstance().addRecipe(new ItemStack(meteorMachines, 1, 4), RecipeLevel.PROTECTED, "SlS", "PgP", "SrS", 's', ItemStacks.lim, 'r', ItemStacks.radar, 'S', ItemStacks.steelingot, 'P', ItemStacks.basepanel, 'g', ItemStacks.generator);
 		}
 		else {
 			GameRegistry.addRecipe(is, "IRI", "BTB", "IDI", 'I', Items.iron_ingot, 'B', Blocks.iron_block, 'D', Blocks.dispenser, 'R', Blocks.redstone_block, 'T', Blocks.tnt);

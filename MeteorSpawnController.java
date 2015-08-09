@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
@@ -122,12 +123,12 @@ public class MeteorSpawnController implements TickHandler {
 		if (get != null)
 			return get.intValue();
 		switch(dimID) {
-		case 0:
-			return MeteorOptions.CHANCE.getValue();
-		case 1:
-			return MeteorOptions.ENDCHANCE.getValue();
-		default:
-			return MeteorOptions.OTHERCHANCE.getValue();
+			case 0:
+				return MeteorOptions.CHANCE.getValue();
+			case 1:
+				return MeteorOptions.ENDCHANCE.getValue();
+			default:
+				return MeteorOptions.OTHERCHANCE.getValue();
 		}
 	}
 
@@ -173,8 +174,8 @@ public class MeteorSpawnController implements TickHandler {
 	}
 
 	@Override
-	public TickType getType() {
-		return TickType.WORLD;
+	public EnumSet<TickType> getType() {
+		return EnumSet.of(TickType.WORLD);
 	}
 
 	@Override

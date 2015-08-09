@@ -25,6 +25,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Instantiable.ItemDrop;
+import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -191,6 +192,9 @@ public class MeteorImpact {
 			return false;
 		if (id == FactorizationHandler.getInstance().bedrockID)
 			return false;
+		if (id instanceof SemiUnbreakable) {
+			return !((SemiUnbreakable)id).isUnbreakable(world, x, y, z, meta);
+		}
 		return true;
 	}
 
