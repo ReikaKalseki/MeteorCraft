@@ -112,4 +112,9 @@ public enum MeteorSounds implements SoundEnum {
 	public boolean canOverlap() {
 		return true;
 	}
+
+	@Override
+	public boolean attenuate() {
+		return false;
+	}
 }
