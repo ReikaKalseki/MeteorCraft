@@ -117,4 +117,9 @@ public enum MeteorSounds implements SoundEnum {
 	public boolean attenuate() {
 		return false;
 	}
+
+	@Override
+	public float getModulatedVolume() {
+		return 1;
+	}
 }

@@ -30,35 +30,33 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 
 public class MeteorConfig extends ControlledConfig {
 
-	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
-		super(mod, option, id, cfg);
-	}
-
 	private static final ArrayList<String> modOres = getModOres();
 	private static final int oreLength = modOres.size();
 	private static final int vanillaOreCount = ReikaOreHelper.oreList.length;
-	private final int[] ores = new int[oreLength+vanillaOreCount];
+	private final DataElement<Integer>[] ores = new DataElement[oreLength+vanillaOreCount];
 
-	private final boolean[] biomes = new boolean[BiomeTypeList.biomeList.length];
+	private final DataElement<Boolean>[] biomes = new DataElement[BiomeTypeList.biomeList.length];
 
 	private final ArrayList<ItemStack> allowedOreItems = new ArrayList();
 
-	//Initialization of the config
-	@Override
-	protected void loadAdditionalData() {
+	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
+		super(mod, option, id, cfg);
+
 		for (int i = 0; i < vanillaOreCount; i++) {
 			String name = ReikaOreHelper.oreList[i].getName();
-			ores[i] = config.get("Ore Weight", name+" Ore", 10).getInt();
+			ores[i] = this.registerAdditionalOption("Ore Weight", name+" Ore", 10);
 		}
 		for (int i = 0; i < oreLength; i++) {
 			String name = modOres.get(i);
-			ores[i+vanillaOreCount] = config.get("Ore Weight", name, 10).getInt();
+			ores[i+vanillaOreCount] = this.registerAdditionalOption("Ore Weight", name, 10);
 		}
 
 		for (int i = 0; i < biomes.length; i++) {
 			String name = BiomeTypeList.biomeList[i].displayName;
-			biomes[i] = config.get("Allowable Impact Biomes", name, true).getBoolean(true);
+			biomes[i] = this.registerAdditionalOption("Allowable Impact Biomes", name, true);
 		}
+
+		registerOrphanExclusion("Mod Ore Allowance");
 	}
 
 	public void initModExclusions() {
@@ -221,24 +219,24 @@ public class MeteorConfig extends ControlledConfig {
 	}*/
 
 	public int getOreWeight(ModOreList ore) {
-		return ores[ore.ordinal()+ReikaOreHelper.oreList.length];
+		return ores[ore.ordinal()+ReikaOreHelper.oreList.length].getData();
 	}
 
 	public int getOreWeight(ReikaOreHelper ore) {
-		return ores[ore.ordinal()];
+		return ores[ore.ordinal()].getData();
 	}
 
 	public boolean shouldGenerateOre(ModOreList ore) {
-		return ores[ore.ordinal()+ReikaOreHelper.oreList.length] > 0;
+		return ores[ore.ordinal()+ReikaOreHelper.oreList.length].getData() > 0;
 	}
 
 	public boolean shouldGenerateOre(ReikaOreHelper ore) {
-		return ores[ore.ordinal()] > 0;
+		return ores[ore.ordinal()].getData() > 0;
 	}
 
 	public boolean canImpactInBiome(BiomeGenBase biome) {
 		BiomeTypeList b = BiomeTypeList.getEntry(biome);
-		return b != null ? biomes[b.ordinal()] : true;
+		return b != null ? biomes[b.ordinal()].getData() : true;
 	}
 
 	public boolean isItemStackGenerationPermitted(ItemStack is) {
