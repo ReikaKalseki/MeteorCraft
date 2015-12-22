@@ -39,8 +39,8 @@ public class MeteorConfig extends ControlledConfig {
 
 	private final ArrayList<ItemStack> allowedOreItems = new ArrayList();
 
-	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id, int cfg) {
-		super(mod, option, id, cfg);
+	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
+		super(mod, option, id);
 
 		for (int i = 0; i < vanillaOreCount; i++) {
 			String name = ReikaOreHelper.oreList[i].getName();
@@ -56,7 +56,7 @@ public class MeteorConfig extends ControlledConfig {
 			biomes[i] = this.registerAdditionalOption("Allowable Impact Biomes", name, true);
 		}
 
-		registerOrphanExclusion("Mod Ore Allowance");
+		this.registerOrphanExclusion("Mod Ore Allowance");
 	}
 
 	public void initModExclusions() {

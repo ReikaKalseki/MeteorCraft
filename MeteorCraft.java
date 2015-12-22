@@ -53,7 +53,7 @@ public class MeteorCraft extends DragonAPIMod {
 	@Instance("MeteorCraft")
 	public static MeteorCraft instance = new MeteorCraft();
 
-	public static final MeteorConfig config = new MeteorConfig(instance, MeteorOptions.optionList, null, 0);
+	public static final MeteorConfig config = new MeteorConfig(instance, MeteorOptions.optionList, null);
 
 	public static ModLogger logger;
 
