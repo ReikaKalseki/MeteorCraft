@@ -317,6 +317,8 @@ public class MeteorGenerator {
 
 	//Very basic rules:
 	public static boolean canGenOreIn(Block blockID, ModOreList ore) {
+		if (blockID == AppEngHandler.getInstance().skystone)
+			return false;
 		if (ore.isNetherOres())
 			return blockID == Blocks.netherrack;
 		if (ore == ModOreList.ARDITE || ore == ModOreList.COBALT)
