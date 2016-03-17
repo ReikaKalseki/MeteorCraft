@@ -122,4 +122,9 @@ public enum MeteorSounds implements SoundEnum {
 	public float getModulatedVolume() {
 		return 1;
 	}
+
+	@Override
+	public boolean preload() {
+		return false;
+	}
 }
