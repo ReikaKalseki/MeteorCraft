@@ -63,6 +63,7 @@ public enum MeteorSounds implements SoundEnum {
 	public void playSound(World world, double x, double y, double z, float vol, float pitch) {
 		if (FMLCommonHandler.instance().getEffectiveSide() != Side.SERVER)
 			return;
+		vol *= MeteorOptions.VOLUME.getFloat();
 		;//ReikaPacketHelper.sendSoundPacket(MeteorCraft.packetChannel, this, world, x, y, z, vol, pitch);
 	}
 

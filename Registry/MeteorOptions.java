@@ -10,10 +10,12 @@
 package Reika.MeteorCraft.Registry;
 
 import Reika.DragonAPI.Interfaces.Configuration.BooleanConfig;
+import Reika.DragonAPI.Interfaces.Configuration.DecimalConfig;
 import Reika.DragonAPI.Interfaces.Configuration.IntegerConfig;
+import Reika.DragonAPI.Interfaces.Configuration.UserSpecificConfig;
 import Reika.MeteorCraft.MeteorCraft;
 
-public enum MeteorOptions implements IntegerConfig, BooleanConfig {
+public enum MeteorOptions implements IntegerConfig, BooleanConfig, DecimalConfig, UserSpecificConfig {
 
 	CHANCE("Overworld Meteor Rarity", 72000), //one meteor every hour
 	ENDCHANCE("End Meteor Rarity", 72000), //one meteor every hour
@@ -30,11 +32,13 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 	EXPLODE("Global Airburst Override", false),
 	OLDGEN("Generate Ancient Meteors", true),
 	LOADCHANCE("Percent of Meteors With Ore", 100),
-	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false);
+	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false),
+	VOLUME("Meteor Sound Volume", 1F);
 
 	private String label;
 	private boolean defaultState;
 	private int defaultValue;
+	private float defaultFloat;
 	private Class type;
 
 	public static final MeteorOptions[] optionList = MeteorOptions.values();
@@ -51,12 +55,22 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 		type = int.class;
 	}
 
+	private MeteorOptions(String l, float d) {
+		label = l;
+		defaultFloat = d;
+		type = float.class;
+	}
+
 	public boolean isBoolean() {
 		return type == boolean.class;
 	}
 
 	public boolean isNumeric() {
 		return type == int.class;
+	}
+
+	public boolean isDecimal() {
+		return type == float.class;
 	}
 
 	public Class getPropertyType() {
@@ -75,6 +89,10 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 		return (Integer)MeteorCraft.config.getControl(this.ordinal());
 	}
 
+	public float getFloat() {
+		return (Float)MeteorCraft.config.getControl(this.ordinal());
+	}
+
 	public boolean isDummiedOut() {
 		return type == null;
 	}
@@ -90,6 +108,11 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 	}
 
 	@Override
+	public float getDefaultFloat() {
+		return defaultFloat;
+	}
+
+	@Override
 	public boolean isEnforcingDefaults() {
 		return false;
 	}
@@ -97,6 +120,16 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig {
 	@Override
 	public boolean shouldLoad() {
 		return true;
+	}
+
+	@Override
+	public boolean isUserSpecific() {
+		switch(this) {
+			case VOLUME:
+				return true;
+			default:
+				return false;
+		}
 	}
 
 }
