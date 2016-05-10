@@ -142,11 +142,6 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 	}
 
 	@Override
-	public final String getName() {
-		return this.getTEName();
-	}
-
-	@Override
 	public final int getIORenderAlpha() {
 		return iotick;
 	}

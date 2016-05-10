@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import Reika.DragonAPI.Libraries.Java.ReikaGLHelper.BlendMode;
 
@@ -26,8 +25,10 @@ public class RenderTrail extends Render {
 
 	public void renderEntity(EntityTrail er, double par2, double par4, double par6, float par8, float par9)
 	{
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthMask(false);
 		GL11.glTranslatef((float)par2, (float)par4, (float)par6);
 		Tessellator v5 = Tessellator.instance;
 		float var16 = 1.0F;
@@ -60,13 +61,8 @@ public class RenderTrail extends Render {
 		v5.addVertexWithUV(0, 1, 0, 0, 1);
 		v5.draw();
 		//ReikaJavaLibrary.pConsole(er.getRange());
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glTranslated(0.5, 0.5, 0);
-		GL11.glScaled(1D/size, 1D/size, 1);
 		//GL11.glDepthFunc(GL11.GL_LEQUAL);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 

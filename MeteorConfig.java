@@ -25,6 +25,7 @@ import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
+import Reika.DragonAPI.ModInteract.ItemHandlers.RailcraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
 import Reika.DragonAPI.ModRegistry.ModOreList;
 
@@ -240,12 +241,14 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	public boolean isItemStackGenerationPermitted(ItemStack is) {
-		if (ReikaItemHelper.matchStackWithBlock(is, TinkerBlockHandler.getInstance().gravelOreID))
+		if (ModList.TINKERER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, TinkerBlockHandler.getInstance().gravelOreID))
 			return false;
 		Block b = Block.getBlockFromItem(is.getItem());
 		if (b == null)
 			return false;
 		if (b.getClass().getName().startsWith("shukaro.artifice")) //artifice ore variants
+			return false;
+		if (ModList.RAILCRAFT.isLoaded() && RailcraftHandler.getInstance().isDarkOre(b, is.getItemDamage()))
 			return false;
 		return ReikaItemHelper.collectionContainsItemStack(allowedOreItems, is);
 	}
