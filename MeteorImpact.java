@@ -128,20 +128,24 @@ public class MeteorImpact {
 						Block b = world.getBlock(dx, dy, dz);
 						int meta = world.getBlockMetadata(dx, dy, dz);
 						if (mat == Material.glass || mat == Material.ice) {
-							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
-							world.setBlockToAir(dx, dy, dz);
+							if (!world.isRemote) {
+								b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
+								world.setBlockToAir(dx, dy, dz);
+							}
 							ReikaSoundHelper.playBreakSound(world, dx, dy, dz, Blocks.glass);
 						}
 						if (mat == Material.circuits || mat == Material.web) {
 							b.dropBlockAsItem(world, dx, dy, dz, meta, 0);
-							world.setBlockToAir(dx, dy, dz);
+							if (!world.isRemote)
+								world.setBlockToAir(dx, dy, dz);
 						}
 					}
 				}
 			}
 		}
 
-		MeteorGenerator.instance.generate(world, posX, posY, posZ, e);
+		if (!world.isRemote)
+			MeteorGenerator.instance.generate(world, posX, posY, posZ, e);
 		/*
 		int num = 16+rand.nextInt(16);
 		for (int i = 0; i < num; i++) {
@@ -158,24 +162,26 @@ public class MeteorImpact {
 			int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
 			ReikaItemHelper.dropItem(world, dx, dy, dz, new ItemStack(Items.gunpowder));
 		}*/
-		Collection<ItemDrop> drops = e.getType().getDroppedItems();
-		for (ItemDrop drop : drops) {
-			ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItem(), 1);
-			int n = drop.getDropCount();
-			for (int i = 0; i < n; i++) {
+		if (!world.isRemote) {
+			Collection<ItemDrop> drops = e.getType().getDroppedItems();
+			for (ItemDrop drop : drops) {
+				ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItem(), 1);
+				int n = drop.getDropCount();
+				for (int i = 0; i < n; i++) {
+					int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
+					int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
+					int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
+					ReikaItemHelper.dropItem(world, dx, dy, dz, is);
+				}
+			}
+
+			int num = 12+rand.nextInt(37);
+			for (int i = 0; i < num; i++) {
 				int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
 				int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
-				int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
-				ReikaItemHelper.dropItem(world, dx, dy, dz, is);
+				int dy = ReikaRandomHelper.getRandomPlusMinus(posY, (int)radius);
+				ReikaWorldHelper.ignite(world, dx, dy, dz);
 			}
-		}
-
-		int num = 12+rand.nextInt(37);
-		for (int i = 0; i < num; i++) {
-			int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
-			int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
-			int dy = ReikaRandomHelper.getRandomPlusMinus(posY, (int)radius);
-			ReikaWorldHelper.ignite(world, dx, dy, dz);
 		}
 	}
 
