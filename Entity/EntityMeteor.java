@@ -53,6 +53,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity {
 
 	private MeteorType type;
+	private boolean spawned = false;
 	private boolean crossed = false;
 	private boolean impact = false;
 	private boolean boom = false;
@@ -223,23 +224,26 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			return ReikaRandomHelper.getRandomPlusMinus(128, 24);
 		}
 		switch(worldObj.provider.dimensionId) {
-		case -1:
-			return 160+rand.nextInt(32);
-		case 1:
-			return 96+rand.nextInt(20);
-		default:
-			return 140+rand.nextInt(32);
+			case -1:
+				return 160+rand.nextInt(32);
+			case 1:
+				return 96+rand.nextInt(20);
+			default:
+				return 140+rand.nextInt(32);
 		}
 	}
 
 	@Override
 	protected void entityInit() {
-		if (worldObj.isRemote) {
-			this.playClientFullVolSound(MeteorSounds.ENTRY);
-			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
+		if (!spawned) {
+			if (worldObj.isRemote) {
+				this.playClientFullVolSound(MeteorSounds.ENTRY);
+				//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
+			}
+			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
+			this.playSound(MeteorSounds.ENTRY, this);
+			spawned = true;
 		}
-		//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
-		this.playSound(MeteorSounds.ENTRY, this);
 
 		explodeY = -1;
 
@@ -247,22 +251,22 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			if (worldObj.provider.dimensionId == ReikaTwilightHelper.getDimensionID() && MeteorOptions.DIM7BURST.getState())
 				explodeY = this.getRandomYToExplodeAlways();
 			switch(worldObj.provider.dimensionId) {
-			case 0:
-				if (MeteorOptions.DIM0BURST.getState())
-					explodeY = this.getRandomYToExplodeAlways();
-				break;
-			case 1:
-				if (MeteorOptions.ENDBURST.getState())
-					explodeY = this.getRandomYToExplodeAlways();
-				break;
-			case -1:
-				if (MeteorOptions.NETHERBURST.getState())
-					explodeY = this.getRandomYToExplodeAlways();
-				break;
-			default:
-				if (MeteorOptions.OTHER.getState())
-					explodeY = this.getRandomYToExplodeAlways();
-				break;
+				case 0:
+					if (MeteorOptions.DIM0BURST.getState())
+						explodeY = this.getRandomYToExplodeAlways();
+					break;
+				case 1:
+					if (MeteorOptions.ENDBURST.getState())
+						explodeY = this.getRandomYToExplodeAlways();
+					break;
+				case -1:
+					if (MeteorOptions.NETHERBURST.getState())
+						explodeY = this.getRandomYToExplodeAlways();
+					break;
+				default:
+					if (MeteorOptions.OTHER.getState())
+						explodeY = this.getRandomYToExplodeAlways();
+					break;
 			}
 		}
 	}
@@ -294,13 +298,19 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-
+	protected void readEntityFromNBT(NBTTagCompound NBT) {
+		spawned = NBT.getBoolean("spawned");
+		crossed = NBT.getBoolean("crossed");
+		impact = NBT.getBoolean("impact");
+		boom = NBT.getBoolean("boom");
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-
+	protected void writeEntityToNBT(NBTTagCompound NBT) {
+		NBT.setBoolean("spawned", spawned);
+		NBT.setBoolean("crossed", crossed);
+		NBT.setBoolean("impact", impact);
+		NBT.setBoolean("boom", boom);
 	}
 
 	@Override

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package Reika.MeteorCraft;
 
+import java.io.File;
 import java.net.URL;
 
 import net.minecraft.block.Block;
@@ -171,6 +172,11 @@ public class MeteorCraft extends DragonAPIMod {
 	@Override
 	public ModLogger getModLogger() {
 		return logger;
+	}
+
+	@Override
+	public File getConfigFolder() {
+		return config.getConfigFolder();
 	}
 
 }

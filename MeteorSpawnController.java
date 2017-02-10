@@ -16,13 +16,12 @@ import java.util.Random;
 
 import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickType;
+import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.DragonAPI.ModRegistry.InterfaceCache;
@@ -82,13 +81,16 @@ public class MeteorSpawnController implements TickHandler {
 				double chance = this.getChanceFromDimension(world.provider.dimensionId);
 				if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
 					IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
-					chance /= ig.getMeteorFrequency();
+					if (ig.getMeteorFrequency() == 0)
+						chance = 0;
+					else
+						chance /= ig.getMeteorFrequency();
 				}
 
-				if (MeteorOptions.SHOWER.getState() && ReikaRandomHelper.doWithChance(0.01D/chance)) {
+				if (chance > 0 && MeteorOptions.SHOWER.getState() && ReikaRandomHelper.doWithChance(0.01D/chance)) {
 					this.startMeteorShower(world);
 				}
-				else if (ReikaRandomHelper.doWithChance(1D/chance)) {
+				else if (chance > 0 && ReikaRandomHelper.doWithChance(1D/chance)) {
 					if (world.playerEntities.size() > 0) {
 						EntityPlayer ep = (EntityPlayer)world.playerEntities.get(rand.nextInt(world.playerEntities.size()));
 						if (ep != null) {
@@ -161,8 +163,9 @@ public class MeteorSpawnController implements TickHandler {
 	}
 
 	private void startMeteorShower(World world) {
-		ChatComponentTranslation chat = new ChatComponentTranslation("A meteor shower is starting...");
-		MinecraftServer.getServer().getConfigurationManager().sendChatMsg(chat);
+		String sg = "A meteor shower is starting...";
+		ReikaChatHelper.sendChatToAllOnServer(sg);
+		MeteorCraft.logger.log(sg+" @ "+world.getTotalWorldTime());
 		isShowering = true;
 		showerDuration = 0;
 		MinecraftForge.EVENT_BUS.post(new MeteorShowerStartEvent(world));

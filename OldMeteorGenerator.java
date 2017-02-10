@@ -11,12 +11,12 @@ package Reika.MeteorCraft;
 
 import java.util.Random;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Registry.MeteorOptions;
@@ -47,8 +47,10 @@ public class OldMeteorGenerator implements IWorldGenerator {
 	private void generate(Random rand, World world, int chunkX, int chunkZ) {
 		int x = chunkX+rand.nextInt(16);
 		int z = chunkZ+rand.nextInt(16);
-		if (world.getBlock(x, 0, z) == Blocks.air || world.canBlockSeeTheSky(x, 1, z)) //sky/void world
+
+		if (ReikaWorldHelper.isVoidWorld(world, x, z))
 			return;
+
 		int y = this.getGenY(world, x, z, rand);
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 		BlockArray gen = MeteorGenerator.instance.getMeteorBlockArray(world, x, y, z);

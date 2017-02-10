@@ -33,7 +33,7 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig, DecimalConfig
 	OLDGEN("Generate Ancient Meteors", true),
 	LOADCHANCE("Percent of Meteors With Ore", 100),
 	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false),
-	VOLUME("Meteor Sound Volume", 1F);
+	VOLUME("Meteor Sound Volume (0.5-2.0)", 1F);
 
 	private String label;
 	private boolean defaultState;
