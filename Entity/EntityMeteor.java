@@ -207,7 +207,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 	private void playClientFullVolSound(String s, float v, float p) {
 		Minecraft.getMinecraft().thePlayer.playSound(s, v, p);
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	private void playSound(MeteorSounds sound, Entity e) {
 		double x = e.posX;
 		double y = e.posY;
