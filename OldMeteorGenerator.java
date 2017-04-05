@@ -52,6 +52,9 @@ public class OldMeteorGenerator implements IWorldGenerator {
 			return;
 
 		int y = this.getGenY(world, x, z, rand);
+		if (y == -1)
+			return;
+
 		//ReikaJavaLibrary.pConsole(x+", "+y+", "+z);
 		BlockArray gen = MeteorGenerator.instance.getMeteorBlockArray(world, x, y, z);
 		double tries = 0;
@@ -85,10 +88,12 @@ public class OldMeteorGenerator implements IWorldGenerator {
 		if (max <= 0)
 			max = 1;
 		int y = 5+rand.nextInt(max);
-		while (world.canBlockSeeTheSky(x, y+1, z)) {
+		int tries = 0;
+		while (world.canBlockSeeTheSky(x, y+1, z) && tries < 40) {
 			y = 5+rand.nextInt(max);
+			tries++;
 		}
-		return y;
+		return world.canBlockSeeTheSky(x, y+1, z) ? -1 : y;
 	}
 
 }

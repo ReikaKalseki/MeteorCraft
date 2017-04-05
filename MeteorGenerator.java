@@ -32,6 +32,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
+import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.Libraries.World.ReikaWorldHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.AppEngHandler;
@@ -92,7 +93,7 @@ public class MeteorGenerator {
 								//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
 								if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
 									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
-									MeteorCraft.logger.log("Registering "+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
+									MeteorCraft.logger.log("Registering "+ReikaItemHelper.getRegistrantMod(block)+":"+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
 									this.addOre(type, block, MeteorCraft.config.getOreWeight(ore));
 								}
 							}
