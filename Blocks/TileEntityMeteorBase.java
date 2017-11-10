@@ -51,48 +51,56 @@ public abstract class TileEntityMeteorBase extends TileEntityBase implements Sha
 		@SubscribeEvent
 		public final void entryEvent(EntryEvent e) {
 			for (WorldLocation loc : cache) {
-				TileEntity te = loc.getTileEntity();
-				if (te == null) {
-					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
-					continue;
+				if (loc.dimensionID == e.world.provider.dimensionId) {
+					TileEntity te = loc.getTileEntity(e.world);
+					if (te == null) {
+						MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+						continue;
+					}
+					((TileEntityMeteorBase)te).onEvent(e);
 				}
-				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(AirburstEvent e) {
 			for (WorldLocation loc : cache) {
-				TileEntity te = loc.getTileEntity();
-				if (te == null) {
-					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
-					continue;
+				if (loc.dimensionID == e.world.provider.dimensionId) {
+					TileEntity te = loc.getTileEntity(e.world);
+					if (te == null) {
+						MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+						continue;
+					}
+					((TileEntityMeteorBase)te).onEvent(e);
 				}
-				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(ImpactEvent e) {
 			for (WorldLocation loc : cache) {
-				TileEntity te = loc.getTileEntity();
-				if (te == null) {
-					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
-					continue;
+				if (loc.dimensionID == e.world.provider.dimensionId) {
+					TileEntity te = loc.getTileEntity(e.world);
+					if (te == null) {
+						MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+						continue;
+					}
+					((TileEntityMeteorBase)te).onEvent(e);
 				}
-				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 
 		@SubscribeEvent
 		public final void entryEvent(MeteorDefenceEvent e) {
 			for (WorldLocation loc : cache) {
-				TileEntity te = loc.getTileEntity();
-				if (te == null) {
-					MeteorCraft.logger.logError("Null meteor tile @ "+loc);
-					continue;
+				if (loc.dimensionID == e.world.provider.dimensionId) {
+					TileEntity te = loc.getTileEntity(e.world);
+					if (te == null) {
+						MeteorCraft.logger.logError("Null meteor tile @ "+loc);
+						continue;
+					}
+					((TileEntityMeteorBase)te).onEvent(e);
 				}
-				((TileEntityMeteorBase)te).onEvent(e);
 			}
 		}
 

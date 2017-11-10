@@ -87,6 +87,10 @@ public enum MeteorSounds implements SoundEnum {
 		this.playSoundAtBlock(loc.getWorld(), loc.xCoord, loc.yCoord, loc.zCoord);
 	}
 
+	public void playSoundNoAttenuation(World world, double x, double y, double z, float vol, float pitch, int broadcast) {
+		//no packet handler to do this
+	}
+
 	public String getName() {
 		return this.name();
 	}

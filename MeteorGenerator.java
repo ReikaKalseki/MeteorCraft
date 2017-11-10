@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -24,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
@@ -41,6 +43,7 @@ import Reika.DragonAPI.ModRegistry.ModOreList;
 import Reika.MeteorCraft.CustomOreLoader.CustomOreEntry;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MeteorGenerator {
 
@@ -54,6 +57,11 @@ public class MeteorGenerator {
 	private static final Random rand = new Random();
 
 	private final Material[] mats;
+	private static final HashSet<Material> softMeteorMats;
+
+	static {
+		softMeteorMats = new HashSet(ReikaJavaLibrary.makeListFrom(Material.circuits, Material.glass, Material.snow, Material.ice, Material.cactus, Material.craftedSnow, Material.fire, Material.leaves, Material.plants, Material.portal, Material.gourd, Material.redstoneLight, Material.sponge, Material.lava, Material.water, Material.vine, Material.web));
+	}
 
 	private MeteorGenerator() {
 
@@ -305,9 +313,10 @@ public class MeteorGenerator {
 			return false;
 		if (ReikaWorldHelper.softBlocks(world, x, y, z))
 			return false;
+		if (ModList.NATURA.isLoaded() && b == GameRegistry.findBlock(ModList.NATURA.modLabel, "Cloud"))
+			return false;
 		Material mat = ReikaWorldHelper.getMaterial(world, x, y, z);
-		List<Material> mats = ReikaJavaLibrary.makeListFrom(Material.circuits, Material.glass, Material.snow, Material.ice, Material.cactus, Material.craftedSnow, Material.fire, Material.leaves, Material.plants, Material.portal, Material.gourd, Material.redstoneLight, Material.sponge, Material.lava, Material.water, Material.vine, Material.web);
-		if (mats.contains(mat))
+		if (softMeteorMats.contains(mat))
 			return false;
 		return true;
 	}
