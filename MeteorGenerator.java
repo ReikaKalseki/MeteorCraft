@@ -436,12 +436,14 @@ public class MeteorGenerator {
 			MeteorType.END.addDrop(Items.ender_pearl, 4, 12);
 			MeteorType.END.addDrop(Items.nether_star, 0, 1);
 
-			//MeteorType.SKYSTONE.addDrop(Items.glowstone_dust, 16, 32);
-			//MeteorType.SKYSTONE.addDrop(Items.gunpowder, 9, 18);
-			MeteorType.SKYSTONE.addDrop(AppEngHandler.getInstance().getCertusQuartzDust(), 16, 32);
-			Collection<ItemStack> c = AppEngHandler.getInstance().getPossibleMeteorChestLoot();
-			for (ItemStack is : c) {
-				MeteorType.SKYSTONE.addDrop(is, 0, 1);
+			if (ModList.APPENG.isLoaded()) {
+				//MeteorType.SKYSTONE.addDrop(Items.glowstone_dust, 16, 32);
+				//MeteorType.SKYSTONE.addDrop(Items.gunpowder, 9, 18);
+				MeteorType.SKYSTONE.addDrop(AppEngHandler.getInstance().getCertusQuartzDust(), 16, 32);
+				Collection<ItemStack> c = AppEngHandler.getInstance().getPossibleMeteorChestLoot();
+				for (ItemStack is : c) {
+					MeteorType.SKYSTONE.addDrop(is, 0, 1);
+				}
 			}
 		}
 
