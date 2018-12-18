@@ -88,8 +88,8 @@ public class MeteorCraft extends DragonAPIMod {
 	public void load(FMLInitializationEvent event) {
 		this.startTiming(LoadPhase.LOAD);
 		int id = EntityRegistry.instance().findGlobalUniqueEntityId();
-		EntityRegistry.registerGlobalEntityID(EntityMeteor.class, "Meteor", id);
-		EntityRegistry.instance().registerModEntity(EntityMeteor.class, "Meteor", EntityRegistry.findGlobalUniqueEntityId(), instance, 384, 20, true);
+		EntityRegistry.registerGlobalEntityID(EntityMeteor.class, "ReikaMeteor", id);
+		EntityRegistry.instance().registerModEntity(EntityMeteor.class, "ReikaMeteor", EntityRegistry.findGlobalUniqueEntityId(), instance, 384, 20, true);
 
 		id = EntityRegistry.instance().findGlobalUniqueEntityId();
 		EntityRegistry.registerGlobalEntityID(EntityTrail.class, "MeteorTrail", id);
