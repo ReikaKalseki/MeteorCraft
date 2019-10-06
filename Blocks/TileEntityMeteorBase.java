@@ -17,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Base.TileEntityBase;
 import Reika.DragonAPI.Instantiable.Data.Immutable.WorldLocation;
@@ -28,6 +29,7 @@ import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.ImpactEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.MeteorDefenceEvent;
 import Reika.RotaryCraft.API.Power.ShaftPowerReceiver;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public abstract class TileEntityMeteorBase extends TileEntityBase implements ShaftPowerReceiver, LocationCached {

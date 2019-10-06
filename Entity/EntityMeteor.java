@@ -1,15 +1,13 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
  ******************************************************************************/
 package Reika.MeteorCraft.Entity;
-
-import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
+
 import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -46,9 +45,11 @@ import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
 import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.MeteorCraft.Registry.MeteorSounds;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity {
 

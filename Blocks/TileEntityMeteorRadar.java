@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,6 +10,7 @@
 package Reika.MeteorCraft.Blocks;
 
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -19,6 +20,8 @@ import Reika.MeteorCraft.API.Event.MeteorCraftEvent.ImpactEvent;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 
 public class TileEntityMeteorRadar extends TileEntityMeteorBase {
+
+	public static final int MINPOWER = 16384;
 
 	@Override
 	public void updateEntity(World world, int x, int y, int z, int meta) {
@@ -32,7 +35,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 
 	@Override
 	public long getMinPower() {
-		return 16384;
+		return MINPOWER;
 	}
 
 	@Override

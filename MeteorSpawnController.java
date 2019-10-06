@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickHandler;
 import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
@@ -30,7 +30,9 @@ import Reika.MeteorCraft.API.Event.MeteorShowerEndEvent;
 import Reika.MeteorCraft.API.Event.MeteorShowerStartEvent;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
+
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import micdoodle8.mods.galacticraft.api.world.IGalacticraftWorldProvider;
 
 public class MeteorSpawnController implements TickHandler {
 

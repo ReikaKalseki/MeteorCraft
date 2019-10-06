@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -15,11 +15,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.AirburstEvent;
 
 public class TileEntityMeteorMagnet extends TileEntityMeteorBase {
+
+	public static final int MINPOWER = 1048576; //1MW
 
 	@Override
 	protected void onEvent(MeteorCraftEvent ev) {
@@ -59,7 +62,7 @@ public class TileEntityMeteorMagnet extends TileEntityMeteorBase {
 
 	@Override
 	public long getMinPower() {
-		return 1048576; //1MW
+		return MINPOWER;
 	}
 
 	@Override

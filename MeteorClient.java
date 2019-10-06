@@ -15,6 +15,7 @@ import Reika.MeteorCraft.Entity.EntityTrail;
 import Reika.MeteorCraft.Entity.RenderMeteor;
 import Reika.MeteorCraft.Entity.RenderTrail;
 import Reika.MeteorCraft.Registry.MeteorSounds;
+
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class MeteorClient extends MeteorCommon {

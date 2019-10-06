@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
 import Reika.DragonAPI.Libraries.Registry.ReikaParticleHelper;
@@ -21,6 +22,7 @@ import Reika.MeteorCraft.API.Event.MeteorCraftEvent.EntryEvent;
 import Reika.MeteorCraft.API.Event.MeteorCraftEvent.MeteorDefenceEvent;
 import Reika.MeteorCraft.Entity.EntityMeteor;
 import Reika.MeteorCraft.Registry.MeteorOptions;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -38,7 +40,11 @@ public class TileEntityMeteorGun extends TileEntityMeteorBase {
 
 	@Override
 	public long getMinPower() {
-		return (1+this.getTier())*524288;
+		return calcMinPower(this.getTier());
+	}
+
+	public static long calcMinPower(int tier) {
+		return (1+tier)*524288;
 	}
 
 	@Override

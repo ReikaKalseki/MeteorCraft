@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -24,9 +25,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+
 import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Interfaces.Block.SemiUnbreakable;
 import Reika.DragonAPI.Libraries.ReikaAABBHelper;
+import Reika.DragonAPI.Libraries.ReikaEntityHelper;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -166,12 +169,18 @@ public class MeteorImpact {
 			Collection<ItemDrop> drops = e.getType().getDroppedItems();
 			for (ItemDrop drop : drops) {
 				ItemStack is = ReikaItemHelper.getSizedItemStack(drop.getItem(), 1);
+				if (is == null) {
+					MeteorCraft.logger.log("Tried to drop an invalid ItemStack for meteor type "+e.getType()+": "+drop);
+					continue;
+				}
 				int n = drop.getDropCount();
 				for (int i = 0; i < n; i++) {
 					int dx = ReikaRandomHelper.getRandomPlusMinus(posX, (int)radius);
 					int dz = ReikaRandomHelper.getRandomPlusMinus(posZ, (int)radius);
 					int dy = world.getTopSolidOrLiquidBlock(dx, dz)+1;
-					ReikaItemHelper.dropItem(world, dx, dy, dz, is);
+					EntityItem ei = ReikaItemHelper.dropItem(world, dx, dy, dz, is);
+					ReikaEntityHelper.setInvulnerable(ei, true);
+					ei.getEntityData().setBoolean("meteor", true);
 				}
 			}
 

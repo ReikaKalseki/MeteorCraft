@@ -11,6 +11,7 @@ package Reika.MeteorCraft.Entity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
 import Reika.DragonAPI.Base.InertEntity;
 
 public class EntityTrail extends InertEntity {

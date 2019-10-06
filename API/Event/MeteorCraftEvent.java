@@ -15,9 +15,11 @@ import java.util.Collections;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
+
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.Blocks.TileEntityMeteorGun;
 import Reika.MeteorCraft.Entity.EntityMeteor;
+
 import cpw.mods.fml.common.eventhandler.Event;
 
 public abstract class MeteorCraftEvent extends Event {
