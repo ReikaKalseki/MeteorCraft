@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -24,7 +24,7 @@ import Reika.DragonAPI.Auxiliary.Trackers.TickRegistry.TickType;
 import Reika.DragonAPI.Libraries.IO.ReikaChatHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.ModInteract.ReikaTwilightHelper;
-import Reika.DragonAPI.ModRegistry.InterfaceCache;
+import Reika.DragonAPI.ModInteract.DeepInteract.PlanetDimensionHandler;
 import Reika.MeteorCraft.MeteorGenerator.MeteorType;
 import Reika.MeteorCraft.API.Event.MeteorShowerEndEvent;
 import Reika.MeteorCraft.API.Event.MeteorShowerStartEvent;
@@ -81,7 +81,7 @@ public class MeteorSpawnController implements TickHandler {
 			}
 			else {
 				double chance = this.getChanceFromDimension(world.provider.dimensionId);
-				if (InterfaceCache.IGALACTICWORLD.instanceOf(world.provider)) {
+				if (PlanetDimensionHandler.isGalacticWorld(world)) {
 					IGalacticraftWorldProvider ig = (IGalacticraftWorldProvider)world.provider;
 					if (ig.getMeteorFrequency() == 0)
 						chance = 0;
