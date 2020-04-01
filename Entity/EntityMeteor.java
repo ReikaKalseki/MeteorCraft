@@ -24,12 +24,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.BlockFluidBase;
 
+import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.ItemDrop;
+import Reika.DragonAPI.Interfaces.Entity.ChunkLoadingEntity;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
 import Reika.DragonAPI.Libraries.MathSci.ReikaMathLibrary;
@@ -51,7 +54,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 
-public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity {
+public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity, ChunkLoadingEntity {
 
 	private MeteorType type;
 	private boolean spawned = false;
@@ -412,6 +415,23 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 	@Override
 	public Vec3 getSpawnPosition() {
 		return Vec3.createVectorHelper(spawnX, spawnY, spawnZ);
+	}
+
+	@Override
+	public Collection<ChunkCoordIntPair> getChunksToLoad() {
+		return ChunkManager.instance.getChunkSquare(MathHelper.floor_double(posX), MathHelper.floor_double(posZ), 5);
+		//return ChunkManager.instance.getChunk(this);
+	}
+
+	@Override
+	public void setDead() {
+		this.onDestroy();
+		super.setDead();
+	}
+
+	@Override
+	public void onDestroy() {
+		ChunkManager.instance.unloadChunks(this);
 	}
 
 }
