@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -79,8 +79,7 @@ public class CustomOreLoader {
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
-		try {
-			BufferedReader p = ReikaFileReader.getReader(f);
+		try(BufferedReader p = ReikaFileReader.getReader(f)) {
 			String line = "";
 			while (line != null) {
 				line = p.readLine();
@@ -101,7 +100,6 @@ public class CustomOreLoader {
 					}
 				}
 			}
-			p.close();
 		}
 		catch (Exception e) {
 			MeteorCraft.logger.log(e.getMessage()+", and it caused the read to fail!");
