@@ -32,6 +32,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 
 import Reika.DragonAPI.Auxiliary.ChunkManager;
 import Reika.DragonAPI.Instantiable.ItemDrop;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Interfaces.Entity.ChunkLoadingEntity;
 import Reika.DragonAPI.Libraries.IO.ReikaSoundHelper;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -332,10 +333,10 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			double rx = ReikaRandomHelper.getRandomPlusMinus(posX, 2);
 			double ry = ReikaRandomHelper.getRandomPlusMinus(posY, 2);
 			double rz = ReikaRandomHelper.getRandomPlusMinus(posZ, 2);
-			ItemStack is = MeteorGenerator.instance.getBlock(this.getType(), genOres);
-			Block b = Block.getBlockFromItem(is.getItem());
+			BlockKey is = MeteorGenerator.instance.getBlock(this.getType(), genOres);
+			Block b = is.blockID;
 			if (b != null) { //because some mods are derps and register items as ores
-				EntityFallingBlock e = new EntityFallingBlock(worldObj, rx, ry, rz, b, is.getItemDamage());
+				EntityFallingBlock e = new EntityFallingBlock(worldObj, rx, ry, rz, b, is.metadata);
 				e.field_145812_b = -10000;
 				if (!worldObj.isRemote)
 					worldObj.spawnEntityInWorld(e);

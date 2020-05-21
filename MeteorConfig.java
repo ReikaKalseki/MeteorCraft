@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -10,8 +10,8 @@
 package Reika.MeteorCraft;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.oredict.OreDictionary;
@@ -19,12 +19,12 @@ import net.minecraftforge.oredict.OreDictionary;
 import Reika.DragonAPI.ModList;
 import Reika.DragonAPI.Auxiliary.BiomeTypeList;
 import Reika.DragonAPI.Base.DragonAPIMod;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.Configuration.ConfigList;
 import Reika.DragonAPI.Interfaces.Registry.IDRegistry;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
-import Reika.DragonAPI.Libraries.Registry.ReikaItemHelper;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
 import Reika.DragonAPI.ModInteract.ItemHandlers.RailcraftHandler;
 import Reika.DragonAPI.ModInteract.ItemHandlers.TinkerBlockHandler;
@@ -39,7 +39,7 @@ public class MeteorConfig extends ControlledConfig {
 
 	private final DataElement<Boolean>[] biomes = new DataElement[BiomeTypeList.biomeList.length];
 
-	private final ArrayList<ItemStack> allowedOreItems = new ArrayList();
+	private final HashSet<BlockKey> allowedOreItems = new HashSet();
 
 	public MeteorConfig(DragonAPIMod mod, ConfigList[] option, IDRegistry[] id) {
 		super(mod, option, id);
@@ -124,8 +124,7 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	private void addModOreAllowance(ItemStack is) {
-		if (!ReikaItemHelper.collectionContainsItemStack(allowedOreItems, is))
-			allowedOreItems.add(is);
+		allowedOreItems.add(new BlockKey(is));
 	}
 
 	private static ArrayList<String> getModOres() {
@@ -241,16 +240,15 @@ public class MeteorConfig extends ControlledConfig {
 		return b != null ? biomes[b.ordinal()].getData() : true;
 	}
 
-	public boolean isItemStackGenerationPermitted(ItemStack is) {
-		if (ModList.TINKERER.isLoaded() && ReikaItemHelper.matchStackWithBlock(is, TinkerBlockHandler.getInstance().gravelOreID))
+	public boolean isItemStackGenerationPermitted(BlockKey is) {
+		if (ModList.TINKERER.isLoaded() && is.blockID == TinkerBlockHandler.getInstance().gravelOreID)
 			return false;
-		Block b = Block.getBlockFromItem(is.getItem());
-		if (b == null)
+		if (is.blockID == null)
 			return false;
-		if (b.getClass().getName().startsWith("shukaro.artifice")) //artifice ore variants
+		if (is.blockID.getClass().getName().startsWith("shukaro.artifice")) //artifice ore variants
 			return false;
-		if (ModList.RAILCRAFT.isLoaded() && RailcraftHandler.getInstance().isDarkOre(b, is.getItemDamage()))
+		if (ModList.RAILCRAFT.isLoaded() && RailcraftHandler.getInstance().isDarkOre(is.blockID, is.metadata))
 			return false;
-		return ReikaItemHelper.collectionContainsItemStack(allowedOreItems, is);
+		return allowedOreItems.contains(is);
 	}
 }

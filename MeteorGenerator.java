@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -31,6 +31,7 @@ import Reika.DragonAPI.Instantiable.ItemDrop;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.WeightedRandom.InvertedWeightedRandom;
 import Reika.DragonAPI.Instantiable.Data.BlockStruct.BlockArray;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.Data.Immutable.Coordinate;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaRandomHelper;
@@ -51,7 +52,7 @@ public class MeteorGenerator {
 
 	public static final MeteorGenerator instance = new MeteorGenerator();
 
-	private final HashMap<MeteorType, InvertedWeightedRandom<ItemStack>> viableOres = new HashMap();
+	private final HashMap<MeteorType, InvertedWeightedRandom<BlockKey>> viableOres = new HashMap();
 
 	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Integer>>> metas = new HashMap();
 	private final HashMap<ModOreList, HashMap<MeteorType, ArrayList<Block>>> ids = new HashMap();
@@ -88,7 +89,7 @@ public class MeteorGenerator {
 				ReikaOreHelper ore = ReikaOreHelper.oreList[i];
 				if (this.canGenerateOre(ore)) {
 					if (this.isValidOreForType(type, ore)) {
-						this.addOre(type, ore.getOreBlock(), MeteorCraft.config.getOreWeight(ore));
+						this.addOre(type, new BlockKey(ore.getOreBlock()), MeteorCraft.config.getOreWeight(ore));
 					}
 				}
 			}
@@ -96,14 +97,15 @@ public class MeteorGenerator {
 				ModOreList ore = ModOreList.oreList[i];
 				if (this.canGenerateOre(ore) && this.canGenOreIn(type.blockID, ore)) {
 					Collection<ItemStack> li = ore.getAllOreBlocks();
-					for (ItemStack block : li) {
+					for (ItemStack is : li) {
+						BlockKey block = new BlockKey(is);
 						if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
 							//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
-							if (this.isValidOreIDForType(type, ore, Block.getBlockFromItem(block.getItem()))) {
+							if (this.isValidOreIDForType(type, ore, block.blockID)) {
 								//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
-								if (this.isValidOreMetaForType(type, ore, block.getItemDamage())) {
+								if (this.isValidOreMetaForType(type, ore, block.metadata)) {
 									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
-									MeteorCraft.logger.log("Registering "+ReikaItemHelper.getRegistrantMod(block)+":"+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
+									MeteorCraft.logger.log("Registering "+ReikaItemHelper.getRegistrantMod(is)+":"+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
 									this.addOre(type, block, MeteorCraft.config.getOreWeight(ore));
 								}
 							}
@@ -141,9 +143,9 @@ public class MeteorGenerator {
 			CustomOreEntry e = li.get(i);
 			int weight = e.spawnWeight;
 			MeteorType type = MeteorType.list[e.meteorType];
-			List<ItemStack> items = e.getItems();
+			List<BlockKey> items = e.getItems();
 			for (int k = 0; k < items.size(); k++) {
-				ItemStack is = items.get(k);
+				BlockKey is = items.get(k);
 				this.addOre(type, is, weight);
 			}
 		}
@@ -219,8 +221,8 @@ public class MeteorGenerator {
 			return true;
 	}
 
-	private void addOre(MeteorType type, ItemStack is, int weight) {
-		InvertedWeightedRandom<ItemStack> dat = this.getOres(type);
+	private void addOre(MeteorType type, BlockKey is, int weight) {
+		InvertedWeightedRandom<BlockKey> dat = this.getOres(type);
 		if (dat == null) {
 			dat = new InvertedWeightedRandom();
 		}
@@ -228,7 +230,7 @@ public class MeteorGenerator {
 		viableOres.put(type, dat);
 	}
 
-	private InvertedWeightedRandom<ItemStack> getOres(MeteorType type) {
+	private InvertedWeightedRandom<BlockKey> getOres(MeteorType type) {
 		return viableOres.get(type);
 	}
 
@@ -236,7 +238,7 @@ public class MeteorGenerator {
 		return this.getOres(type) != null && !this.getOres(type).isEmpty();
 	}
 
-	private ItemStack getRandomOre(MeteorType type) {
+	private BlockKey getRandomOre(MeteorType type) {
 		return this.getOres(type).getRandomEntry();
 	}
 
@@ -248,7 +250,7 @@ public class MeteorGenerator {
 		return MeteorCraft.config.shouldGenerateOre(ore);
 	}
 
-	public ItemStack getBlock(MeteorType type, boolean ore) {
+	public BlockKey getBlock(MeteorType type, boolean ore) {
 		if (ore && ReikaRandomHelper.doWithChance(MeteorOptions.ORE.getValue()) && this.hasOresForType(type)) {
 			return this.getRandomOre(type);
 		}
@@ -280,9 +282,9 @@ public class MeteorGenerator {
 			int fx = c.xCoord;
 			int fy = c.yCoord;
 			int fz = c.zCoord;
-			ItemStack is = this.getBlock(type, ore);
+			BlockKey is = this.getBlock(type, ore);
 			if (fy > 0 && world.getBlock(fx, fy, fz) != Blocks.bedrock)
-				ReikaWorldHelper.setBlock(world, fx, fy, fz, is);
+				is.place(world, fx, fy, fz);
 		}
 	}
 
@@ -397,8 +399,8 @@ public class MeteorGenerator {
 			chance = c;
 		}
 
-		public ItemStack getBlock() {
-			return new ItemStack(blockID, 1, blockMeta);
+		public BlockKey getBlock() {
+			return new BlockKey(blockID, blockMeta);
 		}
 
 		public static MeteorType getWeightedType() {

@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
 public class CustomOreLoader {
@@ -37,7 +38,7 @@ public class CustomOreLoader {
 		public final String displayName;
 		public final int spawnWeight;
 		public final int size;
-		private final ArrayList<ItemStack> oreItems = new ArrayList();
+		private final ArrayList<BlockKey> oreItems = new ArrayList();
 		private final ArrayList<String> oreNames = new ArrayList();
 		public final int meteorType;
 
@@ -47,7 +48,9 @@ public class CustomOreLoader {
 			for (int i = 0; i < ores.length; i++) {
 				String s = ores[i];
 				oreNames.add(s);
-				oreItems.addAll(OreDictionary.getOres(s));
+				for (ItemStack is : OreDictionary.getOres(s)) {
+					oreItems.add(new BlockKey(is));
+				}
 				if (oreItems.isEmpty())
 					throw new IllegalStateException("Cannot have entries with no corresponding ores!");
 			}
@@ -55,7 +58,7 @@ public class CustomOreLoader {
 			meteorType = type;
 		}
 
-		public List<ItemStack> getItems() {
+		public List<BlockKey> getItems() {
 			return Collections.unmodifiableList(oreItems);
 		}
 
