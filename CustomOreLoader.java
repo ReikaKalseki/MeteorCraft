@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.codec.Charsets;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -82,7 +84,7 @@ public class CustomOreLoader {
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
-		try(BufferedReader p = ReikaFileReader.getReader(f)) {
+		try(BufferedReader p = ReikaFileReader.getReader(f, Charsets.UTF_8)) {
 			String line = "";
 			while (line != null) {
 				line = p.readLine();
