@@ -426,6 +426,9 @@ public class MeteorGenerator {
 				if (m.isValid())
 					rand.addEntry(m, m.chance);
 			}
+			if (MeteorOptions.TYPEHISTORY.getState()) {
+				rand.setHistorical();
+			}
 
 			MeteorType.STONE.addDrop(Items.glowstone_dust, 16, 32);
 			MeteorType.STONE.addDrop(Items.gunpowder, 9, 18);

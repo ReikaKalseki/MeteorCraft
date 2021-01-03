@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -33,7 +33,9 @@ public enum MeteorOptions implements IntegerConfig, BooleanConfig, DecimalConfig
 	OLDGEN("Generate Ancient Meteors", true),
 	LOADCHANCE("Percent of Meteors With Ore", 100),
 	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false),
-	VOLUME("Meteor Sound Volume (0.5-2.0)", 1F);
+	VOLUME("Meteor Sound Volume (0.5-2.0)", 1F),
+	TYPEHISTORY("Enforce Meteor Type Weights For Small Numbers", false),
+	;
 
 	private String label;
 	private boolean defaultState;
