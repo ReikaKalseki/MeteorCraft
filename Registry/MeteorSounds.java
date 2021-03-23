@@ -1,8 +1,8 @@
 /*******************************************************************************
  * @author Reika Kalseki
- * 
+ *
  * Copyright 2017
- * 
+ *
  * All rights reserved.
  * Distribution of the software in any form is only allowed with
  * explicit, prior permission from the owner.
@@ -29,8 +29,6 @@ public enum MeteorSounds implements SoundEnum {
 	FLYBY("flyby"),
 	BOOM("boom"),
 	IMPACT("impact");
-
-	public static final MeteorSounds[] soundList = values();
 
 	public static final String PREFIX = "Reika/MeteorCraft/";
 	public static final String SOUND_FOLDER = "Sounds/";
@@ -103,15 +101,6 @@ public enum MeteorSounds implements SoundEnum {
 
 	public URL getURL() {
 		return MeteorCraft.class.getResource(SOUND_DIR+name+SOUND_EXT);
-	}
-
-	public static MeteorSounds getSoundByName(String name) {
-		for (int i = 0; i < soundList.length; i++) {
-			if (soundList[i].name().equals(name))
-				return soundList[i];
-		}
-		MeteorCraft.logger.logError("\""+name+"\" does not correspond to a registered sound!");
-		return null;
 	}
 
 	@Override

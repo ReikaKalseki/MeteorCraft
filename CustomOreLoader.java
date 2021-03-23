@@ -74,13 +74,13 @@ public class CustomOreLoader {
 		return "MeteorCraft_CustomOres.cfg";
 	}
 
-	public final String getFullSavePath() {
-		return MeteorCraft.config.getConfigFolder().getAbsolutePath()+"/"+this.getSaveFileName();
+	public final File getFullSavePath() {
+		return new File(MeteorCraft.config.getConfigFolder(), this.getSaveFileName());
 	}
 
 	public void loadFile() {
 		MeteorCraft.logger.log("Loading custom ore config.");
-		File f = new File(this.getFullSavePath());
+		File f = this.getFullSavePath();
 		if (!f.exists())
 			if (!this.createOreFile(f))
 				return;
