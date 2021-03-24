@@ -22,6 +22,7 @@ import Reika.MeteorCraft.MeteorCraft;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public enum MeteorSounds implements SoundEnum {
 
@@ -104,6 +105,7 @@ public enum MeteorSounds implements SoundEnum {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public SoundCategory getCategory() {
 		return SoundCategory.MASTER;
 	}
