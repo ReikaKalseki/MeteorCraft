@@ -106,7 +106,8 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 
 	@Override
 	public void onUpdate() {
-		ChunkManager.instance.loadChunks(this);
+		if (!worldObj.isRemote)
+			ChunkManager.instance.loadChunks(this);
 		if (ticksExisted < 2)
 			MinecraftForge.EVENT_BUS.post(new EntryEvent(this));
 		super.onUpdate();

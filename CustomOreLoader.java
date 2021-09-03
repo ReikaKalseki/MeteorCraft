@@ -51,7 +51,7 @@ public class CustomOreLoader {
 				String s = ores[i];
 				oreNames.add(s);
 				for (ItemStack is : OreDictionary.getOres(s)) {
-					oreItems.add(new BlockKey(is));
+					oreItems.add(BlockKey.fromItem(is));
 				}
 				if (oreItems.isEmpty())
 					throw new IllegalStateException("Cannot have entries with no corresponding ores!");

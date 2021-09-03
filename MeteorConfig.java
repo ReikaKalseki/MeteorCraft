@@ -62,7 +62,7 @@ public class MeteorConfig extends ControlledConfig {
 	}
 
 	public void initModExclusions() {
-		config.load();
+		this.load();
 
 		for (int i = 0; i < ModOreList.oreList.length; i++) {
 			ModOreList ore = ModOreList.oreList[i];
@@ -91,7 +91,7 @@ public class MeteorConfig extends ControlledConfig {
 							ItemStack is = li.get(h);
 							ModList mod = ModOreList.getOreModFromItemStack(is);
 							if (mod != null) {
-								boolean allow = config.get("Mod Ore Allowance - "+ore.displayName, mod.modLabel, true).getBoolean(true);
+								boolean allow = this.getProperty("Mod Ore Allowance - "+ore.displayName, mod.modLabel, true).getBoolean(true);
 								if (allow)
 									this.addModOreAllowance(is);
 							}
@@ -120,11 +120,11 @@ public class MeteorConfig extends ControlledConfig {
 			}
 		}
 
-		config.save();
+		this.save();
 	}
 
 	private void addModOreAllowance(ItemStack is) {
-		allowedOreItems.add(new BlockKey(is));
+		allowedOreItems.add(BlockKey.fromItem(is));
 	}
 
 	private static ArrayList<String> getModOres() {

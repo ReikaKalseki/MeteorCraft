@@ -89,7 +89,7 @@ public class MeteorGenerator {
 				ReikaOreHelper ore = ReikaOreHelper.oreList[i];
 				if (this.canGenerateOre(ore)) {
 					if (this.isValidOreForType(type, ore)) {
-						this.addOre(type, new BlockKey(ore.getOreBlock()), MeteorCraft.config.getOreWeight(ore));
+						this.addOre(type, BlockKey.fromItem(ore.getOreBlock()), MeteorCraft.config.getOreWeight(ore));
 					}
 				}
 			}
@@ -98,15 +98,20 @@ public class MeteorGenerator {
 				if (this.canGenerateOre(ore) && this.canGenOreIn(type.blockID, ore)) {
 					Collection<ItemStack> li = ore.getAllOreBlocks();
 					for (ItemStack is : li) {
-						BlockKey block = new BlockKey(is);
-						if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
-							//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
-							if (this.isValidOreIDForType(type, ore, block.blockID)) {
-								//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
-								if (this.isValidOreMetaForType(type, ore, block.metadata)) {
-									//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
-									MeteorCraft.logger.log("Registering "+ReikaItemHelper.getRegistrantMod(is)+":"+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
-									this.addOre(type, block, MeteorCraft.config.getOreWeight(ore));
+						if (is.getItem() != null && Block.getBlockFromItem(is.getItem()) != null) {
+							BlockKey block = BlockKey.fromItem(is);
+							if (MeteorCraft.config.isItemStackGenerationPermitted(block)) {
+								//ReikaJavaLibrary.pConsole(type.name()+" INIT:"+ore.name());
+								if (this.isValidOreIDForType(type, ore, block.blockID)) {
+									//ReikaJavaLibrary.pConsole(type.name()+" ID:"+ore.name());
+									if (this.isValidOreMetaForType(type, ore, block.metadata)) {
+										//ReikaJavaLibrary.pConsole(type.name()+" META:"+ore.name());
+										String mod = ReikaItemHelper.getRegistrantMod(is);
+										if (mod == null || mod.equalsIgnoreCase("gregtech") || mod.equalsIgnoreCase("gt"))
+											continue;
+										MeteorCraft.logger.log("Registering "+mod+":"+block+" ("+ore.displayName+" ore) to meteor type "+type.name());
+										this.addOre(type, block, MeteorCraft.config.getOreWeight(ore));
+									}
 								}
 							}
 						}
