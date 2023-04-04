@@ -11,7 +11,6 @@ package Reika.MeteorCraft;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import Reika.DragonAPI.IO.ReikaFileReader;
+import Reika.DragonAPI.IO.ReikaFileReader.SimpleLineWriter;
 import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 
@@ -113,9 +113,7 @@ public class CustomOreLoader {
 	}
 
 	private boolean createOreFile(File f) {
-		try {
-			f.createNewFile();
-			PrintWriter p = new PrintWriter(f);
+		try (SimpleLineWriter p = ReikaFileReader.getPrintWriterForNewFile(f)) {
 			this.writeCommentLine(p, "-------------------------------");
 			this.writeCommentLine(p, " MeteorCraft Custom Ore Loader ");
 			this.writeCommentLine(p, "-------------------------------");
@@ -141,7 +139,6 @@ public class CustomOreLoader {
 			this.writeCommentLine(p, "\tto crash and corrupt the world. No support will be provided in this case.");
 			this.writeCommentLine(p, "====================================================================================");
 			p.append("\n");
-			p.close();
 			return true;
 		}
 		catch (Exception e) {
@@ -151,8 +148,8 @@ public class CustomOreLoader {
 		}
 	}
 
-	private static void writeCommentLine(PrintWriter p, String line) {
-		p.append("// "+line+"\n");
+	private static void writeCommentLine(SimpleLineWriter p, String line) {
+		p.println("// "+line+"\n");
 	}
 
 	private CustomOreEntry parseString(String s) throws Exception {

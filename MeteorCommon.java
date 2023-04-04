@@ -14,7 +14,7 @@ import Reika.MeteorCraft.Registry.MeteorSounds;
 
 public class MeteorCommon {
 
-	protected SoundLoader sounds = new SoundLoader(MeteorSounds.class);
+	protected static final SoundLoader sounds = new SoundLoader(MeteorSounds.class);
 
 	public void addRenders() {
 

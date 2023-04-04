@@ -23,6 +23,7 @@ import Reika.DragonAPI.Instantiable.Data.Immutable.BlockKey;
 import Reika.DragonAPI.Instantiable.IO.ControlledConfig;
 import Reika.DragonAPI.Interfaces.Configuration.ConfigList;
 import Reika.DragonAPI.Interfaces.Registry.IDRegistry;
+import Reika.DragonAPI.Interfaces.Registry.OreType;
 import Reika.DragonAPI.Libraries.Java.ReikaJavaLibrary;
 import Reika.DragonAPI.Libraries.Java.ReikaStringParser;
 import Reika.DragonAPI.Libraries.Registry.ReikaOreHelper;
@@ -219,20 +220,20 @@ public class MeteorConfig extends ControlledConfig {
 		configFile.delete();
 	}*/
 
-	public int getOreWeight(ModOreList ore) {
-		return ores[ore.ordinal()+ReikaOreHelper.oreList.length].getData();
+	private int getOreIndex(OreType ore) {
+		return ore instanceof ModOreList ? ore.ordinal()+ReikaOreHelper.oreList.length : ore.ordinal();
 	}
 
-	public int getOreWeight(ReikaOreHelper ore) {
-		return ores[ore.ordinal()].getData();
+	public int getOreWeight(OreType ore) {
+		return ores[this.getOreIndex(ore)].getData();
 	}
 
-	public boolean shouldGenerateOre(ModOreList ore) {
-		return ores[ore.ordinal()+ReikaOreHelper.oreList.length].getData() > 0;
+	public boolean shouldGenerateOre(OreType ore) {
+		return ores[this.getOreIndex(ore)].getData() > 0;
 	}
 
-	public boolean shouldGenerateOre(ReikaOreHelper ore) {
-		return ores[ore.ordinal()].getData() > 0;
+	public void setOreWeight(OreType ore, int wt) {
+		ores[this.getOreIndex(ore)].setData(wt);
 	}
 
 	public boolean canImpactInBiome(BiomeGenBase biome) {
