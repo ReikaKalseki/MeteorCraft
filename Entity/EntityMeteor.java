@@ -15,7 +15,6 @@ import java.util.Collection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
@@ -127,7 +126,7 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			}
 			if (y < 256 && !world.checkChunksExist(x, y, z, x, y, z)) {
 				if (world.isRemote)
-					this.playClientFullVolSound("random.explode", 1, 0.2F);
+					this.playSound("random.explode", 1, 0.2F);
 				this.setDead();
 			}/*
 			Block[] b = new Block[8];
@@ -176,29 +175,29 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			if (posY <= worldObj.provider.getAverageGroundLevel()+224 && !crossed) {
 				crossed = true;
 				//this.playSound("meteorcraft:flyby", 1, 1);
-				this.playSound(MeteorSounds.FLYBY, this);
+				this.playSound(MeteorSounds.FLYBY);
 				if (worldObj.isRemote) {
 					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:flyby", 1, 1);
-					this.playClientFullVolSound(MeteorSounds.FLYBY);
+					this.playSound(MeteorSounds.FLYBY);
 				}
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+127 && !boom) {
 				crossed = true;
 				//this.playSound("meteorcraft:boom", 1, 1);
-				this.playSound(MeteorSounds.BOOM, this);
+				this.playSound(MeteorSounds.BOOM);
 				if (worldObj.isRemote) {
 					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:boom", 1, 1);
-					this.playClientFullVolSound(MeteorSounds.BOOM);
+					this.playSound(MeteorSounds.BOOM);
 				}
 				boom = true;
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+12 && !impact) {
 				if (worldObj.isRemote) {
 					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:impact", 1, 1);
-					this.playClientFullVolSound(MeteorSounds.IMPACT);
+					this.playSound(MeteorSounds.IMPACT);
 				}
 				//this.playSound("meteorcraft:impact", 1, 1);
-				this.playSound(MeteorSounds.IMPACT, this);
+				this.playSound(MeteorSounds.IMPACT);
 				impact = true;
 			}
 		}
@@ -206,22 +205,17 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 			this.setDead();
 	}
 
-	@SideOnly(Side.CLIENT)
-	private void playClientFullVolSound(MeteorSounds sound) {
-		this.playSound(sound, Minecraft.getMinecraft().thePlayer);
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void playClientFullVolSound(String s, float v, float p) {
-		Minecraft.getMinecraft().thePlayer.playSound(s, v, p);
-	}
-
-	private void playSound(MeteorSounds sound, Entity e) {
-		double x = e.posX;
-		double y = e.posY;
-		double z = e.posZ;
+	@Override
+	public void playSound(String s, float v, float p) {
 		if (worldObj.isRemote)
-			ReikaSoundHelper.playClientSound(sound, x, y, z, 1, 1);
+			ReikaSoundHelper.playClientSound(s, posX, posY, posZ, v, p, false);
+		else
+			ReikaSoundHelper.playSoundFromServer(worldObj, posX, posY, posZ, s, v, p, false);//super.playSound(s, v, p);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void playSound(MeteorSounds sound) {
+		ReikaSoundHelper.playClientSound(sound, posX, posY, posZ, 1, 1, false);
 	}
 
 	private int getRandomYToExplodeAlways() {
@@ -244,11 +238,11 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 	protected void entityInit() {
 		if (!spawned) {
 			if (worldObj.isRemote) {
-				this.playClientFullVolSound(MeteorSounds.ENTRY);
+				this.playSound(MeteorSounds.ENTRY);
 				//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
 			}
 			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
-			this.playSound(MeteorSounds.ENTRY, this);
+			this.playSound(MeteorSounds.ENTRY);
 			spawned = true;
 		}
 
@@ -364,9 +358,9 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 		}
 
 		if (worldObj.isRemote) {
-			this.playClientFullVolSound("random.explode", 3, 0.01F);
-			this.playClientFullVolSound("random.explode", 3, 0.1F);
-			this.playClientFullVolSound("random.explode", 3, 0.2F);
+			this.playSound("random.explode", 3, 0.01F);
+			this.playSound("random.explode", 3, 0.1F);
+			this.playSound("random.explode", 3, 0.2F);
 		}
 
 		int r = 8;
