@@ -50,8 +50,6 @@ import Reika.MeteorCraft.Registry.MeteorOptions;
 import Reika.MeteorCraft.Registry.MeteorSounds;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 
 public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, MeteorEntity, ChunkLoadingEntity {
@@ -174,29 +172,14 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 				world.spawnEntityInWorld(new EntityTrail(world, posX-motionX, posY-motionY, posZ-motionZ));
 			if (posY <= worldObj.provider.getAverageGroundLevel()+224 && !crossed) {
 				crossed = true;
-				//this.playSound("meteorcraft:flyby", 1, 1);
 				this.playSound(MeteorSounds.FLYBY);
-				if (worldObj.isRemote) {
-					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:flyby", 1, 1);
-					this.playSound(MeteorSounds.FLYBY);
-				}
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+127 && !boom) {
 				crossed = true;
-				//this.playSound("meteorcraft:boom", 1, 1);
 				this.playSound(MeteorSounds.BOOM);
-				if (worldObj.isRemote) {
-					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:boom", 1, 1);
-					this.playSound(MeteorSounds.BOOM);
-				}
 				boom = true;
 			}
 			if (posY <= worldObj.provider.getAverageGroundLevel()+12 && !impact) {
-				if (worldObj.isRemote) {
-					//Minecraft.getMinecraft().thePlayer.playSound("meteorcraft:impact", 1, 1);
-					this.playSound(MeteorSounds.IMPACT);
-				}
-				//this.playSound("meteorcraft:impact", 1, 1);
 				this.playSound(MeteorSounds.IMPACT);
 				impact = true;
 			}
@@ -210,12 +193,14 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 		if (worldObj.isRemote)
 			ReikaSoundHelper.playClientSound(s, posX, posY, posZ, v, p, false);
 		else
-			ReikaSoundHelper.playSoundFromServer(worldObj, posX, posY, posZ, s, v, p, false);//super.playSound(s, v, p);
+			ReikaSoundHelper.broadcastSound(s, v, p, worldObj, posX, posY, posZ);//super.playSound(s, v, p);
 	}
 
-	@SideOnly(Side.CLIENT)
 	private void playSound(MeteorSounds sound) {
-		ReikaSoundHelper.playClientSound(sound, posX, posY, posZ, 1, 1, false);
+		if (worldObj.isRemote)
+			ReikaSoundHelper.playClientSound(sound, posX, posY, posZ, 1, 1, false);
+		else
+			ReikaSoundHelper.broadcastSound(sound, 1, 1, worldObj, posX, posY, posZ);//super.playSound(s, v, p);
 	}
 
 	private int getRandomYToExplodeAlways() {
@@ -237,11 +222,6 @@ public class EntityMeteor extends Entity implements IEntityAdditionalSpawnData, 
 	@Override
 	protected void entityInit() {
 		if (!spawned) {
-			if (worldObj.isRemote) {
-				this.playSound(MeteorSounds.ENTRY);
-				//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, Minecraft.getMinecraft().thePlayer);
-			}
-			//MeteorSounds.ENTRY.playSoundAtEntity(worldObj, this);
 			this.playSound(MeteorSounds.ENTRY);
 			spawned = true;
 		}

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -145,13 +146,11 @@ public class MeteorGenerator {
 
 		List<CustomOreEntry> li = CustomOreLoader.instance.getEntries();
 		for (int i = 0; i < li.size(); i++) {
-			CustomOreEntry e = li.get(i);
-			int weight = e.spawnWeight;
-			MeteorType type = MeteorType.list[e.meteorType];
-			List<BlockKey> items = e.getItems();
-			for (int k = 0; k < items.size(); k++) {
-				BlockKey is = items.get(k);
-				this.addOre(type, is, weight);
+			CustomOreEntry en = li.get(i);
+			for (Entry<BlockKey, Double> e : en.getItems().entrySet()) {
+				for (MeteorType type : en.getMeteorTypes()) {
+					this.addOre(type, e.getKey(), e.getValue());
+				}
 			}
 		}
 	}
@@ -226,7 +225,7 @@ public class MeteorGenerator {
 			return true;
 	}
 
-	private void addOre(MeteorType type, BlockKey is, int weight) {
+	private void addOre(MeteorType type, BlockKey is, double weight) {
 		InvertedWeightedRandom<BlockKey> dat = this.getOres(type);
 		if (dat == null) {
 			dat = new InvertedWeightedRandom();
