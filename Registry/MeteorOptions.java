@@ -17,24 +17,24 @@ import Reika.MeteorCraft.MeteorCraft;
 
 public enum MeteorOptions implements IntegerConfig, BooleanConfig, DecimalConfig, UserSpecificConfig {
 
-	CHANCE("Overworld Meteor Rarity", 72000), //one meteor every hour
-	ENDCHANCE("End Meteor Rarity", 72000), //one meteor every hour
-	FORESTCHANCE("Twilight Forest Meteor Rarity", 54000), //one meteor every 45 min
-	OTHERCHANCE("Meteor Rarity in Other Dimensions", 36000), //one meteor every 30 min
-	ORE("Meteor Ore Density", 40), //default 40% ore
-	MINY("Minimum Impactable Y", -1),
+	CHANCE("Overworld Meteor Rarity", 72000), //Roughly how many ticks should pass, on average, between meteors in the overworld
+	ENDCHANCE("End Meteor Rarity", 72000), //72000 is approx one hour
+	FORESTCHANCE("Twilight Forest Meteor Rarity", 54000),
+	OTHERCHANCE("Meteor Rarity in Other Dimensions", 36000),
+	ORE("Meteor Ore Density", 40), //What % of a meteor should be ore vs "stone-type" block
+	MINY("Minimum Impactable Y", -1), //What Y level will meteors always explode at. This allows to make only the mountain peaks impactable
 	DIM0BURST("Always Skyburst in Overworld", false),
 	NETHERBURST("Always Skyburst in Nether", false),
 	ENDBURST("Always Skyburst in End", false),
 	DIM7BURST("Always Skyburst in Twilight Forest", false),
 	OTHER("Always Skyburst in Other Dimensions", false),
-	SHOWER("Allow Meteor Showers", true),
-	EXPLODE("Global Airburst Override", false),
-	OLDGEN("Generate Ancient Meteors", true),
+	SHOWER("Allow Meteor Showers", true), //Meteor showers are rare and short periods of dense meteor activity
+	EXPLODE("Global Airburst Override", false), //Set this true to force all meteors to always explode
+	OLDGEN("Generate Ancient Meteors", true), //Whether to generate ancient buried meteors
 	LOADCHANCE("Percent of Meteors With Ore", 100),
 	NOGUNBURST("Defence Gun Deletes Meteors Instead of Skyburst", false),
 	VOLUME("Meteor Sound Volume (0.5-2.0)", 1F),
-	TYPEHISTORY("Enforce Meteor Type Weights For Small Numbers", false),
+	TYPEHISTORY("Enforce Meteor Type Weights For Small Numbers", false), //Whether to keep a record of meteor types so that the distribution is less pure RNG and more tightly follows the configured rates
 	;
 
 	private String label;

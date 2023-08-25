@@ -29,7 +29,7 @@ public class TileEntityMeteorRadar extends TileEntityMeteorBase {
 	}
 
 	@Override
-	protected String getTEName() {
+	public String getTEName() {
 		return "Meteor Radar";
 	}
 
